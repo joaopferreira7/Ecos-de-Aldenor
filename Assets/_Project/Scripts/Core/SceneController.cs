@@ -1,0 +1,121 @@
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace EcosDeAldenor.Core
+{
+    /// <summary>
+    /// Centraliza o carregamento de cenas do jogo, com suporte a fade simples
+    /// (evita cortes bruscos na troca de cena). Implementado como Singleton
+    /// persistente, assim como o GameManager, pois precisa sobreviver as
+    /// trocas de cena para poder controlar a proxima cena a ser carregada.
+    /// </summary>
+    public class SceneController : MonoBehaviour
+    {
+        public static SceneController Instance { get; private set; }
+
+        [Header("Nomes das Cenas")]
+        [SerializeField] private string mainMenuScene = "MainMenu";
+        [SerializeField] private string tutorialScene = "Tutorial";
+        [SerializeField] private string phase1Scene = "Phase1";
+        [SerializeField] private string phase2Scene = "Phase2";
+        [SerializeField] private string finalPhaseScene = "FinalPhase";
+        [SerializeField] private string victoryScene = "VictoryScreen";
+        [SerializeField] private string gameOverScene = "GameOverScreen";
+
+        [Header("Fade")]
+        [SerializeField] private CanvasGroup fadeCanvasGroup;
+        [SerializeField] private float fadeDuration = 0.5f;
+
+        public event Action<string> OnSceneLoadStarted;
+        public event Action<string> OnSceneLoadCompleted;
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        public void LoadMainMenu() => LoadScene(mainMenuScene);
+        public void LoadTutorial() => LoadScene(tutorialScene);
+        public void LoadPhase1() => LoadScene(phase1Scene);
+        public void LoadPhase2() => LoadScene(phase2Scene);
+        public void LoadVictoryScreen() => LoadScene(victoryScene);
+        public void LoadGameOverScreen() => LoadScene(gameOverScene);
+
+        /// <summary>
+        /// Carrega a fase final apenas se o jogador tiver fragmentos suficientes
+        /// (regra definida no GameManager). Caso contrario, ignora a chamada -
+        /// a UI deve usar GameManager.CanAccessFinalPhase para habilitar/desabilitar
+        /// o acesso antes mesmo de chamar este metodo.
+        /// </summary>
+        public void LoadFinalPhase()
+        {
+            if (GameManager.Instance != null && !GameManager.Instance.CanAccessFinalPhase)
+            {
+                Debug.LogWarning("Fragmentos insuficientes para acessar a fase final.");
+                return;
+            }
+
+            LoadScene(finalPhaseScene);
+        }
+
+        public void ReloadCurrentScene()
+        {
+            LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void LoadScene(string sceneName)
+        {
+            StartCoroutine(LoadSceneRoutine(sceneName));
+        }
+
+        private IEnumerator LoadSceneRoutine(string sceneName)
+        {
+            OnSceneLoadStarted?.Invoke(sceneName);
+
+            yield return StartCoroutine(Fade(1f));
+
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+
+            yield return StartCoroutine(Fade(0f));
+
+            OnSceneLoadCompleted?.Invoke(sceneName);
+        }
+
+        /// <summary>
+        /// Anima o CanvasGroup de fade entre 0 (transparente) e 1 (opaco).
+        /// Se nenhum CanvasGroup for atribuido, pula a animacao sem erro.
+        /// </summary>
+        private IEnumerator Fade(float targetAlpha)
+        {
+            if (fadeCanvasGroup == null)
+            {
+                yield break;
+            }
+
+            float startAlpha = fadeCanvasGroup.alpha;
+            float elapsed = 0f;
+
+            while (elapsed < fadeDuration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
+                yield return null;
+            }
+
+            fadeCanvasGroup.alpha = targetAlpha;
+        }
+    }
+}
