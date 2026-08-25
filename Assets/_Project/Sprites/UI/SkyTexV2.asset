@@ -1,0 +1,258 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!28 &2800000
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SkyTexV2
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 4
+  m_Width: 8
+  m_Height: 128
+  m_CompleteImageSize: 5500
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 8
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 5500
+  _typelessdata: 38242eff38242eff38242eff38242eff38242eff38242eff38242eff38242eff38232eff38232eff38232eff38232eff38232eff38232eff38232eff38232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff37232eff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36232dff36222dff36222dff36222dff36222dff36222dff36222dff36222dff36222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff35222dff34222dff34222dff34222dff34222dff34222dff34222dff34222dff34222dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff34212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff33212dff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff32202cff31202cff31202cff31202cff31202cff31202cff31202cff31202cff31202cff311f2cff311f2cff311f2cff311f2cff311f2cff311f2cff311f2cff311f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff2f1f2cff2f1f2cff2f1f2cff2f1f2cff2f1f2cff2f1f2cff2f1f2cff2f1f2cff2f1e2cff2f1e2cff2f1e2cff2f1e2cff2f1e2cff2f1e2cff2f1e2cff2f1e2cff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1c2bff2c1c2bff2c1c2bff2c1c2bff2c1c2bff2c1c2bff2c1c2bff2c1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1c2aff2a1b2aff2a1b2aff2a1b2aff2a1b2aff2a1b2aff2a1b2aff2a1b2aff2a1b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff291b2aff281b2aff281b2aff281b2aff281b2aff281b2aff281b2aff281b2aff281b2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff281a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff271a2aff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff261929ff251929ff251929ff251929ff251929ff251929ff251929ff251929ff251929ff251829ff251829ff251829ff251829ff251829ff251829ff251829ff251829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff231829ff231829ff231829ff231829ff231829ff231829ff231829ff231829ff231729ff231729ff231729ff231729ff231729ff231729ff231729ff231729ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff221728ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff211628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201628ff201528ff201528ff201528ff201528ff201528ff201528ff201528ff201528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1f1528ff1e1527ff1e1527ff1e1527ff1e1527ff1e1527ff1e1527ff1e1527ff1e1527ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1e1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1d1427ff1c1427ff1c1427ff1c1427ff1c1427ff1c1427ff1c1427ff1c1427ff1c1427ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1c1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1b1327ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff1a1226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191226ff191126ff191126ff191126ff191126ff191126ff191126ff191126ff191126ff191125ff191125ff191125ff191125ff191125ff191125ff191125ff191125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181124ff181124ff181124ff181124ff181124ff181124ff181124ff181124ff171124ff171124ff171124ff171124ff171124ff171124ff171124ff171124ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171024ff171023ff171023ff171023ff171023ff171023ff171023ff171023ff171023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff160f22ff160f22ff160f22ff160f22ff160f22ff160f22ff160f22ff160f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f21ff150f21ff150f21ff150f21ff150f21ff150f21ff150f21ff150f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140f21ff140e21ff140e21ff140e21ff140e21ff140e21ff140e21ff140e21ff140e21ff140e20ff140e20ff140e20ff140e20ff140e20ff140e20ff140e20ff140e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e1fff130e1fff130e1fff130e1fff130e1fff130e1fff130e1fff130e1fff120e1fff120e1fff120e1fff120e1fff120e1fff120e1fff120e1fff120e1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1fff120d1eff120d1eff120d1eff120d1eff120d1eff120d1eff120d1eff120d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110c1dff110c1dff110c1dff110c1dff110c1dff110c1dff110c1dff110c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1cff100c1cff100c1cff100c1cff100c1cff100c1cff100c1cff100c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0b1cff0f0b1cff0f0b1cff0f0b1cff0f0b1cff0f0b1cff0f0b1cff0f0b1cff0f0b1bff0f0b1bff0f0b1bff0f0b1bff0f0b1bff0f0b1bff0f0b1bff0f0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1aff0e0b1aff0e0b1aff0e0b1aff0e0b1aff0e0b1aff0e0b1aff0e0b1aff0d0b1aff0d0b1aff0d0b1aff0d0b1aff0d0b1aff0d0b1aff0d0b1aff0d0b1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff38232eff38232eff38232eff38232eff37232eff37232eff37232eff37232eff36232dff36232dff36232dff36232dff35222dff35222dff35222dff35222dff34222dff34222dff34222dff34222dff34212dff34212dff34212dff34212dff33212dff33212dff33212dff33212dff32202cff32202cff32202cff32202cff31202cff31202cff31202cff31202cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff301f2cff2f1e2cff2f1e2cff2f1e2cff2f1e2cff2e1e2bff2e1e2bff2e1e2bff2e1e2bff2d1d2bff2d1d2bff2d1d2bff2d1d2bff2c1d2bff2c1d2bff2c1d2bff2c1d2bff2c1c2bff2c1c2bff2c1c2bff2c1c2bff2b1c2bff2b1c2bff2b1c2bff2b1c2bff2a1c2aff2a1c2aff2a1c2aff2a1c2aff291b2aff291b2aff291b2aff291b2aff281b2aff281b2aff281b2aff281b2aff281a2aff281a2aff281a2aff281a2aff271a2aff271a2aff271a2aff271a2aff261929ff261929ff261929ff261929ff251929ff251929ff251929ff251929ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff241829ff231729ff231729ff231729ff231729ff221728ff221728ff221728ff221728ff211628ff211628ff211628ff211628ff201628ff201628ff201628ff201628ff201528ff201528ff201528ff201528ff1f1528ff1f1528ff1f1528ff1f1528ff1e1427ff1e1427ff1e1427ff1e1427ff1d1427ff1d1427ff1d1427ff1d1427ff1c1427ff1c1427ff1c1427ff1c1427ff1c1327ff1c1327ff1c1327ff1c1327ff1b1327ff1b1327ff1b1327ff1b1327ff1a1226ff1a1226ff1a1226ff1a1226ff191226ff191226ff191226ff191226ff191126ff191126ff191126ff191126ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff181125ff171124ff171124ff171124ff171124ff171024ff171024ff171024ff171024ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff161023ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff150f22ff140f21ff140f21ff140f21ff140f21ff140e21ff140e21ff140e21ff140e21ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff130e20ff120e1fff120e1fff120e1fff120e1fff120d1fff120d1fff120d1fff120d1fff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff110d1eff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff100c1dff0f0c1cff0f0c1cff0f0c1cff0f0c1cff0f0b1cff0f0b1cff0f0b1cff0f0b1cff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0e0b1bff0d0b1aff0d0b1aff0d0b1aff0d0b1aff0d0a1aff0d0a1aff0d0a1aff0d0a1aff37232eff37232eff35222dff35222dff34212dff34212dff32202cff32202cff301f2cff301f2cff2f1e2cff2f1e2cff2d1d2bff2d1d2bff2c1c2bff2c1c2bff2a1c2aff2a1c2aff281b2aff281b2aff271a2aff271a2aff251929ff251929ff241829ff241829ff221728ff221728ff201628ff201628ff1f1528ff1f1528ff1d1427ff1d1427ff1c1327ff1c1327ff1a1226ff1a1226ff191126ff191126ff181125ff181125ff171024ff171024ff161023ff161023ff150f22ff150f22ff140e21ff140e21ff130e20ff130e20ff120d1fff120d1fff110d1eff110d1eff100c1dff100c1dff0f0b1cff0f0b1cff0e0b1bff0e0b1bff0d0a1aff0d0a1aff36222dff33202cff2f1e2cff2c1c2bff291b2aff261929ff231728ff1f1528ff1c1327ff191126ff171024ff150f22ff130e20ff110d1eff0f0b1cff0d0a1aff34212cff2d1d2bff271a29ff211628ff1a1226ff160f23ff120d1fff0e0a1bff301f2bff241828ff181024ff100b1dff2a1b29ff140d20ff1f1424ff
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+--- !u!213 &7581892792241228713
+Sprite:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 8
+    height: 128
+  m_Offset: {x: 0, y: 0}
+  m_Border: {x: 0, y: 0, z: 0, w: 0}
+  m_PixelsToUnits: 8
+  m_Pivot: {x: 0.5, y: 0.5}
+  m_Extrude: 0
+  m_IsPolygon: 0
+  m_PackingTag: 
+  m_RenderDataKey:
+    00000000000000000000000000000000: 0
+  m_AtlasTags: []
+  m_SpriteAtlas: {fileID: 0}
+  m_RD:
+    serializedVersion: 3
+    texture: {fileID: 2800000}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 6
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 4
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 000001000200020001000300
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 4
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 80
+      _typelessdata: 000000bf00000041000000000000003f0000004100000000000000bf000000c1000000000000003f000000c1000000000000000000000000000000000000000000000000000000000000000000000000
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: 128
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 0
+    uvTransform: {x: 8, y: 4, z: 8, w: 64}
+    downscaleMultiplier: 1
+  m_AtlasRD:
+    serializedVersion: 3
+    texture: {fileID: 2800000}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 6
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 4
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 000001000200020001000300
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 4
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 80
+      _typelessdata: 000000bf00000041000000000000003f0000004100000000000000bf000000c1000000000000003f000000c1000000000000000000000000000000000000000000000000000000000000000000000000
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 8
+      height: 128
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 0
+    uvTransform: {x: 8, y: 4, z: 8, w: 64}
+    downscaleMultiplier: 1
+  m_PhysicsShape: []
+  m_Bones: []
+  m_ScriptableObjects: []
+  m_SpriteID: 
