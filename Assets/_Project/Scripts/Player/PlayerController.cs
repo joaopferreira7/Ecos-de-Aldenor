@@ -31,6 +31,8 @@ namespace EcosDeAldenor.Player
         [SerializeField] private float attackCooldown = 0.25f;
         [SerializeField] private float comboResetTime = 1f;
         [SerializeField] private AudioClip attackSfx;
+        [Tooltip("Som tocado ao pular.")]
+        [SerializeField] private AudioClip jumpSfx;
 
         [Header("VFX de Impacto")]
         [Tooltip("Frames da faisca de impacto (Hitspark FX) disparada ao acertar um inimigo.")]
@@ -165,6 +167,7 @@ namespace EcosDeAldenor.Player
         {
             animator.SetTrigger("Jump");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            AudioManager.Instance?.PlaySfx(jumpSfx);
         }
 
         private void HandleAttackCooldown()

@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.Checkpoint
   activatedSprite: {fileID: 0}
-  activateSfx: {fileID: 0}
+  activateSfx: {fileID: 8300000, guid: d654174ef194bd7479bf4b8d8f753318, type: 3}
   soulRenderer: {fileID: 7721172953362106183}
   shrineLight: {fileID: 5081015325194956392}
   inactiveColor: {r: 0.4, g: 0.55, b: 0.7, a: 1}
