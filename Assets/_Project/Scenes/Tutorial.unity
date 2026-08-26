@@ -331,6 +331,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.SceneMusicPlayer
   sceneMusic: {fileID: 8300000, guid: 50a97a97d379a104ca51ac8e01e47706, type: 3}
+  loop: 1
 --- !u!4 &88250662
 Transform:
   m_ObjectHideFlags: 0
@@ -4110,7 +4111,7 @@ SpriteRenderer:
   m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6b0d1d8d874d0944c89cfab5568a4d4d, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.42, g: 0.45, b: 0.56, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
