@@ -39,9 +39,12 @@ namespace EcosDeAldenor.Systems
             }
         }
 
-        public void PlayMusic(AudioClip clip)
+        public void PlayMusic(AudioClip clip, bool loop = true)
         {
-            if (clip == null || musicSource.clip == clip) return;
+            if (clip == null) return;
+            musicSource.loop = loop;
+            // Evita reiniciar a mesma trilha que ja esta tocando.
+            if (musicSource.clip == clip && musicSource.isPlaying) return;
             musicSource.clip = clip;
             musicSource.Play();
         }

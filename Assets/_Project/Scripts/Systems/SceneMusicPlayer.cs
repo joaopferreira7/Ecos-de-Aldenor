@@ -11,10 +11,12 @@ namespace EcosDeAldenor.Systems
     public class SceneMusicPlayer : MonoBehaviour
     {
         [SerializeField] private AudioClip sceneMusic;
+        [Tooltip("Se falso, a trilha toca uma unica vez (ex.: sting de vitoria/derrota).")]
+        [SerializeField] private bool loop = true;
 
         private void Start()
         {
-            AudioManager.Instance?.PlayMusic(sceneMusic);
+            AudioManager.Instance?.PlayMusic(sceneMusic, loop);
         }
     }
 }
