@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace EcosDeAldenor.Core
 {
@@ -41,6 +42,51 @@ namespace EcosDeAldenor.Core
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Garante um overlay de fade persistente (sobrevive as trocas de cena)
+            // mesmo que nenhum CanvasGroup tenha sido atribuido no Inspector.
+            EnsureFadeOverlay();
+
+            // Revela a primeira cena a partir do preto, evitando um flash inicial.
+            if (fadeCanvasGroup != null)
+            {
+                fadeCanvasGroup.alpha = 1f;
+                fadeCanvasGroup.blocksRaycasts = true;
+                StartCoroutine(Fade(0f));
+            }
+        }
+
+        /// <summary>
+        /// Cria em runtime um Canvas de tela cheia com uma imagem preta e um
+        /// CanvasGroup, como filho deste objeto persistente. Assim o fade funciona
+        /// em todas as transicoes sem depender de fiacao manual por cena (e sem
+        /// ser destruido junto da cena antiga durante o carregamento).
+        /// </summary>
+        private void EnsureFadeOverlay()
+        {
+            if (fadeCanvasGroup != null) return;
+
+            var overlay = new GameObject("FadeOverlay");
+            overlay.transform.SetParent(transform, false);
+
+            var canvas = overlay.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 5000; // acima de todo o HUD/menus
+            overlay.AddComponent<GraphicRaycaster>();
+
+            var imageObj = new GameObject("FadeImage");
+            imageObj.transform.SetParent(overlay.transform, false);
+            var image = imageObj.AddComponent<Image>();
+            image.color = Color.black;
+            var rect = image.rectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+
+            fadeCanvasGroup = overlay.AddComponent<CanvasGroup>();
+            fadeCanvasGroup.alpha = 0f;
+            fadeCanvasGroup.blocksRaycasts = false;
         }
 
         public void LoadMainMenu() => LoadScene(mainMenuScene);
@@ -105,6 +151,9 @@ namespace EcosDeAldenor.Core
                 yield break;
             }
 
+            // Bloqueia interacao enquanto a tela nao esta totalmente visivel.
+            fadeCanvasGroup.blocksRaycasts = true;
+
             float startAlpha = fadeCanvasGroup.alpha;
             float elapsed = 0f;
 
@@ -116,6 +165,8 @@ namespace EcosDeAldenor.Core
             }
 
             fadeCanvasGroup.alpha = targetAlpha;
+            // Libera a interacao somente quando o fade termina transparente.
+            fadeCanvasGroup.blocksRaycasts = targetAlpha > 0.01f;
         }
     }
 }
