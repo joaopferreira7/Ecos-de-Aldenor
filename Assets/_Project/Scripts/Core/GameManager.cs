@@ -30,6 +30,7 @@ namespace EcosDeAldenor.Core
         public event Action OnGameResumed;
 
         public int TotalFragments => totalFragmentsCollected;
+        public int FragmentsRequired => fragmentsRequiredForFinalPhase;
         public bool CanAccessFinalPhase => totalFragmentsCollected >= fragmentsRequiredForFinalPhase;
         public bool IsPaused => isPaused;
 
