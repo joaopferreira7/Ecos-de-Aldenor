@@ -554,9 +554,11 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "Hero Knight \u2013 Pixel Art \u2014 Sven Thole (itch.io)\nBandits \u2013
-    Pixel Art \u2014 Sven Thole (itch.io)\nBrackeys 2D Mega Pack \u2014 Brackeys
-    (gratuito / CC0)\n2D Dungeon Tilemap & Free GameUI \u2014 Unity Asset Store\nRPG
-    Essentials SFX \u2014 Leohpaz (itch.io)\nFonte: Legacy Runtime (Unity)"
+    Pixel Art \u2014 Sven Thole (itch.io)\nGothicvania (Cemiterio, Igreja, Cidade)
+    \u2014 Luis Zuno \"Ansimuz\" (CC0)\nBrackeys 2D Mega Pack \u2014 Brackeys (gratuito
+    / CC0)\n2D Dungeon Tilemap & Free GameUI \u2014 Unity Asset Store\nRPG Essentials
+    SFX \u2014 Leohpaz (itch.io)\nMusica (vila / vitoria) \u2014 Pascal Belisle\nFonte:
+    Legacy Runtime (Unity)"
 --- !u!222 &1437131701
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -940,7 +942,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
