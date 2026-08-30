@@ -85,6 +85,7 @@ abaixo (e também na **tela de Créditos** dentro do jogo):
 | **Gothicvania** (Church, Cemetery, Town) | Cenários, inimigos (fantasma, esqueleto) e o chefe (mago) | Luis Zuno "Ansimuz" — [ansimuz.itch.io](https://ansimuz.itch.io/) | CC0 |
 | **Free 2D Dungeon Platformer Tilemap** (tiles, Free GameUI, CoinSystem) | Tiles, elementos de UI e trilhas das fases | **Aether2D** — [aether2d.itch.io](https://aether2d.itch.io/dungeon) | CC0 |
 | **Music 1 / 2 / 3** (trilha das fases) | Música das fases, via pacote da Aether2D | Seth_Makes_Sounds — [freesound.org](https://freesound.org/people/Seth_Makes_Sounds/) | CC0 |
+| **Epic Boss Battle** *(Seamlessly Looping)* | Trilha da luta contra A Vigília | Juhani Junkala (SubspaceAudio) — [opengameart.org](https://opengameart.org/content/boss-battle-music) | CC0 |
 | **Brackeys 2D Mega Pack** | Elementos e decoração de cenário | Brackeys | gratuito / CC0 |
 | **Hitspark FX** | Efeito de faísca ao acertar golpes | Jason Lee — [jasontomlee.itch.io](https://jasontomlee.itch.io/) | gratuito |
 | **RPG Essentials SFX** | Efeitos sonoros | Leohpaz — [leohpaz.itch.io](https://leohpaz.itch.io/) | gratuito |

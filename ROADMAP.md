@@ -33,7 +33,11 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - ✅ **HUD de fragmentos** redesenhado: ícone + "N / 6" dourado + pulso ao coletar
 - ✅ **Áudio**: música por cena, trilha própria de **vitória** e **derrota**, chefe distinto;
   SFX de ataque, dano, morte, pulo, coleta (alma) e checkpoint
-- ✅ **Mixagem**: música em 0,55 e SFX em 0,90 — antes as duas fontes ficavam em 1,0
+- ✅ **Mixagem**: música em 0,55 e SFX em 0,90 — antes as duas fontes ficavam em 1,0 —
+  com ganho por faixa, já que as trilhas vêm de pacotes diferentes
+- ✅ **Trilha de chefe de verdade**: *Epic Boss Battle* (Juhani Junkala, CC0, 172 BPM) no
+  lugar de um loop de tensão a 67 BPM, com a música subindo de intensidade a cada fase
+  d'A Vigília
 - ✅ **Fade de transição** entre cenas
 - ✅ Menus (principal, pausa), telas de Vitória/GameOver e **Créditos** estilizados
 

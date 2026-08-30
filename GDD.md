@@ -238,11 +238,19 @@ MainMenu → Tutorial → Phase1 → Phase2 → FinalPhase → Victory
 - **Música por cena** (componente `SceneMusicPlayer` + `AudioManager` persistente):
   - Menu: tema calmo;
   - Fases: temas de exploração distintos;
-  - **Chefe (FinalPhase):** trilha própria, mais intensa;
+  - **Chefe (FinalPhase):** *Epic Boss Battle*, trilha orquestral de combate (172 BPM) —
+    as trilhas das fases têm 64–100 BPM e servem à exploração, não ao confronto;
   - **Vitória:** trilha de "paz restaurada" (em loop);
   - **Derrota:** *sting* que toca uma única vez.
+- **Escalada na luta do chefe:** a cada terço de vida perdido, A Vigília muda de fase e a
+  trilha sobe de intensidade (×1,12 e ×1,25), com um toque de virada e um tremor de câmera.
+  As fases já mudavam o comportamento do chefe, mas em silêncio; agora a virada se ouve.
+- **Encadeamento de ganho:** volume final = escolha do jogador × ganho da faixa × intensidade.
+  O ganho por faixa existe porque as trilhas vêm de pacotes diferentes e não foram
+  masterizadas juntas — a do chefe é gravada ~3,5× mais alta que as das fases e entra com
+  ganho 0,36, para ficar presente sem virar um susto de volume.
 - **SFX** (RPG Essentials — Leohpaz): ataque, dano, **morte**, **pulo**, **coleta de alma**
-  (absorção) e **ativação de checkpoint** (revive).
+  (absorção), **ativação de checkpoint** (revive) e **virada de fase do chefe** (carga mágica).
 
 ---
 
@@ -283,6 +291,7 @@ estão na **tela de Créditos** do jogo e no README.
 | **Brackeys 2D Mega Pack** | Decoração e efeitos | Brackeys | CC0 |
 | **Free 2D Dungeon Platformer Tilemap** | Tiles, Free GameUI e trilhas das fases | **Aether2D** (aether2d.itch.io) | CC0 |
 | **Music 1 / 2 / 3** | Música das fases (vem no pacote da Aether2D) | Seth_Makes_Sounds (freesound.org) | CC0 |
+| **Epic Boss Battle** | Trilha da luta contra A Vigília | Juhani Junkala / SubspaceAudio (opengameart.org) | CC0 |
 | **RPG Essentials SFX** | Efeitos sonoros | Leohpaz | gratuito |
 | **Música (vila / vitória)** | Trilha da tela de Vitória | Pascal Belisle | crédito exigido |
 
