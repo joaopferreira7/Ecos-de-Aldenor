@@ -118,6 +118,33 @@ namespace EcosDeAldenor.Core
             LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        /// <summary>
+        /// Carrega uma cena depois de um tempo, contando esse tempo AQUI.
+        ///
+        /// Existe porque quem pede uma troca de cena com atraso costuma ser
+        /// justamente um objeto que esta morrendo - o chefe, por exemplo, e
+        /// removido 0,6 s depois de cair. Um Invoke ou uma corrotina iniciada
+        /// nele morrem junto com o objeto, em silencio, e a cena nunca troca.
+        /// Este controlador e persistente e nao vai a lugar nenhum.
+        ///
+        /// A contagem e em tempo REAL: o hit stop zera o timeScale por instantes
+        /// exatamente no golpe que mata, e uma pausa no meio da comemoracao nao
+        /// pode engolir a troca de cena.
+        /// </summary>
+        public void LoadSceneAfter(string sceneName, float delay)
+        {
+            StartCoroutine(LoadSceneAfterRoutine(sceneName, delay));
+        }
+
+        public void LoadVictoryScreenAfter(float delay) => LoadSceneAfter(victoryScene, delay);
+        public void LoadGameOverScreenAfter(float delay) => LoadSceneAfter(gameOverScene, delay);
+
+        private IEnumerator LoadSceneAfterRoutine(string sceneName, float delay)
+        {
+            if (delay > 0f) yield return new WaitForSecondsRealtime(delay);
+            yield return StartCoroutine(LoadSceneRoutine(sceneName));
+        }
+
         public void LoadScene(string sceneName)
         {
             StartCoroutine(LoadSceneRoutine(sceneName));
