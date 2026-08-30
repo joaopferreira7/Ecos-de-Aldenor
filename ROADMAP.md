@@ -85,6 +85,11 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   para a VictoryScreen — bastava correr para a direita e o jogo era vencido sem encostar
   n'A Vigília. Removido; a vitória é do `BossDeathTrigger`, e o verificador agora recusa
   qualquer porta de saída na arena.
+- **Preso na arena depois de matar o chefe**: o `BossDeathTrigger` agendava a Vitória com
+  `Invoke(..., 1,6 s)` **no próprio objeto do chefe**, mas `EnemyBase.HandleDeath` destrói
+  esse objeto em 0,6 s — e destruir um objeto cancela os `Invoke` pendentes dele, sem erro
+  no console. O jogo acabava sem saída. A contagem passou para o `SceneController`, que é
+  persistente. O defeito era antigo, mascarado pelo `PhaseExit` que existia na arena.
 - **Barra do chefe no meio da tela**: o `BossHealthBar` ancora o painel no topo do próprio
   RectTransform, que na cena era um quadrado de 100×100 preso ao centro do canvas — a barra
   aparecia atravessada no rosto do jogador durante a luta. Agora ocupa 30,6%–69,4% da
