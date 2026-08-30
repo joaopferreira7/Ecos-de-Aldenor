@@ -18,6 +18,8 @@ namespace EcosDeAldenor.Systems
     {
         [SerializeField] private float deathDelay = 1.2f;
         [SerializeField] private int fallDamage = 1;
+        [Tooltip("Tempo de invulnerabilidade concedido ao reaparecer num checkpoint.")]
+        [SerializeField] private float respawnGraceTime = 1.5f;
 
         private HealthSystem healthSystem;
         private PlayerController playerController;
@@ -58,15 +60,33 @@ namespace EcosDeAldenor.Systems
                 && !string.IsNullOrEmpty(manager.GetCheckpointScene())
                 && manager.GetCheckpointScene() == SceneManager.GetActiveScene().name;
 
+            // A ORDEM importa. O dano vem primeiro, ainda durante a queda: assim
+            // o empurrao de dano do PlayerController e gasto no ar, e nao em cima
+            // do ponto de renascimento. Aplicar o dano depois de reposicionar
+            // lancava o jogador para o lado assim que ele reaparecia - se o altar
+            // ficasse perto da borda, ele era arremessado de volta no abismo e
+            // caia em ciclo ate perder todas as vidas.
+            // Dano de queda ignora a invulnerabilidade: senao cair logo apos
+            // levar um golpe sairia de graca.
+            healthSystem.ForceDamage(fallDamage);
+
+            // Sem vida restante, quem conduz e a rotina de morte/Game Over.
+            if (healthSystem.IsDead) return;
+
             // Cair custa um coracao e devolve o jogador ao ultimo altar ativado -
             // ou ao inicio da fase, se ele ainda nao passou por nenhum. Cair
             // nunca e Game Over instantaneo: so acaba quando a vida acaba.
             transform.position = hasCheckpointHere ? manager.GetCheckpointPosition() : spawnPosition;
+
+            // Reposiciona por ultimo e zera velocidade, estado de combate e
+            // recuo: o jogador reaparece parado e sob controle.
             playerController?.ResetForRespawn();
 
-            // Dano de queda ignora a invulnerabilidade: senao cair logo apos
-            // levar um golpe sairia de graca.
-            healthSystem.ForceDamage(fallDamage);
+            // Um respiro de invulnerabilidade ao voltar. Sem ele, um inimigo que
+            // esteja rondando o altar acerta o jogador no quadro seguinte ao
+            // renascimento, e o empurrao do golpe pode devolve-lo ao abismo.
+            healthSystem.GrantInvulnerability(respawnGraceTime);
+            playerController?.FlashInvulnerability(respawnGraceTime);
         }
 
         private void HandleDeath()

@@ -374,6 +374,17 @@ namespace EcosDeAldenor.Player
             flashRoutine = StartCoroutine(InvulnerabilityFlash(healthSystem.InvulnerabilityDuration));
         }
 
+        /// <summary>
+        /// Faz o personagem piscar por um tempo sem ter levado dano. Usado ao
+        /// reaparecer num checkpoint, para o jogador enxergar que esta protegido
+        /// durante o respiro de invulnerabilidade.
+        /// </summary>
+        public void FlashInvulnerability(float duration)
+        {
+            if (flashRoutine != null) StopCoroutine(flashRoutine);
+            flashRoutine = StartCoroutine(InvulnerabilityFlash(duration));
+        }
+
         private IEnumerator InvulnerabilityFlash(float duration)
         {
             if (spriteRenderer == null) yield break;

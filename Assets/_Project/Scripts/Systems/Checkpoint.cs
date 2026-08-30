@@ -45,30 +45,34 @@ namespace EcosDeAldenor.Systems
         {
             if (!other.CompareTag("Player")) return;
 
+            // O ponto de retorno e sempre reafirmado, inclusive quando o jogador
+            // reaparece aqui depois de uma queda.
             GameManager.Instance?.SetCheckpoint(transform.position, SceneManager.GetActiveScene().name);
 
-            HealthSystem playerHealth = other.GetComponent<HealthSystem>();
-            playerHealth?.ResetHealth();
+            // A CURA, porem, acontece uma unica vez: o altar se consome ao ser
+            // acendido. Curar a cada passagem tornava a queda gratuita - o
+            // jogador perdia um coracao e o recuperava ao reaparecer sobre o
+            // altar - e permitia recuperar vida so andando para tras e para
+            // frente em cima dele.
+            if (activated) return;
+            activated = true;
 
-            if (!activated)
+            other.GetComponent<HealthSystem>()?.ResetHealth();
+
+            if (activatedSprite != null && spriteRenderer != null)
             {
-                activated = true;
-
-                if (activatedSprite != null && spriteRenderer != null)
-                {
-                    spriteRenderer.sprite = activatedSprite;
-                }
-
-                // Acende o altar: chama de alma verde e luz mais forte.
-                if (soulRenderer != null) soulRenderer.color = activeColor;
-                if (shrineLight != null)
-                {
-                    shrineLight.color = activeColor;
-                    shrineLight.intensity = activeIntensity;
-                }
-
-                AudioManager.Instance?.PlaySfx(activateSfx);
+                spriteRenderer.sprite = activatedSprite;
             }
+
+            // Acende o altar: chama de alma verde e luz mais forte.
+            if (soulRenderer != null) soulRenderer.color = activeColor;
+            if (shrineLight != null)
+            {
+                shrineLight.color = activeColor;
+                shrineLight.intensity = activeIntensity;
+            }
+
+            AudioManager.Instance?.PlaySfx(activateSfx);
         }
     }
 }

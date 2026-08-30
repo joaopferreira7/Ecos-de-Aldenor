@@ -109,6 +109,20 @@ namespace EcosDeAldenor.Systems
         }
 
         /// <summary>
+        /// Concede um periodo de invulnerabilidade sem causar dano. Usado ao
+        /// reaparecer num checkpoint: sem isso um inimigo proximo pode acertar o
+        /// jogador no mesmo instante em que ele volta, e o empurrao resultante
+        /// pode joga-lo de novo no abismo.
+        /// </summary>
+        public void GrantInvulnerability(float duration)
+        {
+            if (IsDead) return;
+
+            isInvulnerable = true;
+            invulnerabilityTimer = Mathf.Max(invulnerabilityTimer, duration);
+        }
+
+        /// <summary>
         /// Aplica dano ignorando a invulnerabilidade. Usado pela queda fora do
         /// mapa: cair logo apos levar um golpe nao pode sair de graca.
         /// </summary>
