@@ -46,7 +46,9 @@ namespace EcosDeAldenor.UI
         {
             if (bossHealth == null)
             {
-                var boss = FindObjectOfType<AVigilia>();
+                // Ha um unico chefe na arena, entao qualquer instancia serve -
+                // e FindAnyObjectByType nao precisa ordenar para escolher.
+                var boss = FindAnyObjectByType<AVigilia>();
                 if (boss != null) bossHealth = boss.GetComponent<HealthSystem>();
             }
 
