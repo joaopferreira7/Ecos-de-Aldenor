@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using EcosDeAldenor.Systems;
 
@@ -8,6 +9,12 @@ namespace EcosDeAldenor.Player
     /// A ponte com o Animator segue exatamente o contrato de parametros do
     /// HeroKnight_AnimController (AnimState, Grounded, AirSpeedY, Jump,
     /// Attack1/2/3, Hurt, Death), original do asset Hero Knight - Pixel Art.
+    ///
+    /// O pulo usa as tecnicas classicas de "game feel" de plataforma:
+    /// coyote time (o pulo ainda vale por alguns quadros apos sair da borda),
+    /// jump buffer (o comando dado pouco antes de aterrissar nao e perdido),
+    /// altura variavel (soltar o botao corta a subida) e gravidade maior na
+    /// queda, o que elimina a sensacao "flutuante" do arco simetrico.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(HealthSystem))]
@@ -15,7 +22,23 @@ namespace EcosDeAldenor.Player
     {
         [Header("Movimento")]
         [SerializeField] private float moveSpeed = 4f;
+        [Tooltip("Aceleracao no chao (unidades/s^2). Valores altos = resposta imediata.")]
+        [SerializeField] private float groundAcceleration = 90f;
+        [Tooltip("Aceleracao no ar - um pouco menor da peso ao salto sem tirar o controle.")]
+        [SerializeField] private float airAcceleration = 45f;
+
+        [Header("Pulo")]
         [SerializeField] private float jumpForce = 7.5f;
+        [Tooltip("Tempo apos sair do chao em que o pulo ainda e aceito (coyote time).")]
+        [SerializeField] private float coyoteTime = 0.12f;
+        [Tooltip("Tempo em que um comando de pulo fica guardado esperando o chao (jump buffer).")]
+        [SerializeField] private float jumpBufferTime = 0.12f;
+        [Tooltip("Multiplicador de gravidade durante a queda: deixa a descida mais rapida que a subida.")]
+        [SerializeField] private float fallGravityMultiplier = 1.9f;
+        [Tooltip("Multiplicador de gravidade ao soltar o botao durante a subida (pulo curto).")]
+        [SerializeField] private float lowJumpGravityMultiplier = 2.6f;
+        [Tooltip("Velocidade maxima de queda, evita ganhar velocidade absurda em quedas longas.")]
+        [SerializeField] private float maxFallSpeed = 16f;
 
         [Header("Deteccao de Chao")]
         [SerializeField] private Transform groundCheck;
@@ -33,6 +56,8 @@ namespace EcosDeAldenor.Player
         [SerializeField] private AudioClip attackSfx;
         [Tooltip("Som tocado ao pular.")]
         [SerializeField] private AudioClip jumpSfx;
+        [Tooltip("Som tocado ao aterrissar depois de uma queda com peso.")]
+        [SerializeField] private AudioClip landSfx;
 
         [Header("VFX de Impacto")]
         [Tooltip("Frames da faisca de impacto (Hitspark FX) disparada ao acertar um inimigo.")]
@@ -46,6 +71,12 @@ namespace EcosDeAldenor.Player
         [SerializeField] private float knockbackForce = 6f;
         [Tooltip("Duracao do congelamento de tempo (hit stop) ao acertar.")]
         [SerializeField] private float hitStopDuration = 0.05f;
+        [Tooltip("Forca do empurrao sofrido pelo jogador ao levar dano.")]
+        [SerializeField] private float hurtKnockbackForce = 5.5f;
+        [Tooltip("Tempo em que o jogador perde o controle apos levar dano (deixa o recuo legivel).")]
+        [SerializeField] private float hurtControlLock = 0.18f;
+        [Tooltip("Cor do flash de invulnerabilidade apos levar dano.")]
+        [SerializeField] private Color hurtFlashColor = new Color(1f, 0.35f, 0.35f, 1f);
 
         private Rigidbody2D rb;
         private HealthSystem healthSystem;
@@ -53,6 +84,7 @@ namespace EcosDeAldenor.Player
         private SpriteRenderer spriteRenderer;
 
         private bool isGrounded;
+        private bool wasGrounded;
         private float horizontalInput;
         private float attackTimer;
         private float timeSinceAttack;
@@ -60,12 +92,25 @@ namespace EcosDeAldenor.Player
         private int facingDirection = 1;
         private float delayToIdle;
 
+        private float coyoteTimer;
+        private float jumpBufferTimer;
+        private bool jumpHeld;
+        private float baseGravityScale;
+        private float hurtLockTimer;
+        private float lastFallSpeed;
+
+        private Color baseSpriteColor = Color.white;
+        private Coroutine flashRoutine;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             healthSystem = GetComponent<HealthSystem>();
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
+
+            baseGravityScale = rb.gravityScale;
+            if (spriteRenderer != null) baseSpriteColor = spriteRenderer.color;
 
             healthSystem.OnDamaged += HandleDamaged;
             healthSystem.OnDeath += HandleDeath;
@@ -82,50 +127,91 @@ namespace EcosDeAldenor.Player
             if (healthSystem.IsDead) return;
 
             timeSinceAttack += Time.deltaTime;
+            if (hurtLockTimer > 0f) hurtLockTimer -= Time.deltaTime;
 
             ReadInput();
             CheckGrounded();
             HandleAttackCooldown();
+            UpdateJumpTimers();
             UpdateFacing();
             UpdateAnimatorMovementParams();
 
-            if (Input.GetButtonDown("Jump") && isGrounded)
+            // Pulo e ataque sao independentes: um nao pode "engolir" o outro no
+            // mesmo quadro, como acontecia quando estavam em cadeia else-if.
+            if (jumpBufferTimer > 0f && coyoteTimer > 0f)
             {
                 Jump();
             }
-            else if (Input.GetMouseButtonDown(0) && attackTimer <= 0f)
+
+            if (Input.GetMouseButtonDown(0) && attackTimer <= 0f)
             {
                 Attack();
             }
-            else if (Mathf.Abs(horizontalInput) > Mathf.Epsilon)
-            {
-                delayToIdle = 0.05f;
-                animator.SetInteger("AnimState", 1);
-            }
-            else
-            {
-                delayToIdle -= Time.deltaTime;
-                if (delayToIdle < 0f)
-                {
-                    animator.SetInteger("AnimState", 0);
-                }
-            }
+
+            UpdateAnimationState();
         }
 
         private void FixedUpdate()
         {
             if (healthSystem.IsDead) return;
             Move();
+            ApplyJumpGravity();
         }
 
         private void ReadInput()
         {
             horizontalInput = Input.GetAxisRaw("Horizontal");
+            jumpHeld = Input.GetButton("Jump");
+        }
+
+        /// <summary>
+        /// Atualiza as duas janelas de tolerancia do pulo. O coyote time perdoa
+        /// quem aperta logo depois de sair da borda; o buffer perdoa quem aperta
+        /// logo antes de encostar no chao.
+        /// </summary>
+        private void UpdateJumpTimers()
+        {
+            coyoteTimer = isGrounded ? coyoteTime : coyoteTimer - Time.deltaTime;
+
+            if (Input.GetButtonDown("Jump")) jumpBufferTimer = jumpBufferTime;
+            else jumpBufferTimer -= Time.deltaTime;
         }
 
         private void Move()
         {
-            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+            // Sem controle logo apos levar dano, para o recuo ser percebido.
+            if (hurtLockTimer > 0f) return;
+
+            float targetSpeed = horizontalInput * moveSpeed;
+            float accel = isGrounded ? groundAcceleration : airAcceleration;
+            float newX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, accel * Time.fixedDeltaTime);
+            rb.linearVelocity = new Vector2(newX, rb.linearVelocity.y);
+        }
+
+        /// <summary>
+        /// Gravidade dinamica: mais forte na queda e ao soltar o botao durante a
+        /// subida. E o que separa um pulo "flutuante" de um pulo com peso.
+        /// </summary>
+        private void ApplyJumpGravity()
+        {
+            float vy = rb.linearVelocity.y;
+
+            if (vy < -0.01f)
+            {
+                rb.gravityScale = baseGravityScale * fallGravityMultiplier;
+                if (vy < -maxFallSpeed)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxFallSpeed);
+                }
+            }
+            else if (vy > 0.01f && !jumpHeld)
+            {
+                rb.gravityScale = baseGravityScale * lowJumpGravityMultiplier;
+            }
+            else
+            {
+                rb.gravityScale = baseGravityScale;
+            }
         }
 
         private void UpdateFacing()
@@ -151,6 +237,20 @@ namespace EcosDeAldenor.Player
             }
         }
 
+        private void UpdateAnimationState()
+        {
+            if (Mathf.Abs(horizontalInput) > Mathf.Epsilon)
+            {
+                delayToIdle = 0.05f;
+                animator.SetInteger("AnimState", 1);
+            }
+            else
+            {
+                delayToIdle -= Time.deltaTime;
+                if (delayToIdle < 0f) animator.SetInteger("AnimState", 0);
+            }
+        }
+
         private void UpdateAnimatorMovementParams()
         {
             animator.SetFloat("AirSpeedY", rb.linearVelocity.y);
@@ -160,13 +260,40 @@ namespace EcosDeAldenor.Player
         private void CheckGrounded()
         {
             if (groundCheck == null) return;
+
+            wasGrounded = isGrounded;
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+            if (!isGrounded)
+            {
+                lastFallSpeed = Mathf.Min(lastFallSpeed, rb.linearVelocity.y);
+            }
+            else if (!wasGrounded)
+            {
+                HandleLanding();
+            }
+        }
+
+        /// <summary>
+        /// Aterrissagem: so quedas com alguma altura ganham som, e as mais
+        /// fortes tambem sacodem a camera. Pulinhos curtos ficam em silencio
+        /// para o feedback nao virar ruido constante.
+        /// </summary>
+        private void HandleLanding()
+        {
+            if (lastFallSpeed < -6f) AudioManager.Instance?.PlaySfx(landSfx);
+            if (lastFallSpeed < -10f) CameraShake.Shake(0.12f, 0.09f);
+            lastFallSpeed = 0f;
         }
 
         private void Jump()
         {
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+
             animator.SetTrigger("Jump");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            rb.gravityScale = baseGravityScale;
             AudioManager.Instance?.PlaySfx(jumpSfx);
         }
 
@@ -222,14 +349,58 @@ namespace EcosDeAldenor.Player
             if (hitSomething) HitStop.Do(hitStopDuration);
         }
 
+        /// <summary>
+        /// Reacao ao levar dano: hit stop curto, empurrao para longe da fonte e
+        /// piscar enquanto dura a invulnerabilidade - o jogador precisa ver e
+        /// sentir que foi atingido, e saber quando volta a ser vulneravel.
+        /// </summary>
         private void HandleDamaged()
         {
             animator.SetTrigger("Hurt");
+            HitStop.Do(0.07f, 0.02f);
+
+            float dir = -facingDirection;
+            Vector2 source;
+            if (healthSystem.TryGetLastDamageSource(out source))
+            {
+                dir = Mathf.Sign(transform.position.x - source.x);
+                if (Mathf.Approximately(dir, 0f)) dir = -facingDirection;
+            }
+
+            rb.linearVelocity = new Vector2(dir * hurtKnockbackForce, hurtKnockbackForce * 0.55f);
+            hurtLockTimer = hurtControlLock;
+
+            if (flashRoutine != null) StopCoroutine(flashRoutine);
+            flashRoutine = StartCoroutine(InvulnerabilityFlash(healthSystem.InvulnerabilityDuration));
+        }
+
+        private IEnumerator InvulnerabilityFlash(float duration)
+        {
+            if (spriteRenderer == null) yield break;
+
+            const float blinkInterval = 0.08f;
+            float elapsed = 0f;
+            bool tinted = false;
+
+            while (elapsed < duration && !healthSystem.IsDead)
+            {
+                tinted = !tinted;
+                spriteRenderer.color = tinted ? hurtFlashColor : baseSpriteColor;
+                yield return new WaitForSeconds(blinkInterval);
+                elapsed += blinkInterval;
+            }
+
+            spriteRenderer.color = baseSpriteColor;
+            flashRoutine = null;
         }
 
         private void HandleDeath()
         {
             animator.SetTrigger("Death");
+
+            if (flashRoutine != null) StopCoroutine(flashRoutine);
+            flashRoutine = null;
+            if (spriteRenderer != null) spriteRenderer.color = baseSpriteColor;
         }
 
         /// <summary>
@@ -241,9 +412,18 @@ namespace EcosDeAldenor.Player
         public void ResetForRespawn()
         {
             rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = baseGravityScale;
             currentAttack = 0;
             attackTimer = 0f;
             timeSinceAttack = 0f;
+            hurtLockTimer = 0f;
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+            lastFallSpeed = 0f;
+
+            if (flashRoutine != null) StopCoroutine(flashRoutine);
+            flashRoutine = null;
+            if (spriteRenderer != null) spriteRenderer.color = baseSpriteColor;
 
             animator.Rebind();
             animator.Update(0f);

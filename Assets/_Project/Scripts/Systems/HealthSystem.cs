@@ -22,6 +22,11 @@ namespace EcosDeAldenor.Systems
         private bool isInvulnerable;
         private float invulnerabilityTimer;
 
+        // Ultima posicao de onde veio o dano. Permite a quem reage (por exemplo o
+        // PlayerController) empurrar a vitima para o lado oposto ao do agressor.
+        private Vector2 lastDamageSource;
+        private bool hasDamageSource;
+
         // Eventos para que outros sistemas (UI, animacao, audio) reajam sem
         // que o HealthSystem precise conhece-los diretamente (baixo acoplamento).
         public event Action<int, int> OnHealthChanged; // (atual, maximo)
@@ -31,6 +36,17 @@ namespace EcosDeAldenor.Systems
         public int CurrentHealth => currentHealth;
         public int MaxHealth => maxHealth;
         public bool IsDead => currentHealth <= 0;
+        public float InvulnerabilityDuration => invulnerabilityDuration;
+        public bool IsInvulnerable => isInvulnerable;
+
+        /// <summary>
+        /// Devolve de onde veio o ultimo dano, se essa informacao foi fornecida.
+        /// </summary>
+        public bool TryGetLastDamageSource(out Vector2 source)
+        {
+            source = lastDamageSource;
+            return hasDamageSource;
+        }
 
         private void Awake()
         {
@@ -56,6 +72,25 @@ namespace EcosDeAldenor.Systems
         {
             if (isInvulnerable || IsDead) return;
 
+            hasDamageSource = false;
+            ApplyDamage(amount);
+        }
+
+        /// <summary>
+        /// Igual a TakeDamage, mas informa de onde veio o golpe para que a reacao
+        /// (recuo, VFX) possa ser direcional.
+        /// </summary>
+        public void TakeDamage(int amount, Vector2 sourcePosition)
+        {
+            if (isInvulnerable || IsDead) return;
+
+            lastDamageSource = sourcePosition;
+            hasDamageSource = true;
+            ApplyDamage(amount);
+        }
+
+        private void ApplyDamage(int amount)
+        {
             currentHealth = Mathf.Max(0, currentHealth - amount);
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
             OnDamaged?.Invoke();
@@ -71,6 +106,19 @@ namespace EcosDeAldenor.Systems
                 isInvulnerable = true;
                 invulnerabilityTimer = invulnerabilityDuration;
             }
+        }
+
+        /// <summary>
+        /// Aplica dano ignorando a invulnerabilidade. Usado pela queda fora do
+        /// mapa: cair logo apos levar um golpe nao pode sair de graca.
+        /// </summary>
+        public void ForceDamage(int amount)
+        {
+            if (IsDead) return;
+
+            isInvulnerable = false;
+            hasDamageSource = false;
+            ApplyDamage(amount);
         }
 
         /// <summary>

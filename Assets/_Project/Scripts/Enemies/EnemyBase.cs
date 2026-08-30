@@ -154,7 +154,7 @@ namespace EcosDeAldenor.Enemies
                 HealthSystem targetHealth = hit.GetComponent<HealthSystem>();
                 if (targetHealth != null)
                 {
-                    targetHealth.TakeDamage(contactDamage);
+                    targetHealth.TakeDamage(contactDamage, transform.position);
                     contactDamageTimer = contactDamageCooldown;
                 }
             }

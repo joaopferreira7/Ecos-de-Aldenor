@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 7228352265404339946}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.9, z: 0}
+  m_LocalPosition: {x: 0, y: 0.041999977, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -182,9 +182,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Player.PlayerController
   moveSpeed: 5
-  jumpForce: 10
+  groundAcceleration: 90
+  airAcceleration: 45
+  jumpForce: 11
+  coyoteTime: 0.12
+  jumpBufferTime: 0.12
+  fallGravityMultiplier: 1.9
+  lowJumpGravityMultiplier: 2.6
+  maxFallSpeed: 16
   groundCheck: {fileID: 755228313173927687}
-  groundCheckRadius: 0.15
+  groundCheckRadius: 0.12
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -199,6 +206,7 @@ MonoBehaviour:
   comboResetTime: 1
   attackSfx: {fileID: 8300000, guid: 88b1cbe3caa3fee4b8b103b5edd7aba9, type: 3}
   jumpSfx: {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
+  landSfx: {fileID: 8300000, guid: eaae8fe8d600e1f459f34aa5757fa3b8, type: 3}
   hitSparkFrames:
   - {fileID: -585612294927119770, guid: 1f52a2a83e2876e4a92b4f6272e7466d, type: 3}
   - {fileID: -9050144134885651352, guid: 1f52a2a83e2876e4a92b4f6272e7466d, type: 3}
@@ -213,6 +221,9 @@ MonoBehaviour:
   hitSparkTint: {r: 1, g: 1, b: 1, a: 1}
   knockbackForce: 6
   hitStopDuration: 0.05
+  hurtKnockbackForce: 5.5
+  hurtControlLock: 0.18
+  hurtFlashColor: {r: 1, g: 0.35, b: 0.35, a: 1}
 --- !u!114 &29811367113660257
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -211,7 +211,7 @@ namespace EcosDeAldenor.Enemies
             if (distance <= range)
             {
                 HealthSystem playerHealth = detectedPlayer.GetComponent<HealthSystem>();
-                playerHealth?.TakeDamage(damage);
+                if (playerHealth != null) playerHealth.TakeDamage(damage, transform.position);
             }
         }
 
