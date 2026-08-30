@@ -200,7 +200,10 @@ MainMenu → Tutorial → Phase1 → Phase2 → FinalPhase → Victory
 - **MainMenu** — título estilizado e navegação (Jogar, Créditos, Sair).
 - **Tutorial** — área segura, sem inimigos, com placas ensinando os controles.
 - **Phase1 / Phase2** — cemitério espectral com plataformas, inimigos, fragmentos e checkpoints.
-- **FinalPhase** — arena na igreja com o chefe A Vigília.
+- **FinalPhase** — arena na igreja com o chefe A Vigília. É a única fase **sem porta de
+  saída**: a passagem para a Vitória é derrubar o chefe (`BossDeathTrigger`), e não
+  alcançar a borda direita. Um `PhaseExit` aqui seria um atalho que vence o jogo sem
+  luta — o verificador de fases recusa.
 - **VictoryScreen / GameOverScreen** — telas de fim, com botão de voltar ao menu.
 - **Credits** — integrantes e fontes dos assets.
 

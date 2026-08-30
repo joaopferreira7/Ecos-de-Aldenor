@@ -81,6 +81,14 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   as duas fontes tocavam no volume máximo.
 - **Crédito errado no sprite do herói**: Hero Knight constava como "Sven Thole"; é do
   **LuizMelo**. Sven Thole é o autor do Bandits, que nem aparecia na tabela do README.
+- **Vitória sem lutar**: a arena do chefe tinha um `PhaseExit` invisível em x=14 apontando
+  para a VictoryScreen — bastava correr para a direita e o jogo era vencido sem encostar
+  n'A Vigília. Removido; a vitória é do `BossDeathTrigger`, e o verificador agora recusa
+  qualquer porta de saída na arena.
+- **Barra do chefe no meio da tela**: o `BossHealthBar` ancora o painel no topo do próprio
+  RectTransform, que na cena era um quadrado de 100×100 preso ao centro do canvas — a barra
+  aparecia atravessada no rosto do jogador durante a luta. Agora ocupa 30,6%–69,4% da
+  largura, a 5,5% do topo.
 
 ---
 
