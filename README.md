@@ -61,7 +61,7 @@ O jogo tem **8 cenas** encadeadas:
 1. Instale o **Unity Hub** e a versão **6000.4.1f1** (com módulo de build para *Windows*).
 2. No Unity Hub: **Add → Add project from disk** e selecione a pasta do projeto
    (`Ecos de Aldenor`, a que contém as pastas `Assets/`, `Packages/` e `ProjectSettings/`).
-3. Abra o projeto e carregue a cena `Assets/Scenes/MainMenu.unity`.
+3. Abra o projeto e carregue a cena `Assets/_Project/Scenes/MainMenu.unity`.
 4. Pressione **Play** ▶️ para jogar no editor.
 
 ## 📦 Como gerar a build (executável)
@@ -78,17 +78,21 @@ O jogo tem **8 cenas** encadeadas:
 Todos os assets de terceiros são gratuitos. As atribuições exigidas por licença estão listadas
 abaixo (e também na **tela de Créditos** dentro do jogo):
 
-| Asset | Uso no jogo | Autor / Fonte |
-|-------|-------------|---------------|
-| **Hero Knight – Pixel Art** | Personagem jogável (Ren) | Sven Thole (LuizMelo) |
-| **Gothicvania** (Church, Cemetery, Town) | Cenários, inimigos (fantasma, esqueleto) e o chefe (mago) | ansimuz |
-| **Hitspark FX** | Efeito de faísca ao acertar golpes | (autor do pacote Hitspark FX) |
-| **Brackeys 2D Mega Pack** | Elementos e decoração de cenário | Brackeys |
-| **2D Dungeon Tilemap** | Tiles e elementos de nível | (autor do pacote) |
-| **RPG Essentials SFX** | Efeitos sonoros | Leohpaz |
+| Asset | Uso no jogo | Autor / Fonte | Licença |
+|-------|-------------|---------------|---------|
+| **Hero Knight – Pixel Art** | Personagem jogável (Ren) | **LuizMelo** — [luizmelo.itch.io](https://luizmelo.itch.io/hero-knight) | CC0 (crédito não exigido, mas apreciado) |
+| **Bandits – Pixel Art** | Base dos prefabs de inimigos (estrutura e animações) | **Sven Thole** — [sventhole.itch.io](https://sventhole.itch.io/bandits) | livre para qualquer jogo, comercial ou não; **não** pode ser revendido como asset |
+| **Gothicvania** (Church, Cemetery, Town) | Cenários, inimigos (fantasma, esqueleto) e o chefe (mago) | Luis Zuno "Ansimuz" — [ansimuz.itch.io](https://ansimuz.itch.io/) | CC0 |
+| **Free 2D Dungeon Platformer Tilemap** (tiles, Free GameUI, CoinSystem) | Tiles, elementos de UI e trilhas das fases | **Aether2D** — [aether2d.itch.io](https://aether2d.itch.io/dungeon) | CC0 |
+| **Music 1 / 2 / 3** (trilha das fases) | Música das fases, via pacote da Aether2D | Seth_Makes_Sounds — [freesound.org](https://freesound.org/people/Seth_Makes_Sounds/) | CC0 |
+| **Brackeys 2D Mega Pack** | Elementos e decoração de cenário | Brackeys | gratuito / CC0 |
+| **Hitspark FX** | Efeito de faísca ao acertar golpes | Jason Lee — [jasontomlee.itch.io](https://jasontomlee.itch.io/) | gratuito |
+| **RPG Essentials SFX** | Efeitos sonoros | Leohpaz — [leohpaz.itch.io](https://leohpaz.itch.io/) | gratuito |
+| **Música (vila / vitória)** | Trilha da tela de Vitória | Pascal Belisle | crédito exigido |
 
-> Ao finalizar, confira as páginas oficiais de cada pacote e ajuste os nomes/licenças
-> exatamente como o autor pede (ex.: CC0, CC-BY). A tela de Créditos deve refletir esta tabela.
+> Autoria conferida nas páginas oficiais em 30/08/2026. **Hero Knight e Bandits são de autores
+> diferentes**: os dois já constaram como "Sven Thole", mas Hero Knight é do **LuizMelo** — dele é o
+> sprite do Ren. A tela de Créditos dentro do jogo reflete exatamente esta tabela.
 
 ---
 
@@ -99,7 +103,6 @@ Assets/
 ├── _Project/            # Código, prefabs e cenas próprias do jogo
 │   ├── Scripts/         # C# (Core, Player, Enemies, Systems, UI)
 │   ├── Prefabs/         # Player, inimigos, itens, UI, ambiente
-│   └── Scenes/          # As 8 cenas do jogo
-├── Scenes/              # Cena inicial (MainMenu)
+│   └── Scenes/          # As 8 cenas do jogo, MainMenu inclusive
 └── ...                  # Pacotes de assets de terceiros (ver Créditos)
 ```

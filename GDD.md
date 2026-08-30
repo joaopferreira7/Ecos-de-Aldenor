@@ -274,13 +274,15 @@ estão na **tela de Créditos** do jogo e no README.
 | Asset | Uso | Autor / Fonte | Licença |
 |-------|-----|---------------|---------|
 | **Gothicvania** (Cemetery, Church, Town) | Cenários, inimigos e chefe | Luis Zuno "Ansimuz" | CC0 |
-| **Hero Knight – Pixel Art** | Personagem jogável (Ren) | *confirmar (LuizMelo / Sven Thole)* | gratuito |
-| **Bandits – Pixel Art** | Animações/sensor auxiliares | *confirmar (LuizMelo / Sven Thole)* | gratuito |
+| **Hero Knight – Pixel Art** | Personagem jogável (Ren) | **LuizMelo** (luizmelo.itch.io) | CC0 |
+| **Bandits – Pixel Art** | Base dos prefabs de inimigos | **Sven Thole** (sventhole.itch.io) | livre em jogos; não revendável como asset |
 | **Hitspark FX** | Faísca de impacto no golpe | Jason Lee (jasontomlee.itch.io) | gratuito |
 | **Brackeys 2D Mega Pack** | Decoração e efeitos | Brackeys | CC0 |
-| **2D Dungeon Tilemap & músicas CC0** | Tiles e trilhas | Unity Asset Store | CC0 |
+| **Free 2D Dungeon Platformer Tilemap** | Tiles, Free GameUI e trilhas das fases | **Aether2D** (aether2d.itch.io) | CC0 |
+| **Music 1 / 2 / 3** | Música das fases (vem no pacote da Aether2D) | Seth_Makes_Sounds (freesound.org) | CC0 |
 | **RPG Essentials SFX** | Efeitos sonoros | Leohpaz | gratuito |
 | **Música (vila / vitória)** | Trilha da tela de Vitória | Pascal Belisle | crédito exigido |
 
-> **Atenção:** confirmar nas páginas oficiais a autoria de *Hero Knight* e *Bandits*
-> e a licença exata de cada pacote, alinhando README e tela de Créditos (ver `ROADMAP.md`).
+> Autoria conferida nas páginas oficiais em 30/08/2026. *Hero Knight* e *Bandits* são de
+> **autores diferentes** — os dois já constaram como "Sven Thole" no README e na tela de
+> Créditos, mas o sprite do Ren é do **LuizMelo**. README, GDD e tela de Créditos estão alinhados.

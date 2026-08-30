@@ -553,12 +553,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Hero Knight \u2013 Pixel Art \u2014 Sven Thole (itch.io)\nBandits \u2013
-    Pixel Art \u2014 Sven Thole (itch.io)\nGothicvania (Cemiterio, Igreja, Cidade)
-    \u2014 Luis Zuno \"Ansimuz\" (CC0)\nBrackeys 2D Mega Pack \u2014 Brackeys (gratuito
-    / CC0)\n2D Dungeon Tilemap & Free GameUI \u2014 Unity Asset Store\nHitspark FX
-    \u2014 Jason Lee (jasontomlee.itch.io)\nRPG Essentials SFX \u2014 Leohpaz (itch.io)\nMusica
-    (vila / vitoria) \u2014 Pascal Belisle\nFonte: Legacy Runtime (Unity)"
+  m_Text: "Hero Knight \u2013 Pixel Art \u2014 LuizMelo (luizmelo.itch.io)\nBandits
+    \u2013 Pixel Art \u2014 Sven Thole (sventhole.itch.io)\nGothicvania (Cemiterio,
+    Igreja, Cidade) \u2014 Luis Zuno \"Ansimuz\" (CC0)\nBrackeys 2D Mega Pack \u2014
+    Brackeys (gratuito / CC0)\n2D Dungeon Tilemap, Free GameUI e trilhas \u2014 Aether2D
+    / Seth_Makes_Sounds (CC0)\nHitspark FX \u2014 Jason Lee (jasontomlee.itch.io)\nRPG
+    Essentials SFX \u2014 Leohpaz (itch.io)\nMusica (vila / vitoria) \u2014 Pascal
+    Belisle\nFonte: Legacy Runtime (Unity)"
 --- !u!222 &1437131701
 CanvasRenderer:
   m_ObjectHideFlags: 0
