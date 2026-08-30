@@ -44,6 +44,9 @@ namespace EcosDeAldenor.Enemies
         [SerializeField] private float retreatDuration = 1f;
         [SerializeField] private float stateCooldown = 1.2f;
 
+        [Tooltip("Toque que marca a virada de fase do chefe (a cada terco de vida perdido).")]
+        [SerializeField] private AudioClip phaseChangeSfx;
+
         private BossState currentState = BossState.Idle;
         private float stateTimer;
         private int currentPhase = 1; // 1, 2 ou 3 - muda conforme a vida diminui
@@ -232,6 +235,7 @@ namespace EcosDeAldenor.Enemies
         private void EvaluatePhase(int current, int max)
         {
             float healthPercent = (float)current / max;
+            int anterior = currentPhase;
 
             if (healthPercent <= 1f / 3f)
             {
@@ -245,6 +249,28 @@ namespace EcosDeAldenor.Enemies
             {
                 currentPhase = 1;
             }
+
+            if (currentPhase > anterior) EntrarNaFase(currentPhase);
+        }
+
+        /// <summary>
+        /// A luta aperta a cada terco de vida do chefe, e a trilha aperta junto.
+        ///
+        /// As fases ja mudavam o comportamento dele, mas em silencio: o jogador
+        /// via o chefe ficar mais agressivo sem nada marcar a virada. Uma trilha
+        /// que sobe de intensidade e um toque de batalha na passagem dizem "isto
+        /// mudou" no momento exato em que muda - e e o que faz uma luta longa
+        /// parecer ter atos, em vez de um bloco so.
+        ///
+        /// A intensidade multiplica o volume da trilha; ela volta a 1 sozinha
+        /// quando outra cena pede a sua musica, entao a escalada nao vaza para a
+        /// tela de Vitoria.
+        /// </summary>
+        private void EntrarNaFase(int fase)
+        {
+            AudioManager.Instance?.SetMusicIntensity(fase == 3 ? 1.25f : 1.12f);
+            AudioManager.Instance?.PlaySfx(phaseChangeSfx);
+            CameraShake.Shake(0.25f, 0.2f);
         }
     }
 }

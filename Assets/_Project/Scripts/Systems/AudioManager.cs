@@ -30,6 +30,11 @@ namespace EcosDeAldenor.Systems
         [Range(0f, 1f)]
         [SerializeField] private float sfxVolume = 0.9f;
 
+        // Ganho da faixa que esta tocando e intensidade momentanea dela. Nao sao
+        // ajustes do jogador: sao mixagem, e por isso nao aparecem no Inspector.
+        private float trackGain = 1f;
+        private float musicIntensity = 1f;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -59,14 +64,49 @@ namespace EcosDeAldenor.Systems
             SetSfxVolume(sfxVolume);
         }
 
-        public void PlayMusic(AudioClip clip, bool loop = true)
+        /// <summary>
+        /// Toca uma trilha. <paramref name="trackGain"/> compensa a diferenca de
+        /// nivel ENTRE as faixas: elas vem de pacotes diferentes e nao foram
+        /// masterizadas juntas. O tema do chefe, por exemplo, e gravado quase
+        /// quatro vezes mais alto que as trilhas das fases - sem correcao, entrar
+        /// na arena seria um susto de volume, e baixar a musica no geral so
+        /// deixaria as outras fases inaudiveis.
+        /// </summary>
+        public void PlayMusic(AudioClip clip, bool loop = true, float trackGain = 1f)
         {
             if (clip == null) return;
             musicSource.loop = loop;
+
+            // A intensidade e propria de cada trilha: quem entra numa cena nova
+            // comeca do zero, senao a escalada da luta do chefe vazaria para a
+            // tela de Vitoria (este objeto sobrevive a troca de cena).
+            musicIntensity = 1f;
+            this.trackGain = Mathf.Max(0f, trackGain);
+
             // Evita reiniciar a mesma trilha que ja esta tocando.
-            if (musicSource.clip == clip && musicSource.isPlaying) return;
+            if (musicSource.clip == clip && musicSource.isPlaying) { AplicarVolumeDaMusica(); return; }
+
             musicSource.clip = clip;
+            AplicarVolumeDaMusica();
             musicSource.Play();
+        }
+
+        /// <summary>
+        /// Multiplicador de intensidade da trilha atual, para a musica reagir ao
+        /// que esta acontecendo - a luta do chefe aperta a cada fase dele. Nao
+        /// substitui o volume do jogador nem o ganho da faixa: multiplica os dois.
+        /// </summary>
+        public void SetMusicIntensity(float intensity)
+        {
+            musicIntensity = Mathf.Clamp(intensity, 0f, 2f);
+            AplicarVolumeDaMusica();
+        }
+
+        /// <summary>volume final = escolha do jogador x ganho da faixa x intensidade.</summary>
+        private void AplicarVolumeDaMusica()
+        {
+            if (musicSource != null)
+                musicSource.volume = Mathf.Clamp01(musicVolume * trackGain * musicIntensity);
         }
 
         public void PlaySfx(AudioClip clip)
@@ -83,7 +123,7 @@ namespace EcosDeAldenor.Systems
         public void SetMusicVolume(float volume)
         {
             musicVolume = Mathf.Clamp01(volume);
-            if (musicSource != null) musicSource.volume = musicVolume;
+            AplicarVolumeDaMusica();
         }
 
         public void SetSfxVolume(float volume)

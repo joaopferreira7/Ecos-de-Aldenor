@@ -292,6 +292,7 @@ MonoBehaviour:
   telegraphDuration: 0.8
   retreatDuration: 1
   stateCooldown: 1.2
+  phaseChangeSfx: {fileID: 8300000, guid: d1afd3f4d23c24f418ffc315afb04965, type: 3}
 --- !u!114 &5370883949939185928
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2493,8 +2493,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed373d47767d50f40b8bdc5026ed4674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.SceneMusicPlayer
-  sceneMusic: {fileID: 8300000, guid: b4cdc4c9f9e1f8b4ca9e742e68378d32, type: 3}
+  sceneMusic: {fileID: 8300000, guid: 9bafb657db51aaa49b5be8b9c30de4a1, type: 3}
   loop: 1
+  trackGain: 0.36
 --- !u!4 &1051502319
 Transform:
   m_ObjectHideFlags: 0
