@@ -21,11 +21,15 @@ namespace EcosDeAldenor.Systems
 
         private HealthSystem healthSystem;
         private PlayerController playerController;
+        private Vector3 spawnPosition;
 
         private void Awake()
         {
             healthSystem = GetComponent<HealthSystem>();
             playerController = GetComponent<PlayerController>();
+            // Posicao inicial da fase: rede de seguranca para quedas que
+            // acontecem antes de qualquer checkpoint ter sido ativado.
+            spawnPosition = transform.position;
             healthSystem.OnDeath += HandleDeath;
             healthSystem.OnDamaged += HandleDamagedFeedback;
         }
@@ -47,20 +51,22 @@ namespace EcosDeAldenor.Systems
         /// </summary>
         public void HandleFallOutOfBounds()
         {
+            if (healthSystem.IsDead) return;
+
             GameManager manager = GameManager.Instance;
             bool hasCheckpointHere = manager != null
                 && !string.IsNullOrEmpty(manager.GetCheckpointScene())
                 && manager.GetCheckpointScene() == SceneManager.GetActiveScene().name;
 
-            if (!hasCheckpointHere)
-            {
-                healthSystem.Kill();
-                return;
-            }
-
-            transform.position = manager.GetCheckpointPosition();
+            // Cair custa um coracao e devolve o jogador ao ultimo altar ativado -
+            // ou ao inicio da fase, se ele ainda nao passou por nenhum. Cair
+            // nunca e Game Over instantaneo: so acaba quando a vida acaba.
+            transform.position = hasCheckpointHere ? manager.GetCheckpointPosition() : spawnPosition;
             playerController?.ResetForRespawn();
-            healthSystem.TakeDamage(fallDamage);
+
+            // Dano de queda ignora a invulnerabilidade: senao cair logo apos
+            // levar um golpe sairia de graca.
+            healthSystem.ForceDamage(fallDamage);
         }
 
         private void HandleDeath()
