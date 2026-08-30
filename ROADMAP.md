@@ -18,6 +18,14 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - ✅ Chefe "A Vigília": barra de vida própria (com *chip damage*), telegrafo, fases de combate
 - ✅ Coleta dos 6 fragmentos de alma (regra da fase final)
 - ✅ Checkpoints (altares) + queda reposiciona no checkpoint em vez de morte instantânea
+- ✅ **Level design de verdade**: as fases deixaram de ser corredores planos — chão
+  segmentado com abismos, plataformas em degrau e almas que exigem subir
+- ✅ **Game feel do pulo**: coyote time, jump buffer, altura variável, gravidade de
+  queda maior, som de aterrissagem
+- ✅ **Dano com peso**: hit stop, empurrão direcional e pisca-pisca de invulnerabilidade
+- ✅ Aviso central ao reunir as 6 almas (fase final liberada)
+- ✅ Ferramenta de editor `LevelTerrainBuilder` + verificador automático de
+  jogabilidade das fases (alcance, vãos, patrulhas, sobreposição de corpos)
 
 **Apresentação / game feel**
 - ✅ Câmera seguidora com limites + *screen shake*
@@ -36,6 +44,19 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 ---
 
+## 🐞 Bugs de fundo corrigidos nesta rodada
+
+- **Pulo no ar**: o `GroundCheck` do Ren estava **0,94 u abaixo dos pés**, então o
+  jogador contava como "no chão" flutuando quase uma unidade acima dele.
+- **Pulo e ataque se anulavam**: estavam numa cadeia `else if`, então não dava para
+  atacar no mesmo quadro em que se pulava.
+- **Nascimento dentro da rocha**: na Phase2 uma plataforma cobria o ponto de
+  nascimento e a física cuspia o jogador para longe.
+- **Inimigo colado ao nascimento**: o jogador levava empurrão/dano antes de tocar o teclado.
+- **Chefe afundado 0,2 u no chão** (o collider foi recalculado quando o sprite virou o mago).
+
+---
+
 ## 🔲 P1 — Obrigatório para a entrega (18/11)
 
 - 🔲 **GDD** entregue (ver `GDD.md`) — revisar com o grupo e exportar em PDF se exigido
@@ -49,9 +70,10 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 - 🔲 **Playtest de balanceamento**: vida do chefe (hoje 12), dano/alcance do player, dificuldade dos inimigos, número de checkpoints
 - 🔲 **Mixagem de áudio**: revisar volumes relativos de música x SFX (nenhum estourando/inaudível)
-- 🔲 Feedback ao **completar 6/6 fragmentos** (aviso visual/sonoro de que a fase final foi liberada)
-- 🔲 *Hit stop*/flash também **ao levar dano** (hoje há shake; falta o "peso")
-- 🔎 Confirmar em playtest o **fade**, o **HUD de fragmentos** e o **pulo** recém-adicionados
+- ✅ Feedback ao **completar 6/6 fragmentos** (aviso visual/sonoro de que a fase final foi liberada)
+- ✅ *Hit stop*/flash também **ao levar dano**
+- 🔎 Confirmar em playtest jogado à mão o **percurso completo das 4 fases** com o novo relevo
+  (a verificação automática aprova a geometria, mas ritmo e dificuldade só se sentem jogando)
 - 🔲 Passe visual final: consistência de escala dos inimigos, emendas de parallax, legibilidade dos textos no escuro
 
 ---
