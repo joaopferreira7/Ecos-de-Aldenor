@@ -673,6 +673,7 @@ MonoBehaviour:
   heartEmptySprite: {fileID: 21300000, guid: 9ae0830f911e6d64d91109e55a34aee8, type: 2}
   fragmentsText: {fileID: 5952085004869010125}
   fragmentIcon: {fileID: 7434315570607238820}
+  finalPhaseUnlockedSfx: {fileID: 8300000, guid: b0e62ed71b1538648b719821f4f63b4c, type: 3}
 --- !u!1 &8178408346114047022
 GameObject:
   m_ObjectHideFlags: 0
