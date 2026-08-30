@@ -203,6 +203,21 @@ namespace EcosDeAldenor.EditorTools
             }
             livres = Subtrair(livres, xPorta - 1.5f, xPorta + 1.5f);
             livres = Subtrair(livres, xNascimento - 1.2f, xNascimento + 1.2f);
+
+            // Altares e a saida da fase tambem reservam o seu lugar. Sao objetos
+            // ALTOS e que o jogador precisa reconhecer de relance: uma lapide
+            // plantada em cima de um altar nao esconde so o sprite, esconde o
+            // unico ponto de retorno da fase. Decoracao rasteira (cranio,
+            // entulho) some atras deles do mesmo jeito, entao a faixa e limpa
+            // para os dois casos.
+            foreach (var root in cena.GetRootGameObjects())
+            {
+                foreach (var altar in root.GetComponentsInChildren<EcosDeAldenor.Systems.Checkpoint>(true))
+                    livres = Subtrair(livres, altar.transform.position.x - 1.2f, altar.transform.position.x + 1.2f);
+                foreach (var saida in root.GetComponentsInChildren<EcosDeAldenor.Systems.PhaseExit>(true))
+                    livres = Subtrair(livres, saida.transform.position.x - 1.5f, saida.transform.position.x + 1.5f);
+            }
+
             livres = livres.Where(i => i.y - i.x >= 1.0f).OrderBy(i => i.x).ToList();
 
             var chao = new List<SpriteRenderer>();
@@ -245,25 +260,18 @@ namespace EcosDeAldenor.EditorTools
                 var tmp = pecas[i]; pecas[i] = pecas[j]; pecas[j] = tmp;
             }
 
-            int couberam = Distribuir(pecas, livres, 0.35f, rng);
+            var sobras = Distribuir(pecas, livres, 0.35f, rng);
 
-            for (int i = couberam; i < pecas.Count; i++)
-                pecas[i].t.gameObject.SetActive(false);
+            foreach (var s in sobras) s.t.gameObject.SetActive(false);
 
             // Correntes pendem acima de tudo: so precisam de espacamento proprio.
             EspacarNaLargura(correntes, xMundoMin + 2f, xMundoMax - 2f, 0f);
             // Luzes cobrem a fase inteira, meio passo desencontradas das correntes.
             EspacarNaLargura(luzes, xMundoMin + 1.5f, xMundoMax - 1.5f, 0.5f);
 
-            return pecas.Count - couberam;
+            return sobras.Count;
         }
 
-        /// <summary>
-        /// Preenche os intervalos livres da esquerda para a direita e depois
-        /// redistribui, dentro de cada intervalo, a folga que sobrou - assim as
-        /// pecas ficam espacadas por igual em vez de amontoadas num canto.
-        /// Devolve quantas pecas couberam.
-        /// </summary>
         /// <summary>
         /// Largura e desvio do pivo de uma peca, calculados a partir do sprite e
         /// da escala - NAO de Renderer.bounds.
@@ -301,24 +309,41 @@ namespace EcosDeAldenor.EditorTools
             public float desvioCentro;
         }
 
-        static int Distribuir(List<Peca> itens, List<Vector2> livres, float folga, System.Random rng)
+        /// <summary>
+        /// Preenche os intervalos livres da esquerda para a direita e depois
+        /// redistribui, dentro de cada intervalo, a folga que sobrou - assim as
+        /// pecas ficam espacadas em vez de amontoadas num canto.
+        ///
+        /// Uma peca larga demais para o intervalo da vez NAO encerra o
+        /// intervalo: pula-se para a proxima, e ela concorre no intervalo
+        /// seguinte. Parar no primeiro tropeco desligava lapides enquanto
+        /// sobravam metros de chao vazio logo adiante - o fim da Phase1 ficava
+        /// pelado so porque uma lapide grande calhou de vir cedo no sorteio.
+        ///
+        /// Devolve as pecas que nao couberam em lugar nenhum.
+        /// </summary>
+        static List<Peca> Distribuir(List<Peca> itens, List<Vector2> livres, float folga, System.Random rng)
         {
-            if (itens.Count == 0 || livres.Count == 0) return 0;
+            var restantes = new List<Peca>(itens);
+            if (restantes.Count == 0 || livres.Count == 0) return restantes;
 
-            int k = 0;
             foreach (var iv in livres)
             {
-                // Quantas cabem neste intervalo, e com que largura somada.
-                int inicio = k;
+                // Quais cabem neste intervalo, e com que largura somada.
+                var escolhidas = new List<Peca>();
                 float usado = 0f;
-                while (k < itens.Count)
+                for (int i = 0; i < restantes.Count; )
                 {
-                    float extra = itens[k].largura + (k > inicio ? folga : 0f);
-                    if (usado + extra > iv.y - iv.x) break;
-                    usado += extra;
-                    k++;
+                    float extra = restantes[i].largura + (escolhidas.Count > 0 ? folga : 0f);
+                    if (usado + extra <= iv.y - iv.x)
+                    {
+                        usado += extra;
+                        escolhidas.Add(restantes[i]);
+                        restantes.RemoveAt(i);
+                    }
+                    else i++;
                 }
-                int quantas = k - inicio;
+                int quantas = escolhidas.Count;
                 if (quantas == 0) continue;
 
                 // A sobra do intervalo e repartida entre os espacos com PESOS
@@ -336,17 +361,17 @@ namespace EcosDeAldenor.EditorTools
                 }
 
                 float cursor = iv.x + sobra * pesos[0] / soma;
-                for (int i = inicio; i < k; i++)
+                for (int i = 0; i < quantas; i++)
                 {
                     // 'cursor' e a borda esquerda desejada; o transform recua o
                     // desvio do pivo para o DESENHO cair no lugar calculado.
-                    float centro = cursor + itens[i].largura * 0.5f;
-                    var pos = itens[i].t.position;
-                    itens[i].t.position = new Vector3(centro - itens[i].desvioCentro, pos.y, pos.z);
-                    cursor += itens[i].largura + folga + sobra * pesos[i - inicio + 1] / soma;
+                    float centro = cursor + escolhidas[i].largura * 0.5f;
+                    var pos = escolhidas[i].t.position;
+                    escolhidas[i].t.position = new Vector3(centro - escolhidas[i].desvioCentro, pos.y, pos.z);
+                    cursor += escolhidas[i].largura + folga + sobra * pesos[i + 1] / soma;
                 }
             }
-            return k;
+            return restantes;
         }
 
         /// <summary>Hash estavel de string, para a semente nao mudar entre execucoes.</summary>
