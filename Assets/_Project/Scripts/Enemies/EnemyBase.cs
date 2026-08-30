@@ -144,6 +144,17 @@ namespace EcosDeAldenor.Enemies
             // junto. Perto de um altar de checkpoint isso virava um ciclo: o
             // jogador renascia, era empurrado de volta para o vazio e caia de
             // novo ate perder todas as vidas.
+            //
+            // Sem pontos de patrulha nao ha territorio a respeitar, e o limite
+            // seria a origem do mundo: pointAPos/pointBPos ficariam em zero e o
+            // inimigo perseguiria x = 0 em vez do jogador. Nesse caso persegue
+            // livremente, como antes.
+            if (pointA == null || pointB == null)
+            {
+                MoveTowards(detectedPlayer.position, patrolSpeed * 1.5f);
+                return;
+            }
+
             float limiteA = Mathf.Min(pointAPos.x, pointBPos.x);
             float limiteB = Mathf.Max(pointAPos.x, pointBPos.x);
             float alvoX = Mathf.Clamp(detectedPlayer.position.x, limiteA, limiteB);
