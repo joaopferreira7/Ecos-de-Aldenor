@@ -15,6 +15,21 @@ namespace EcosDeAldenor.Systems
         [SerializeField] private AudioSource musicSource;
         [SerializeField] private AudioSource sfxSource;
 
+        [Header("Mixagem")]
+        // As duas fontes nasciam no volume padrao 1,0 e nada mudava isso: nenhum
+        // ponto do jogo chamava SetMusicVolume ou SetSfxVolume. A trilha tocava
+        // no mesmo nivel do golpe, do dano e da coleta, e engolia os efeitos -
+        // justamente os sons que informam o jogador do que acabou de acontecer.
+        //
+        // A musica sustenta o clima e pode ficar bem abaixo sem se perder; o SFX
+        // e informacao e fica logo abaixo do teto, com folga para os picos.
+        [Tooltip("Volume da trilha de fundo. Fica abaixo do SFX: e clima, nao informacao.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float musicVolume = 0.55f;
+        [Tooltip("Volume dos efeitos. Sao eles que dizem ao jogador o que aconteceu.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float sfxVolume = 0.9f;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -37,6 +52,11 @@ namespace EcosDeAldenor.Systems
                 sfxSource = gameObject.AddComponent<AudioSource>();
                 sfxSource.loop = false;
             }
+
+            // Aplicado aqui, e nao so quando alguem pedir: sem isto a mixagem
+            // depende de um chamador que nunca existiu.
+            SetMusicVolume(musicVolume);
+            SetSfxVolume(sfxVolume);
         }
 
         public void PlayMusic(AudioClip clip, bool loop = true)
@@ -55,7 +75,21 @@ namespace EcosDeAldenor.Systems
             sfxSource.PlayOneShot(clip);
         }
 
-        public void SetMusicVolume(float volume) => musicSource.volume = Mathf.Clamp01(volume);
-        public void SetSfxVolume(float volume) => sfxSource.volume = Mathf.Clamp01(volume);
+        // Guardam tambem o valor escolhido, para um futuro menu de opcoes poder
+        // ler de volta o que esta valendo.
+        public float MusicVolume => musicVolume;
+        public float SfxVolume => sfxVolume;
+
+        public void SetMusicVolume(float volume)
+        {
+            musicVolume = Mathf.Clamp01(volume);
+            if (musicSource != null) musicSource.volume = musicVolume;
+        }
+
+        public void SetSfxVolume(float volume)
+        {
+            sfxVolume = Mathf.Clamp01(volume);
+            if (sfxSource != null) sfxSource.volume = sfxVolume;
+        }
     }
 }
