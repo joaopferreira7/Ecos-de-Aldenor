@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EcosDeAldenor.EditorTools
 {
@@ -165,48 +166,219 @@ namespace EcosDeAldenor.EditorTools
         /// </summary>
         public static float EspessuraDaPlataforma(float topo) => topo >= 1.8f ? 0.6f : 0.9f;
 
-        /// <summary>Verdadeiro se x cai dentro de algum vao (com margem de seguranca).</summary>
-        public static bool SobreVao(float x, List<Vector2> vaos, float margem = 0.5f)
-        {
-            foreach (var v in vaos)
-                if (x > v.x - margem && x < v.y + margem) return true;
-            return false;
-        }
-
-        /// <summary>Empurra x para fora do vao mais proximo, para o lado mais perto.</summary>
-        public static float ForaDoVao(float x, List<Vector2> vaos, float folga = 1.2f)
-        {
-            foreach (var v in vaos)
-            {
-                if (x > v.x - 0.5f && x < v.y + 0.5f)
-                    return (Mathf.Abs(x - v.x) < Mathf.Abs(x - v.y)) ? v.x - folga : v.y + folga;
-            }
-            return x;
-        }
-
         /// <summary>
-        /// Move decoracoes (filhas dos objetos "Decoration*") que ficaram
-        /// suspensas sobre um vao de volta para o chao solido mais proximo.
-        /// Nunca move o proprio container, so os filhos com renderizador.
+        /// Distribui as decoracoes ao longo do chao solido de forma
+        /// DETERMINISTICA, em vez de empurrar as que caem num lugar ruim.
+        ///
+        /// Empurrar para a borda mais proxima (a abordagem anterior) juntava
+        /// varios objetos exatamente na mesma coordenada, e nada impedia que uma
+        /// lapide ficasse atravessada numa plataforma.
+        ///
+        /// Aqui o espaco disponivel e calculado de verdade: tira-se do chao o
+        /// que nao pode receber decoracao (vaos, plataformas BAIXAS - que sao
+        /// macicas -, a porta de cripta e a area de nascimento) e o que sobra e
+        /// repartido respeitando a largura real de cada sprite. Plataformas
+        /// ALTAS nao entram na conta: elas sao finas e ha passagem livre embaixo.
+        ///
+        /// O cenario foi decorado quando as fases eram uma faixa continua de
+        /// 30u. Com o relevo segmentado nao ha espaco para todas as pecas sem
+        /// que se encavalem, entao as que nao cabem sao DESATIVADAS (nao
+        /// apagadas) e o metodo devolve quantas sobraram, para quem chamou poder
+        /// registrar. Melhor um cemiterio mais esparso do que lapides fundidas.
+        ///
+        /// Correntes e luzes ficam fora dessa disputa: as correntes pendem bem
+        /// acima da acao e as luzes precisam cobrir a fase inteira, inclusive
+        /// sobre plataformas e abismos.
         /// </summary>
-        public static void AjustarDecoracoes(UnityEngine.SceneManagement.Scene cena, List<Vector2> vaos)
+        public static int EspalharDecoracoes(UnityEngine.SceneManagement.Scene cena,
+                                             Vector2[] segmentos, Vector3[] plataformas,
+                                             float xPorta, float xNascimento,
+                                             float xMundoMin, float xMundoMax)
         {
+            var livres = new List<Vector2>(segmentos);
+            foreach (var p in plataformas)
+            {
+                if (p.z >= 1.8f) continue;                 // alta e fina: passa-se por baixo
+                livres = Subtrair(livres, p.x - 0.3f, p.y + 0.3f);
+            }
+            livres = Subtrair(livres, xPorta - 1.5f, xPorta + 1.5f);
+            livres = Subtrair(livres, xNascimento - 1.2f, xNascimento + 1.2f);
+            livres = livres.Where(i => i.y - i.x >= 1.0f).OrderBy(i => i.x).ToList();
+
+            var chao = new List<SpriteRenderer>();
+            var correntes = new List<Transform>();
+            var luzes = new List<Transform>();
+
             foreach (var root in cena.GetRootGameObjects())
             {
                 if (!root.name.StartsWith("Decoration")) continue;
+                if (root.name == "Decoration_Door") continue;      // a porta e a entrada: fica onde esta
 
-                bool ehContainer = root.GetComponent<SpriteRenderer>() == null;
                 var alvos = new List<Transform>();
-                if (ehContainer) { foreach (Transform c in root.transform) alvos.Add(c); }
-                else alvos.Add(root.transform);
+                if (root.GetComponent<SpriteRenderer>() != null) alvos.Add(root.transform);
+                foreach (Transform c in root.transform) alvos.Add(c);
 
                 foreach (var t in alvos)
                 {
-                    float x = t.position.x;
-                    if (!SobreVao(x, vaos)) continue;
-                    t.position = new Vector3(ForaDoVao(x, vaos), t.position.y, t.position.z);
+                    if (t.name.StartsWith("Chain")) { correntes.Add(t); continue; }
+                    if (t.GetComponent<SpriteRenderer>() != null) { chao.Add(t.GetComponent<SpriteRenderer>()); continue; }
+                    if (t.GetComponent<UnityEngine.Rendering.Universal.Light2D>() != null) luzes.Add(t);
                 }
             }
+
+            // Reativa tudo antes de medir: uma execucao anterior pode ter
+            // desligado pecas que agora cabem.
+            foreach (var d in chao) d.gameObject.SetActive(true);
+
+            // Um gerador com semente fixa por cena: o resultado varia de fase
+            // para fase, mas e sempre o mesmo se a ferramenta rodar de novo.
+            var rng = new System.Random(Semente(cena.name));
+
+            // Embaralha a ORDEM das pecas antes de posicionar. Sem isso os
+            // objetos saem agrupados por tipo (todos os cranios sao irmaos
+            // consecutivos na hierarquia) e o cemiterio vira uma fileira.
+            var pecas = chao.Select(Medir).ToList();
+
+            for (int i = pecas.Count - 1; i > 0; i--)
+            {
+                int j = rng.Next(i + 1);
+                var tmp = pecas[i]; pecas[i] = pecas[j]; pecas[j] = tmp;
+            }
+
+            int couberam = Distribuir(pecas, livres, 0.35f, rng);
+
+            for (int i = couberam; i < pecas.Count; i++)
+                pecas[i].t.gameObject.SetActive(false);
+
+            // Correntes pendem acima de tudo: so precisam de espacamento proprio.
+            EspacarNaLargura(correntes, xMundoMin + 2f, xMundoMax - 2f, 0f);
+            // Luzes cobrem a fase inteira, meio passo desencontradas das correntes.
+            EspacarNaLargura(luzes, xMundoMin + 1.5f, xMundoMax - 1.5f, 0.5f);
+
+            return pecas.Count - couberam;
+        }
+
+        /// <summary>
+        /// Preenche os intervalos livres da esquerda para a direita e depois
+        /// redistribui, dentro de cada intervalo, a folga que sobrou - assim as
+        /// pecas ficam espacadas por igual em vez de amontoadas num canto.
+        /// Devolve quantas pecas couberam.
+        /// </summary>
+        /// <summary>
+        /// Largura e desvio do pivo de uma peca, calculados a partir do sprite e
+        /// da escala - NAO de Renderer.bounds.
+        ///
+        /// Renderer.bounds devolve valor defasado para um objeto que acabou de
+        /// ser reativado no mesmo quadro (caso comum aqui, ja que a execucao
+        /// anterior pode ter desligado pecas). Medir errado a largura fazia o
+        /// distribuidor achar que cabia mais do que cabe, e as pecas voltavam a
+        /// se encavalar. A geometria do sprite nao depende do estado do renderer.
+        /// </summary>
+        static Peca Medir(SpriteRenderer sr)
+        {
+            float escala = Mathf.Abs(sr.transform.lossyScale.x);
+            float largura, desvio;
+
+            if (sr.drawMode == SpriteDrawMode.Simple && sr.sprite != null)
+            {
+                largura = sr.sprite.bounds.size.x * escala;
+                desvio = sr.sprite.bounds.center.x * escala;   // pivo fora do centro
+            }
+            else
+            {
+                largura = sr.size.x * escala;                  // tiled/sliced: centrado
+                desvio = 0f;
+            }
+
+            return new Peca { t = sr.transform, largura = largura, desvioCentro = desvio };
+        }
+
+        /// <summary>Uma peca de cenario e o que se precisa saber para posiciona-la.</summary>
+        struct Peca
+        {
+            public Transform t;
+            public float largura;
+            public float desvioCentro;
+        }
+
+        static int Distribuir(List<Peca> itens, List<Vector2> livres, float folga, System.Random rng)
+        {
+            if (itens.Count == 0 || livres.Count == 0) return 0;
+
+            int k = 0;
+            foreach (var iv in livres)
+            {
+                // Quantas cabem neste intervalo, e com que largura somada.
+                int inicio = k;
+                float usado = 0f;
+                while (k < itens.Count)
+                {
+                    float extra = itens[k].largura + (k > inicio ? folga : 0f);
+                    if (usado + extra > iv.y - iv.x) break;
+                    usado += extra;
+                    k++;
+                }
+                int quantas = k - inicio;
+                if (quantas == 0) continue;
+
+                // A sobra do intervalo e repartida entre os espacos com PESOS
+                // SORTEADOS, nao em partes iguais. Espacamento uniforme fazia as
+                // pecas parecerem enfileiradas numa grade; um cemiterio precisa
+                // ser irregular. Como os pesos apenas repartem a mesma sobra, a
+                // garantia de nao haver sobreposicao se mantem.
+                float sobra = (iv.y - iv.x) - usado;
+                var pesos = new float[quantas + 1];
+                float soma = 0f;
+                for (int i = 0; i < pesos.Length; i++)
+                {
+                    pesos[i] = 0.35f + (float)rng.NextDouble();
+                    soma += pesos[i];
+                }
+
+                float cursor = iv.x + sobra * pesos[0] / soma;
+                for (int i = inicio; i < k; i++)
+                {
+                    // 'cursor' e a borda esquerda desejada; o transform recua o
+                    // desvio do pivo para o DESENHO cair no lugar calculado.
+                    float centro = cursor + itens[i].largura * 0.5f;
+                    var pos = itens[i].t.position;
+                    itens[i].t.position = new Vector3(centro - itens[i].desvioCentro, pos.y, pos.z);
+                    cursor += itens[i].largura + folga + sobra * pesos[i - inicio + 1] / soma;
+                }
+            }
+            return k;
+        }
+
+        /// <summary>Hash estavel de string, para a semente nao mudar entre execucoes.</summary>
+        static int Semente(string s)
+        {
+            int h = 17;
+            foreach (char c in s) h = unchecked(h * 31 + c);
+            return h;
+        }
+
+        /// <summary>Espaca objetos uniformemente numa faixa, sem checar colisao.</summary>
+        static void EspacarNaLargura(List<Transform> itens, float xMin, float xMax, float desvio)
+        {
+            for (int i = 0; i < itens.Count; i++)
+            {
+                float t = (i + 0.5f + desvio) / Mathf.Max(1, itens.Count);
+                float x = Mathf.Lerp(xMin, xMax, Mathf.Repeat(t, 1f));
+                itens[i].position = new Vector3(x, itens[i].position.y, itens[i].position.z);
+            }
+        }
+
+        /// <summary>Remove a faixa [a, b] de uma lista de intervalos.</summary>
+        static List<Vector2> Subtrair(List<Vector2> intervalos, float a, float b)
+        {
+            var saida = new List<Vector2>();
+            foreach (var iv in intervalos)
+            {
+                if (b <= iv.x || a >= iv.y) { saida.Add(iv); continue; }   // nao encosta
+                if (a > iv.x) saida.Add(new Vector2(iv.x, a));
+                if (b < iv.y) saida.Add(new Vector2(b, iv.y));
+            }
+            return saida;
         }
 
         /// <summary>Reposiciona um inimigo e os seus dois pontos de patrulha.</summary>
