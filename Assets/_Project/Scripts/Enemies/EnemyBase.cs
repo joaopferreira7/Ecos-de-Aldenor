@@ -136,7 +136,20 @@ namespace EcosDeAldenor.Enemies
 
         protected virtual void ChasePlayer()
         {
-            MoveTowards(detectedPlayer.position, patrolSpeed * 1.5f);
+            // O inimigo persegue, mas nao abandona o proprio territorio: o alvo
+            // e limitado a faixa entre os dois pontos de patrulha.
+            //
+            // Sem esse limite ele seguia o jogador ate qualquer lugar - andava
+            // para fora da borda e caia no abismo, e pior, empurrava o jogador
+            // junto. Perto de um altar de checkpoint isso virava um ciclo: o
+            // jogador renascia, era empurrado de volta para o vazio e caia de
+            // novo ate perder todas as vidas.
+            float limiteA = Mathf.Min(pointAPos.x, pointBPos.x);
+            float limiteB = Mathf.Max(pointAPos.x, pointBPos.x);
+            float alvoX = Mathf.Clamp(detectedPlayer.position.x, limiteA, limiteB);
+
+            MoveTowards(new Vector3(alvoX, transform.position.y, transform.position.z),
+                        patrolSpeed * 1.5f);
         }
 
         /// <summary>
