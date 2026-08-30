@@ -151,6 +151,28 @@ namespace EcosDeAldenor.UI
             group = gameObject.GetComponent<CanvasGroup>();
             if (group == null) group = gameObject.AddComponent<CanvasGroup>();
 
+            // O painel abaixo e ancorado no TOPO deste RectTransform, e nao no
+            // topo do canvas. Na cena o objeto estava solto no meio da tela
+            // (ancora no centro, 100x100), entao o "topo" dele era o meio da
+            // tela: a barra do chefe aparecia atravessada bem no rosto do
+            // jogador, em cima da luta.
+            //
+            // Toda esta UI e construida por codigo, entao o componente assume
+            // tambem o proprio retangulo, esticado sobre o canvas inteiro. Ficar
+            // dependendo de como o objeto foi largado na cena e o que deixou a
+            // barra fora do lugar.
+            var proprio = GetComponent<RectTransform>();
+            if (proprio != null)
+            {
+                proprio.anchorMin = Vector2.zero;
+                proprio.anchorMax = Vector2.one;
+                proprio.pivot = new Vector2(0.5f, 0.5f);
+                proprio.offsetMin = Vector2.zero;
+                proprio.offsetMax = Vector2.zero;
+                proprio.anchoredPosition3D = Vector3.zero;
+                proprio.localScale = Vector3.one;
+            }
+
             // Painel raiz, ancorado no topo-centro da tela.
             var panel = new GameObject("BossBarPanel", typeof(RectTransform));
             var prt = panel.GetComponent<RectTransform>();
