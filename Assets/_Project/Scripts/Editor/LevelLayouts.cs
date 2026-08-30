@@ -551,6 +551,19 @@ namespace EcosDeAldenor.EditorTools
                     }
             }
 
+            // A arena do chefe nao pode ter porta de saida. A vitoria ali e
+            // responsabilidade do BossDeathTrigger, que espera o chefe cair; uma
+            // PhaseExit no mesmo cenario e um atalho que entrega a tela de
+            // Vitoria a quem simplesmente correr para a direita, sem lutar.
+            var chefe = Object.FindAnyObjectByType<AVigilia>();
+            if (chefe != null)
+                foreach (var porta in Object.FindObjectsByType<PhaseExit>())
+                {
+                    sb.AppendLine(string.Format("    [ARENA] a fase do chefe tem uma PhaseExit em x={0:F2}: da para vencer sem matar o chefe",
+                        porta.transform.position.x));
+                    probs++;
+                }
+
             // Fundo: nenhuma camada pode acabar antes do que a camera mostra,
             // ou aparece um rasgo preto no alto da tela na ponta da fase.
             float camMin, camMax, meiaTela;
