@@ -158,6 +158,32 @@ namespace EcosDeAldenor.Systems
         }
 
         /// <summary>
+        /// Redefine a vida maxima (e enche a vida). Usado pela dificuldade
+        /// escolhida no menu: o jogador ganha ou perde um coracao e os inimigos
+        /// ficam mais duros ou mais fracos, sem que cada prefab precise de uma
+        /// copia por nivel de dificuldade.
+        ///
+        /// Mexe tambem na vida ATUAL de proposito: isto e chamado no Awake,
+        /// antes de qualquer dano, e o HUD monta a fileira de coracoes a partir
+        /// do maximo.
+        /// </summary>
+        public void SetMaxHealth(int novoMaximo)
+        {
+            maxHealth = Mathf.Max(1, novoMaximo);
+            currentHealth = maxHealth;
+            OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        }
+
+        /// <summary>
+        /// Redefine quanto tempo dura a piscada invulneravel apos o dano - outra
+        /// alavanca de dificuldade (mais folga no Facil, menos no Dificil).
+        /// </summary>
+        public void SetInvulnerabilityDuration(float duracao)
+        {
+            invulnerabilityDuration = Mathf.Max(0f, duracao);
+        }
+
+        /// <summary>
         /// Restaura a vida ao maximo. Usado ao reiniciar em um checkpoint.
         /// </summary>
         public void ResetHealth()

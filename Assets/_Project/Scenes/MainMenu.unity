@@ -345,7 +345,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 68
+    m_MaxSize: 72
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -805,6 +805,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1135449640}
   - component: {fileID: 1135449639}
+  - component: {fileID: 1135449641}
   m_Layer: 0
   m_Name: MainMenuManager
   m_TagString: Untagged
@@ -839,6 +840,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1135449641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135449638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776af1a1cc54bf04689b2d094c7e7070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.UI.DifficultySelector
+  alturaNoMenu: -238
 --- !u!1 &1175238514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,6 +1097,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.AudioManager
   musicSource: {fileID: 0}
   sfxSource: {fileID: 0}
+  musicVolume: 0.55
+  sfxVolume: 0.9
 --- !u!1 &1344282321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,6 +1396,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1957784731
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1957784733}
+  - component: {fileID: 1957784732}
+  m_Layer: 0
+  m_Name: UISounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1957784732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957784731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b6fbf6b384b7f4091a379c3e2b664b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.UI.UISounds
+  somDeFoco: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+  somDeClique: {fileID: 8300000, guid: c5cb2ac29e89dbf43a9b644caaad45e6, type: 3}
+--- !u!4 &1957784733
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957784731}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2123326971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,6 +1472,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.SceneMusicPlayer
   sceneMusic: {fileID: 8300000, guid: 3c581804274b5ee41ac3a6d2fece8127, type: 3}
+  loop: 1
+  trackGain: 1
 --- !u!4 &2123326973
 Transform:
   m_ObjectHideFlags: 0
@@ -1804,3 +1868,4 @@ SceneRoots:
   - {fileID: 1135449640}
   - {fileID: 2123326973}
   - {fileID: 1918330317}
+  - {fileID: 1957784733}
