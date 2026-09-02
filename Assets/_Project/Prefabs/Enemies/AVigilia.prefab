@@ -273,7 +273,35 @@ MonoBehaviour:
   deathPoofFrames: []
   deathPoofTint: {r: 1, g: 1, b: 1, a: 1}
   deathPoofScale: 1.2
+  framesParado: []
+  fpsParado: 6
+  framesAndando: []
+  fpsAndando: 10
+  framesPerseguindo: []
+  fpsPerseguindo: 12
+  framesDespertar: []
+  fpsDespertar: 10
+  despertarSfx: {fileID: 0}
+  framesMorte:
+  - {fileID: -3253193444426366541, guid: 15222c8af6cae6543bf9c0d49e301561, type: 3}
+  - {fileID: -737181413011840186, guid: 9321fa25ac885f4469b9685bd16c2faa, type: 3}
+  - {fileID: 1278183561560509872, guid: 4b87c1b92fc0a58438b5bd1c1779de4f, type: 3}
+  - {fileID: -2130145742107678009, guid: 5e1f4c10b294eb64bb6db56e12b7b811, type: 3}
+  - {fileID: 3543433116065506159, guid: 2878d23874da03549a82d5edb0942632, type: 3}
+  - {fileID: -6236713194945363207, guid: 4cafdc3fc9a34244aaf4db9ad7c55e15, type: 3}
+  - {fileID: -4641077647485429793, guid: f0b03808349a7874d99ef77e996261ac, type: 3}
+  - {fileID: 6472947323643325921, guid: 5bb5db41f3be071418be9217cc27c545, type: 3}
+  - {fileID: -285156463949586906, guid: 12d68ea1a65993f4ab6f3adf8c48f7f5, type: 3}
+  fpsMorte: 12
+  corDoClarao: {r: 1, g: 1, b: 1, a: 1}
+  duracaoDoClarao: 0.12
   hitStunDuration: 0.35
+  fireballFrames:
+  - {fileID: -5240615596922460295, guid: b22eb61ebac094742adc9ea8ff7d05de, type: 3}
+  - {fileID: 2230344122243341868, guid: 542fe31df51e7154c96f311e0caf72a0, type: 3}
+  - {fileID: -7480526380293838484, guid: ff1ed2ffd7f35894092e7fcf2ac693bc, type: 3}
+  fireballFps: 14
+  fireballEscala: 1.6
   specialVfxFrames:
   - {fileID: 21300000, guid: 947c0cbf176869a45b7fd547776a2b0c, type: 3}
   - {fileID: 21300002, guid: 947c0cbf176869a45b7fd547776a2b0c, type: 3}
@@ -285,14 +313,29 @@ MonoBehaviour:
   - {fileID: 21300004, guid: 947c0cbf176869a45b7fd547776a2b0c, type: 3}
   - {fileID: 21300006, guid: 947c0cbf176869a45b7fd547776a2b0c, type: 3}
   telegraphColor: {r: 1, g: 0.3, b: 0.25, a: 1}
+  framesConjurar:
+  - {fileID: -5927506780216296808, guid: e66c08bf11986bc43b78626d3f50fa96, type: 3}
+  - {fileID: -2176686178391373125, guid: 5f15935f783a0ef4b8cc98ebbae63e58, type: 3}
+  - {fileID: -7301179835633524511, guid: 85b3a35972e44ae4ab83f2c3eaef2828, type: 3}
+  - {fileID: -5854508680906126570, guid: 07298610f0e7755438ba148d6c327066, type: 3}
+  - {fileID: 7075594664846311672, guid: 1b29460adff01b34fb54bdc18574e5e4, type: 3}
+  - {fileID: -192966328997025247, guid: 8737e1eb2026fce44aeeb24aa21607a5, type: 3}
+  - {fileID: -8741561622873583302, guid: d5155c8040f42d84dbe857fb1a5285e6, type: 3}
+  - {fileID: 2687013147448523899, guid: e35014f86181b644fb5e2afe7e43e048, type: 3}
+  - {fileID: 917300222284693428, guid: 7ff58d8de9fbca44197ad3dbc747e661, type: 3}
+  - {fileID: 3090450909953986718, guid: 14ccdc6ca5e24bd468e79e5d676b5863, type: 3}
+  basicTelegraphColor: {r: 1, g: 0.72, b: 0.3, a: 1}
   basicAttackRange: 1.2
   specialAttackRange: 3
   basicAttackDamage: 1
   specialAttackDamage: 2
+  basicWindUpDuration: 0.5
   telegraphDuration: 0.8
+  specialImpactRadius: 1.7
   retreatDuration: 1
   stateCooldown: 1.2
-  phaseChangeSfx: {fileID: 8300000, guid: d1afd3f4d23c24f418ffc315afb04965, type: 3}
+  castSfx: {fileID: 8300000, guid: d1afd3f4d23c24f418ffc315afb04965, type: 3}
+  phaseChangeSfx: {fileID: 8300000, guid: 21c4a490b24ba2045bc815f7626a40ef, type: 3}
 --- !u!114 &5370883949939185928
 MonoBehaviour:
   m_ObjectHideFlags: 0
