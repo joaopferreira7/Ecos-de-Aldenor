@@ -207,6 +207,18 @@ MonoBehaviour:
   attackSfx: {fileID: 8300000, guid: 88b1cbe3caa3fee4b8b103b5edd7aba9, type: 3}
   jumpSfx: {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
   landSfx: {fileID: 8300000, guid: eaae8fe8d600e1f459f34aa5757fa3b8, type: 3}
+  rollSpeed: 9
+  rollDuration: 0.42
+  rollInvulnerability: 0.3
+  rollCooldown: 0.65
+  rollSfx: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  dustFrames:
+  - {fileID: 21300000, guid: 7fb51a422c4a36e40b71b06331a74b11, type: 3}
+  - {fileID: 21300002, guid: 7fb51a422c4a36e40b71b06331a74b11, type: 3}
+  - {fileID: 21300004, guid: 7fb51a422c4a36e40b71b06331a74b11, type: 3}
+  - {fileID: 21300006, guid: 7fb51a422c4a36e40b71b06331a74b11, type: 3}
+  - {fileID: 21300008, guid: 7fb51a422c4a36e40b71b06331a74b11, type: 3}
+  dustScale: 1
   hitSparkFrames:
   - {fileID: -585612294927119770, guid: 1f52a2a83e2876e4a92b4f6272e7466d, type: 3}
   - {fileID: -9050144134885651352, guid: 1f52a2a83e2876e4a92b4f6272e7466d, type: 3}
@@ -238,3 +250,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.RespawnHandler
   deathDelay: 1.2
   fallDamage: 1
+  respawnGraceTime: 1.5

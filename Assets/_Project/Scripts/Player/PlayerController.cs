@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using EcosDeAldenor.Core;
 using EcosDeAldenor.Systems;
 
 namespace EcosDeAldenor.Player
@@ -59,6 +60,34 @@ namespace EcosDeAldenor.Player
         [Tooltip("Som tocado ao aterrissar depois de uma queda com peso.")]
         [SerializeField] private AudioClip landSfx;
 
+        // ESQUIVA (ROLAMENTO)
+        //
+        // O HeroKnight_AnimController ja trazia o estado "Roll" e o gatilho para
+        // ele desde o primeiro dia: a animacao existia, completa, e nada no jogo
+        // a acionava. Ren so sabia andar, pular e bater.
+        //
+        // Ela entra agora porque o jogo passou a PEDIR uma esquiva: os golpes do
+        // chefe anunciam uma area e so acertam quem ficar dentro dela. Sem um
+        // movimento de fuga rapido, sair da area depende de correr, que e lento
+        // demais para o aviso curto do Dificil. O rolamento fecha esse circulo -
+        // o aviso pergunta, a esquiva responde.
+        //
+        // Os quadros invulneraveis sao menores que a animacao inteira de
+        // proposito: rolar POR CIMA do golpe tem de ser uma questao de tempo
+        // certo, nao um botao de imunidade.
+        [Header("Esquiva (rolamento)")]
+        [Tooltip("Velocidade horizontal durante o rolamento.")]
+        [SerializeField] private float rollSpeed = 9f;
+        [Tooltip("Duracao do rolamento - deve acompanhar a animacao Roll do Animator.")]
+        [SerializeField] private float rollDuration = 0.42f;
+        [Tooltip("Tempo invulneravel dentro do rolamento (menor que a duracao).")]
+        [SerializeField] private float rollInvulnerability = 0.3f;
+        [SerializeField] private float rollCooldown = 0.65f;
+        [SerializeField] private AudioClip rollSfx;
+        [Tooltip("Quadros da poeira (SlideDust do pacote Hero Knight).")]
+        [SerializeField] private Sprite[] dustFrames;
+        [SerializeField] private float dustScale = 1f;
+
         [Header("VFX de Impacto")]
         [Tooltip("Frames da faisca de impacto (Hitspark FX) disparada ao acertar um inimigo.")]
         [SerializeField] private Sprite[] hitSparkFrames;
@@ -102,12 +131,26 @@ namespace EcosDeAldenor.Player
         private Color baseSpriteColor = Color.white;
         private Coroutine flashRoutine;
 
+        private float rollTimer;
+        private float rollCooldownTimer;
+        private int rollDirection = 1;
+
+        /// <summary>Esta rolando agora? O rolamento manda no movimento e trava o ataque.</summary>
+        public bool EstaRolando => rollTimer > 0f;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             healthSystem = GetComponent<HealthSystem>();
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
+
+            // Dificuldade: coracoes do Ren e folga apos levar dano. O HUD monta
+            // a fileira de coracoes a partir da vida maxima, entao basta definir
+            // o maximo aqui - antes do Start do UIManager.
+            healthSystem.SetMaxHealth(DifficultySettings.VidaDoJogador);
+            healthSystem.SetInvulnerabilityDuration(
+                DifficultySettings.InvulnerabilidadeDoJogador(healthSystem.InvulnerabilityDuration));
 
             baseGravityScale = rb.gravityScale;
             if (spriteRenderer != null) baseSpriteColor = spriteRenderer.color;
@@ -128,6 +171,8 @@ namespace EcosDeAldenor.Player
 
             timeSinceAttack += Time.deltaTime;
             if (hurtLockTimer > 0f) hurtLockTimer -= Time.deltaTime;
+            if (rollCooldownTimer > 0f) rollCooldownTimer -= Time.deltaTime;
+            if (rollTimer > 0f) rollTimer -= Time.deltaTime;
 
             ReadInput();
             CheckGrounded();
@@ -138,12 +183,19 @@ namespace EcosDeAldenor.Player
 
             // Pulo e ataque sao independentes: um nao pode "engolir" o outro no
             // mesmo quadro, como acontecia quando estavam em cadeia else-if.
-            if (jumpBufferTimer > 0f && coyoteTimer > 0f)
+            if (jumpBufferTimer > 0f && coyoteTimer > 0f && !EstaRolando)
             {
                 Jump();
             }
 
-            if (Input.GetMouseButtonDown(0) && attackTimer <= 0f)
+            // Shift ou botao direito: as duas maos ja estao ocupadas (esquerda no
+            // teclado, direita no mouse), entao a esquiva fica ao alcance das duas.
+            bool pediuEsquiva = Input.GetKeyDown(KeyCode.LeftShift) ||
+                                Input.GetKeyDown(KeyCode.RightShift) ||
+                                Input.GetMouseButtonDown(1);
+            if (pediuEsquiva) Rolar();
+
+            if (Input.GetMouseButtonDown(0) && attackTimer <= 0f && !EstaRolando)
             {
                 Attack();
             }
@@ -182,6 +234,14 @@ namespace EcosDeAldenor.Player
             // Sem controle logo apos levar dano, para o recuo ser percebido.
             if (hurtLockTimer > 0f) return;
 
+            // Durante o rolamento a direcao esta travada: esquivar e um
+            // compromisso, nao um deslize com controle total.
+            if (EstaRolando)
+            {
+                rb.linearVelocity = new Vector2(rollDirection * rollSpeed, rb.linearVelocity.y);
+                return;
+            }
+
             float targetSpeed = horizontalInput * moveSpeed;
             float accel = isGrounded ? groundAcceleration : airAcceleration;
             float newX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, accel * Time.fixedDeltaTime);
@@ -216,6 +276,8 @@ namespace EcosDeAldenor.Player
 
         private void UpdateFacing()
         {
+            if (EstaRolando) return;
+
             // Usa SpriteRenderer.flipX (nao escala negativa) para evitar efeitos
             // colaterais em colliders/fisica ao espelhar o personagem.
             if (horizontalInput > 0f)
@@ -239,6 +301,8 @@ namespace EcosDeAldenor.Player
 
         private void UpdateAnimationState()
         {
+            if (EstaRolando) return;
+
             if (Mathf.Abs(horizontalInput) > Mathf.Epsilon)
             {
                 delayToIdle = 0.05f;
@@ -281,7 +345,11 @@ namespace EcosDeAldenor.Player
         /// </summary>
         private void HandleLanding()
         {
-            if (lastFallSpeed < -6f) AudioManager.Instance?.PlaySfx(landSfx);
+            if (lastFallSpeed < -6f)
+            {
+                AudioManager.Instance?.PlaySfx(landSfx);
+                SoltarPoeira(0f);   // pousou: a poeira sai sob os pes
+            }
             if (lastFallSpeed < -10f) CameraShake.Shake(0.12f, 0.09f);
             lastFallSpeed = 0f;
         }
@@ -295,6 +363,44 @@ namespace EcosDeAldenor.Player
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             rb.gravityScale = baseGravityScale;
             AudioManager.Instance?.PlaySfx(jumpSfx);
+        }
+
+        /// <summary>
+        /// Rolamento: um impulso curto na direcao em que Ren olha, com um
+        /// punhado de quadros invulneraveis no meio. So no chao - rolar no ar
+        /// viraria um segundo pulo e quebraria o desenho dos abismos.
+        /// </summary>
+        private void Rolar()
+        {
+            if (EstaRolando || rollCooldownTimer > 0f || !isGrounded || hurtLockTimer > 0f) return;
+
+            rollTimer = rollDuration;
+            rollCooldownTimer = rollDuration + rollCooldown;
+            // Rola para onde se esta indo; parado, rola para onde se esta olhando.
+            rollDirection = Mathf.Abs(horizontalInput) > 0.01f ? (int)Mathf.Sign(horizontalInput) : facingDirection;
+
+            spriteRenderer.flipX = rollDirection < 0;
+            facingDirection = rollDirection;
+
+            animator.SetTrigger("Roll");
+            AudioManager.Instance?.PlaySfx(rollSfx);
+            healthSystem.GrantInvulnerability(rollInvulnerability);
+            SoltarPoeira(-rollDirection);
+        }
+
+        /// <summary>
+        /// Baforada de poeira no chao (SlideDust do pacote Hero Knight, que veio
+        /// com o personagem e nunca tinha sido usada). Sai atras do movimento,
+        /// como poeira levantada por um pe que empurra o chao.
+        /// </summary>
+        private void SoltarPoeira(float lado)
+        {
+            if (dustFrames == null || dustFrames.Length == 0) return;
+
+            Vector3 pos = transform.position + new Vector3(lado * 0.25f, 0.05f, 0f);
+            if (groundCheck != null) pos.y = groundCheck.position.y + 0.05f;
+            OneShotVFX.Spawn(dustFrames, pos, dustScale, 18f, 15,
+                             new Color(0.85f, 0.82f, 0.9f, 0.75f));
         }
 
         private void HandleAttackCooldown()
