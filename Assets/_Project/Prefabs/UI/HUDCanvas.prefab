@@ -655,6 +655,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.UI.PauseManager
   pausePanel: {fileID: 7904587585501465074}
+  pausarSfx: {fileID: 8300000, guid: b83bf8726a7fac349a54389f0c57cda6, type: 3}
+  retomarSfx: {fileID: 8300000, guid: e58d8bd078f188a4ba314e933b98528b, type: 3}
 --- !u!114 &84025102985597428
 MonoBehaviour:
   m_ObjectHideFlags: 0
