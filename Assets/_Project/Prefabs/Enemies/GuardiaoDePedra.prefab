@@ -337,6 +337,39 @@ MonoBehaviour:
   - {fileID: 21300006, guid: 947c0cbf176869a45b7fd547776a2b0c, type: 3}
   deathPoofTint: {r: 0.5, g: 0.85, b: 1, a: 1}
   deathPoofScale: 1.3
+  framesParado:
+  - {fileID: 198671530240338892, guid: dde705d3d7527ec4fa3c577a3fe8b66b, type: 3}
+  fpsParado: 6
+  framesAndando:
+  - {fileID: 198671530240338892, guid: dde705d3d7527ec4fa3c577a3fe8b66b, type: 3}
+  - {fileID: -6523335273875780606, guid: f206ce3f37121f54c811730dba8637da, type: 3}
+  - {fileID: -3622191938825109595, guid: 7c1d092d561e9a942bab8b2c9cc5d465, type: 3}
+  - {fileID: -3303504227256558275, guid: 4b4a37fea80178745a558e7644e9cac4, type: 3}
+  - {fileID: 1221985643771966923, guid: af3fe9b1c3fb4e94289b54678a3ec77e, type: 3}
+  - {fileID: 8106096575616176050, guid: b7ce342e95a87a4489e46c52db09960b, type: 3}
+  - {fileID: -3411850291526202688, guid: b766421a6e5db9549ba021ad220db36f, type: 3}
+  - {fileID: -3472529097398242689, guid: 1634cd4fc1eda114bab4dd491d12f122, type: 3}
+  fpsAndando: 10
+  framesPerseguindo: []
+  fpsPerseguindo: 12
+  framesDespertar:
+  - {fileID: 9212642943794043644, guid: 5098985dd8ca2e642933309eac69df63, type: 3}
+  - {fileID: 1291632540701798756, guid: 55c96e2c4ff115a4888823fd1dd14d36, type: 3}
+  - {fileID: -3814826522294924935, guid: 0050b403d341556478ae0e48ad5368b5, type: 3}
+  - {fileID: -641852435613351580, guid: 6587548323c21fd43950b00de6f891ec, type: 3}
+  - {fileID: -5630921969054635323, guid: 067c256bc8f0e0047b55851d798da97a, type: 3}
+  - {fileID: 4221982185469553617, guid: 1d30996499c7c6246b6f9cec78f1c4cb, type: 3}
+  fpsDespertar: 9
+  despertarSfx: {fileID: 8300000, guid: d654174ef194bd7479bf4b8d8f753318, type: 3}
+  framesMorte:
+  - {fileID: -5741429081293458367, guid: 0f6f2404df1406146b45ea54352997a2, type: 3}
+  - {fileID: 5186094806293441859, guid: 80d27112d4b676741821a45388b60112, type: 3}
+  - {fileID: -917537695328215058, guid: c32757c82998c6643bce369288f40299, type: 3}
+  - {fileID: 7088101548298323720, guid: 765de52c09efb4544b245d0bfce8ebf6, type: 3}
+  - {fileID: -4743388124831816668, guid: 45e240fb0b2186044a1109b61fda7134, type: 3}
+  fpsMorte: 12
+  corDoClarao: {r: 1, g: 1, b: 1, a: 1}
+  duracaoDoClarao: 0.12
   hitStunDuration: 0.35
 --- !u!114 &6395986249309941868
 MonoBehaviour:

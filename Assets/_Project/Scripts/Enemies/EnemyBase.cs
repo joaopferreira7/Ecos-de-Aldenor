@@ -1,4 +1,5 @@
 using UnityEngine;
+using EcosDeAldenor.Core;
 using EcosDeAldenor.Systems;
 
 namespace EcosDeAldenor.Enemies
@@ -36,6 +37,40 @@ namespace EcosDeAldenor.Enemies
         [SerializeField] protected Color deathPoofTint = Color.white;
         [SerializeField] protected float deathPoofScale = 1.2f;
 
+        // ANIMACAO DOS INIMIGOS GOTHIC
+        //
+        // Fantasma, esqueleto e chefe sao PNGs soltos dos pacotes GothicVania,
+        // sem AnimatorController - o Animator do prefab original (Bandits) foi
+        // removido junto com a troca de arte. O resultado e que eles passavam o
+        // jogo inteiro numa pose so, deslizando pelo chao.
+        //
+        // Os pacotes trazem os clipes que faltavam, todos no mesmo tamanho de
+        // quadro do clipe parado (o esqueleto tem caminhada de 8 quadros e um
+        // "levantar do chao" de 6; o fantasma tem a versao com halo; ha uma
+        // morte de 5 quadros). Basta ligar cada um ao estado certo.
+        [Header("Animacao por sprites (pacotes Gothic)")]
+        [Tooltip("Pose de descanso. Vazio = usa o clipe do SimpleSpriteAnimator.")]
+        [SerializeField] protected Sprite[] framesParado;
+        [SerializeField] protected float fpsParado = 6f;
+        [Tooltip("Ciclo de caminhada, tocado enquanto o inimigo se move.")]
+        [SerializeField] protected Sprite[] framesAndando;
+        [SerializeField] protected float fpsAndando = 10f;
+        [Tooltip("Ciclo alternativo tocado enquanto persegue o jogador (ex.: o fantasma com halo).")]
+        [SerializeField] protected Sprite[] framesPerseguindo;
+        [SerializeField] protected float fpsPerseguindo = 12f;
+        [Tooltip("Gesto tocado UMA vez, ao avistar o jogador pela primeira vez.")]
+        [SerializeField] protected Sprite[] framesDespertar;
+        [SerializeField] protected float fpsDespertar = 10f;
+        [SerializeField] protected AudioClip despertarSfx;
+        [Tooltip("Gesto de morte, tocado antes de o inimigo sumir.")]
+        [SerializeField] protected Sprite[] framesMorte;
+        [SerializeField] protected float fpsMorte = 12f;
+
+        [Header("Feedback de dano")]
+        [Tooltip("Cor do clarao ao levar um golpe - o inimigo precisa REAGIR ao ser acertado.")]
+        [SerializeField] protected Color corDoClarao = Color.white;
+        [SerializeField] protected float duracaoDoClarao = 0.12f;
+
         protected Rigidbody2D rb;
         protected HealthSystem healthSystem;
         protected Animator animator;
@@ -44,6 +79,17 @@ namespace EcosDeAldenor.Enemies
         protected Vector3 currentTargetPos;
         protected Transform detectedPlayer;
         protected bool movingToB = true;
+        protected SimpleSpriteAnimator spriteAnim;
+        protected SpriteRenderer corpo;
+        private Color corBase = Color.white;
+        private bool jaDespertou;
+        private float despertarTimer;
+        private float clarao;
+
+        /// <summary>Esta piscando por ter levado dano agora? Quem pinta o corpo
+        /// por conta propria (o chefe) precisa saber para nao apagar o clarao.</summary>
+        protected bool EmClarao => clarao > 0f;
+
         private float contactDamageTimer;
         private int lastAnimState = -1;
         private float stunTimer;
@@ -55,10 +101,22 @@ namespace EcosDeAldenor.Enemies
             rb = GetComponent<Rigidbody2D>();
             healthSystem = GetComponent<HealthSystem>();
             animator = GetComponent<Animator>();
+            spriteAnim = GetComponent<SimpleSpriteAnimator>();
+            corpo = GetComponent<SpriteRenderer>();
+            if (corpo != null) corBase = corpo.color;
 
             // pointA/pointB sao filhos do inimigo no prefab: capturamos a posicao
             // mundial deles uma unica vez aqui, pois senao eles se moveriam junto
             // com o inimigo (que e o proprio pai) e a patrulha nunca chegaria ao alvo.
+            // Dificuldade escolhida no menu. Fica aqui, na base de todos os
+            // inimigos, para valer igualmente para espectros, esqueletos e chefe
+            // sem duplicar prefabs - no Medio os multiplicadores sao 1 e os
+            // valores do prefab passam intactos.
+            healthSystem.SetMaxHealth(DifficultySettings.VidaDeInimigo(healthSystem.MaxHealth));
+            contactDamage = DifficultySettings.DanoDeInimigo(contactDamage);
+            patrolSpeed = DifficultySettings.VelocidadeDeInimigo(patrolSpeed);
+            contactDamageCooldown = DifficultySettings.CooldownDeContato(contactDamageCooldown);
+
             if (pointA != null) pointAPos = pointA.position;
             if (pointB != null) pointBPos = pointB.position;
             currentTargetPos = pointBPos;
@@ -75,7 +133,20 @@ namespace EcosDeAldenor.Enemies
 
         protected virtual void Update()
         {
+            AtualizarClarao();
+
             if (healthSystem.IsDead) return;
+
+            // Enquanto o inimigo se levanta, ele nao anda nem machuca: o gesto
+            // de despertar e um aviso ao jogador, e um aviso que ja empurra o
+            // inimigo para cima dele nao e aviso nenhum.
+            if (despertarTimer > 0f)
+            {
+                despertarTimer -= Time.deltaTime;
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+                DetectPlayer();
+                return;
+            }
 
             if (stunTimer > 0f)
             {
@@ -132,6 +203,37 @@ namespace EcosDeAldenor.Enemies
         {
             Collider2D hit = Physics2D.OverlapCircle(transform.position, detectionRadius, playerLayer);
             detectedPlayer = hit != null ? hit.transform : null;
+
+            if (detectedPlayer != null && !jaDespertou) Despertar();
+        }
+
+        /// <summary>
+        /// Primeira vez que o inimigo ve o jogador. O esqueleto tem uma animacao
+        /// de se levantar do chao (6 quadros) que nunca era tocada; e ela que
+        /// transforma "um esqueleto que ja estava andando" em "um esqueleto que
+        /// acordou por sua causa".
+        /// </summary>
+        protected virtual void Despertar()
+        {
+            jaDespertou = true;
+            if (framesDespertar == null || framesDespertar.Length == 0 || spriteAnim == null) return;
+
+            despertarTimer = SimpleSpriteAnimator.Duracao(framesDespertar, fpsDespertar);
+            spriteAnim.PlayOnce(framesDespertar, fpsDespertar);
+            AudioManager.Instance?.PlaySfx(despertarSfx);
+        }
+
+        /// <summary>
+        /// Clarao branco ao levar dano. Sem isto, acertar um inimigo Gothic nao
+        /// produzia nenhuma reacao NELE - a faisca aparecia no ar e o bicho
+        /// seguia igual, o que faz o golpe parecer que nao contou.
+        /// </summary>
+        private void AtualizarClarao()
+        {
+            if (corpo == null || clarao <= 0f) return;
+
+            clarao -= Time.deltaTime / Mathf.Max(0.01f, duracaoDoClarao);
+            corpo.color = clarao > 0f ? Color.Lerp(corBase, corDoClarao, Mathf.Clamp01(clarao)) : corBase;
         }
 
         protected virtual void ChasePlayer()
@@ -205,6 +307,8 @@ namespace EcosDeAldenor.Enemies
 
         protected void UpdateAnimator(bool isMoving)
         {
+            AtualizarClipe(isMoving);
+
             if (animator == null) return;
 
             int animState = isMoving ? 2 : 0; // 2 = Run, 0 = Idle (contrato do LightBandit_AnimController)
@@ -215,6 +319,26 @@ namespace EcosDeAldenor.Enemies
             }
 
             animator.SetBool("Grounded", true);
+        }
+
+        /// <summary>
+        /// Escolhe entre parado e andando. Um gesto em andamento (despertar,
+        /// morte) tem prioridade: nada de trocar de clipe no meio dele.
+        /// </summary>
+        protected void AtualizarClipe(bool isMoving)
+        {
+            if (spriteAnim == null || spriteAnim.EmGesto) return;
+
+            // Perseguindo tem clipe proprio quando existe: e o "estado de alerta"
+            // do inimigo, e o que diz ao jogador que ele foi notado.
+            if (detectedPlayer != null && framesPerseguindo != null && framesPerseguindo.Length > 0)
+                spriteAnim.PlayLoop(framesPerseguindo, fpsPerseguindo);
+            else if (isMoving && framesAndando != null && framesAndando.Length > 0)
+                spriteAnim.PlayLoop(framesAndando, fpsAndando);
+            else if (framesParado != null && framesParado.Length > 0)
+                spriteAnim.PlayLoop(framesParado, fpsParado);
+            else if (!isMoving)
+                spriteAnim.VoltarAoPadrao();
         }
 
         /// <summary>
@@ -236,12 +360,27 @@ namespace EcosDeAldenor.Enemies
             // pois inimigos com sprites Gothic nao tem Animator - o ?. nao trata
             // o "null falso" do Unity e lancaria MissingComponentException.
             if (animator != null) animator.SetTrigger("Hurt");
+            clarao = 1f;
             stunTimer = hitStunDuration;
         }
 
         protected virtual void HandleDeath()
         {
             if (animator != null) animator.SetTrigger("Death");
+
+            // Para de empurrar, de machucar e de colidir: um cadaver em queda
+            // que ainda causa dano de contato e o tipo de coisa que faz a morte
+            // do inimigo parecer um bug.
+            if (rb != null) { rb.linearVelocity = Vector2.zero; rb.simulated = false; }
+            foreach (var col in GetComponents<Collider2D>()) col.enabled = false;
+            if (corpo != null) corpo.color = corBase;
+
+            float espera = 0.6f;
+            if (spriteAnim != null && framesMorte != null && framesMorte.Length > 0)
+            {
+                spriteAnim.PlayOnce(framesMorte, fpsMorte);
+                espera = SimpleSpriteAnimator.Duracao(framesMorte, fpsMorte) + 0.15f;
+            }
 
             // "Poof" de morte: pequena baforada de particulas/explosao no lugar do
             // inimigo, tingida com a cor do inimigo, dando feedback claro do abate.
@@ -250,7 +389,7 @@ namespace EcosDeAldenor.Enemies
                 OneShotVFX.Spawn(deathPoofFrames, transform.position, deathPoofScale, 16f, 20, deathPoofTint);
             }
 
-            Destroy(gameObject, 0.6f); // tempo para a animacao de morte tocar antes de remover
+            Destroy(gameObject, espera); // tempo para a animacao de morte tocar antes de remover
         }
 
         private void OnDrawGizmosSelected()

@@ -337,6 +337,32 @@ MonoBehaviour:
   - {fileID: 21300006, guid: 947c0cbf176869a45b7fd547776a2b0c, type: 3}
   deathPoofTint: {r: 0.9, g: 0.3, b: 0.25, a: 1}
   deathPoofScale: 1.1
+  framesParado:
+  - {fileID: 8470135921755293876, guid: 7f9f557c5cd3a9d4ebab80edb2e8196c, type: 3}
+  - {fileID: 8443824245170527895, guid: 6476947e4af82694b8c4f437619c54b8, type: 3}
+  - {fileID: -830642171995352235, guid: 861d2045d3cd6da419e0fb8efc37926a, type: 3}
+  - {fileID: -5225689013183718448, guid: 9f72e7d9f3d2f814f8267dccb3676d7c, type: 3}
+  fpsParado: 6
+  framesAndando: []
+  fpsAndando: 10
+  framesPerseguindo:
+  - {fileID: -696117140377348211, guid: 2bdca6d4d87cd2140bcf78c8454d1167, type: 3}
+  - {fileID: 7377476498170648722, guid: 44a9b0e6f7c5d2b4d8c87d9c673ece1b, type: 3}
+  - {fileID: 8982032809643238666, guid: da620593e3e124742a8875f48a99998c, type: 3}
+  - {fileID: -4278363009422742616, guid: 72b069d62d7fa124895ddaf7ba4ecf5b, type: 3}
+  fpsPerseguindo: 10
+  framesDespertar: []
+  fpsDespertar: 10
+  despertarSfx: {fileID: 0}
+  framesMorte:
+  - {fileID: -5741429081293458367, guid: 0f6f2404df1406146b45ea54352997a2, type: 3}
+  - {fileID: 5186094806293441859, guid: 80d27112d4b676741821a45388b60112, type: 3}
+  - {fileID: -917537695328215058, guid: c32757c82998c6643bce369288f40299, type: 3}
+  - {fileID: 7088101548298323720, guid: 765de52c09efb4544b245d0bfce8ebf6, type: 3}
+  - {fileID: -4743388124831816668, guid: 45e240fb0b2186044a1109b61fda7134, type: 3}
+  fpsMorte: 12
+  corDoClarao: {r: 1, g: 1, b: 1, a: 1}
+  duracaoDoClarao: 0.12
   hitStunDuration: 0.35
 --- !u!114 &8584120487908113621
 MonoBehaviour:
