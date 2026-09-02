@@ -38,7 +38,7 @@ namespace EcosDeAldenor.UI
 
         private void Start()
         {
-            foreach (var botao in FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var botao in FindObjectsByType<Button>(FindObjectsInactive.Include))
                 Aplicar(botao);
         }
 

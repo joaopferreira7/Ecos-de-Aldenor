@@ -52,7 +52,7 @@ namespace EcosDeAldenor.UI
         private Canvas CanvasDoMenu()
         {
             Canvas escolhido = null;
-            foreach (var c in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+            foreach (var c in FindObjectsByType<Canvas>())
             {
                 if (c.gameObject.scene != gameObject.scene) continue;
                 if (escolhido == null || c.sortingOrder < escolhido.sortingOrder) escolhido = c;
