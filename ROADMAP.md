@@ -16,6 +16,31 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - ✅ Faísca de impacto (Hitspark) ao acertar inimigos
 - ✅ Patrulha dos inimigos corrigida (pontos fixos) + IA do chefe (state machine)
 - ✅ Chefe "A Vigília": barra de vida própria (com *chip damage*), telegrafo, fases de combate
+- ✅ **Ataques do chefe legíveis**: os dois golpes passaram a ter carga, impacto e respiro. Antes o
+  golpe corpo a corpo não avisava nada e o dano saía 0,6 s depois do tremor de câmera; e os dois
+  ataques acertavam por distância no instante do dano, então fugir não adiantava. Agora o corpo
+  muda de cor e incha durante a carga, um indicador mostra a área (faixa âmbar à frente, marca
+  vermelha no chão) e o dano só vale dentro da área anunciada — esquivar funciona
+- ✅ **Tela inicial de tutorial**: controles, objetivo e avisos antes da primeira fase, com o tempo
+  congelado até o jogador escolher *Começar*
+- ✅ **Esquiva (rolamento) do Ren**: a animação `Roll` estava no Animator desde o começo sem nada
+  acioná-la. Agora `Shift` / botão direito rola na direção do movimento, com quadros invulneráveis
+  (menos que a animação inteira, para exigir tempo certo) e poeira do `SlideDust` — que também
+  passou a sair na aterrissagem
+- ✅ **Animações dos inimigos ligadas**: o esqueleto **se levanta do chão** (6 quadros) ao avistar o
+  jogador pela primeira vez, caminha de verdade (8 quadros) e **morre animado** (5 quadros); o
+  fantasma troca para a versão **com halo** enquanto persegue; todo inimigo Gothic **pisca de branco**
+  ao levar dano, que antes não tinha reação nenhuma
+- ✅ **A Vigília deixou de ser uma pose parada**: usa a **conjuração do mago** (10 quadros) durante a
+  carga, **arremessa uma bola de fogo** (3 quadros, projétil novo) que pousa na marca no instante do
+  golpe, e **morre com a animação de morte da igreja** (9 quadros). Tudo isso já estava nos pacotes
+- ✅ **Silhuetas de fundo**: árvores mortas, estátua e arbustos do `objects.png` do cemitério (o mesmo
+  pacote que fornece o fundo) nas fases de cemitério, e **colunas** na igreja da luta final
+- ✅ **Som na interface**: toque ao passar o mouse e ao clicar em todos os botões, mais toques de
+  pausa e retomada — os menus eram completamente mudos
+- ✅ **Dificuldade (Fácil / Médio / Difícil)** no Menu Principal, guardada em PlayerPrefs e aplicada
+  a vida e dano do jogador e dos inimigos, velocidade de patrulha, cadência do dano de contato e
+  duração dos avisos do chefe. *Médio* = o jogo original, sem multiplicador
 - ✅ Coleta dos 6 fragmentos de alma (regra da fase final)
 - ✅ Checkpoints (altares) + queda reposiciona no checkpoint em vez de morte instantânea
 - ✅ **Level design de verdade**: as fases deixaram de ser corredores planos — chão
@@ -42,6 +67,10 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - ✅ Menus (principal, pausa), telas de Vitória/GameOver e **Créditos** estilizados
 
 **Ferramentas e organização**
+- ✅ **Ecos de Aldenor → Ligar animacoes dos pacotes**: liga por caminho (e não por arrastar no
+  Inspector) os clipes que os pacotes trazem — conjuração, bola de fogo, levantar, caminhar, morrer,
+  poeira — deixando a ligação revisável em código
+- ✅ **Ecos de Aldenor → Decorar cenario (props dos pacotes)** e **→ Ligar sons de interface**
 - ✅ **Relevo das fases como dado versionado** (`LevelLayouts.cs`): segmentos, plataformas
   e patrulhas de cada fase num só lugar, com o menu **Ecos de Aldenor → Reconstruir fases**
 - ✅ **Verificador automático** (**Ecos de Aldenor → Verificar fases**): vão, degrau,

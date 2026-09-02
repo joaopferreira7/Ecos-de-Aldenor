@@ -28,11 +28,30 @@ até enfrentar o chefe final, **A Vigília**, dentro de uma igreja em ruínas.
 | Mover | `A` / `D` ou setas `←` `→` |
 | Pular | `Espaço` |
 | Atacar | Botão **esquerdo** do mouse |
+| Esquivar (rolamento) | `Shift` ou botão **direito** do mouse |
 | Pausar | `ESC` |
 
 **Objetivo:** colete todos os **6 fragmentos de alma** ao longo das fases para liberar a fase final
 e derrote o chefe **A Vigília**. Cuidado com quedas e com os inimigos — a barra de corações no topo
 mostra sua vida, e os checkpoints (altares) restauram você ao longo do caminho.
+
+Ao apertar **Jogar**, uma **tela de tutorial** resume esses controles e o objetivo antes da primeira
+fase começar; o jogo só destrava quando você escolhe *Começar* (ou pressiona `Espaço`).
+
+O **rolamento** dá alguns quadros de invulnerabilidade: é com ele que se sai da marca de impacto
+d'A Vigília a tempo.
+
+### Dificuldade
+
+O Menu Principal tem três níveis, guardados entre partidas:
+
+| Nível | O que muda |
+|-------|------------|
+| **Fácil** | 4 corações, invulnerabilidade mais longa após o dano, inimigos com 30% menos vida, mais lentos e batendo com menos frequência; os avisos do chefe duram 60% mais |
+| **Médio** | A experiência original do jogo, sem nenhum multiplicador |
+| **Difícil** | Inimigos com 35% mais vida, 20% mais rápidos, dano maior e menos tempo entre golpes; o chefe avisa 30% mais rápido, respira menos entre ataques e parte mais para o golpe forte |
+
+Nenhum golpe mata com a vida cheia, em nenhum nível.
 
 ---
 
@@ -42,9 +61,14 @@ O jogo tem **8 cenas** encadeadas:
 
 `MainMenu → Tutorial → Phase1 → Phase2 → FinalPhase → Victory / GameOver / Credits`
 
-- **Tutorial:** área segura com placas ensinando os controles.
+- **Tutorial:** abre com a **tela de tutorial** (controles e objetivo) e depois entrega uma área
+  segura, com placas reforçando cada comando no lugar onde ele é usado.
 - **Phase1 / Phase2:** cemitério espectral, com espectros (*Sombra Rastejante*) e esqueletos (*Guardião de Pedra*).
 - **FinalPhase:** arena na igreja, com o chefe **A Vigília** (barra de vida própria e fases de combate).
+  Todo golpe dele é anunciado antes: o mago **conjura** (animação de 10 quadros), o corpo muda de cor
+  e incha, e um indicador mostra onde vai bater — faixa âmbar à frente no golpe curto, marca vermelha
+  no chão no golpe forte. No golpe forte uma **bola de fogo** sai das mãos dele e pousa na marca no
+  instante exato em que o círculo se completa. Sair da marca a tempo faz o golpe errar.
 
 ---
 
