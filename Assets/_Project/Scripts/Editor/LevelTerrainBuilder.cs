@@ -228,6 +228,7 @@ namespace EcosDeAldenor.EditorTools
             {
                 if (!root.name.StartsWith("Decoration")) continue;
                 if (root.name == "Decoration_Door") continue;      // a porta e a entrada: fica onde esta
+                if (root.name == "Decoration_Fundo") continue;     // silhuetas de fundo tem lugar proprio
 
                 var alvos = new List<Transform>();
                 if (root.GetComponent<SpriteRenderer>() != null) alvos.Add(root.transform);

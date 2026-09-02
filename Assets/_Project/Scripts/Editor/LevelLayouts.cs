@@ -431,6 +431,14 @@ namespace EcosDeAldenor.EditorTools
                     if (t.name.StartsWith("Chain") || !t.gameObject.activeInHierarchy) continue;
                     var sr = t.GetComponent<SpriteRenderer>();
                     if (sr == null) continue;
+                    // Silhuetas de fundo (ordem negativa) ficam ATRAS do terreno e
+                    // nao tem colisor: elas se sobrepoem umas as outras e passam
+                    // por tras de lapides e altares de proposito - e assim que se
+                    // desenha profundidade. As regras abaixo existem para as pecas
+                    // de chao, que dividem uma faixa de terreno e precisam ser
+                    // lidas lado a lado; aplicar as mesmas regras a uma arvore
+                    // pintada no fundo so gera alarme falso.
+                    if (sr.sortingOrder < 0) continue;
                     float esc = Mathf.Abs(t.lossyScale.x);
                     float larg = (sr.drawMode == SpriteDrawMode.Simple && sr.sprite != null)
                         ? sr.sprite.bounds.size.x * esc : sr.size.x * esc;
