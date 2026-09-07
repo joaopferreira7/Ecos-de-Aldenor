@@ -90,10 +90,31 @@ O jogo tem **8 cenas** encadeadas:
 
 ## 📦 Como gerar a build (executável)
 
-1. Menu **File → Build Settings**.
-2. Confirme que as 8 cenas estão listadas em **Scenes In Build**, com **MainMenu** em primeiro.
-3. Plataforma **Windows** → **Build** e escolha uma pasta de saída.
-4. O executável gerado (`.exe`) roda o jogo de forma independente.
+### Pelo terminal (recomendado)
+
+Com o **Editor fechado**, na raiz do projeto:
+
+```powershell
+.\montar.ps1           # só verifica o projeto e as fases
+.\montar.ps1 -Build    # verifica e gera o executável
+```
+
+O script chama o Unity em modo batch e faz, nesta ordem: confere a lista de
+cenas (8, com **MainMenu** em primeiro), roda o verificador de geometria das
+fases (alcance de pulo, vãos, atores presos na rocha, patrulha válida), roda os
+testes automatizados quando houver alguma suíte, e só então constrói. Qualquer
+etapa que falhe interrompe a build e aponta o log em `Logs\`.
+
+Saída: `Build\Ecos de Aldenor.exe` (a pasta é recriada do zero a cada build, para
+não levar sobra da anterior no pacote da entrega).
+
+### Pelo Editor
+
+Menu **Ecos de Aldenor → Gerar build Windows** (mesmas verificações), ou
+**Ecos de Aldenor → Verificar projeto** para só conferir.
+
+O caminho manual por **File → Build Settings** também funciona, mas pula as
+verificações.
 
 ---
 
