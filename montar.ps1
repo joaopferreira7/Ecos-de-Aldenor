@@ -3,24 +3,90 @@
 #       .\montar.ps1 -Build     (verifica, testa e gera o .exe)
 #       .\montar.ps1 -SoTestes  (so roda os testes)
 #
+# Em outra maquina:  -Unity "D:\...\Unity.exe"  aponta o Editor na mao, caso a
+# busca automatica nao ache (Hub instalado num lugar incomum, por exemplo).
+#
 # O Unity so aceita uma instancia por projeto: feche o Editor antes de rodar,
 # senao o batchmode morre reclamando de lock.
 
 param(
     [switch]$Build,
-    [switch]$SoTestes
+    [switch]$SoTestes,
+    [string]$Unity
 )
 
 $ErrorActionPreference = "Stop"
 
-$unity = "C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Unity.exe"
 $projeto = $PSScriptRoot
 $logs = Join-Path $projeto "Logs"
 
-if (-not (Test-Path $unity)) {
-    Write-Host "Unity 6000.4.1f1 nao encontrado em:" -ForegroundColor Red
-    Write-Host "  $unity"
-    Write-Host "Ajuste a variavel `$unity no topo deste script."
+# A versao sai do proprio projeto, nao de uma constante aqui: quem clonar em
+# outra maquina precisa do Editor que o projeto pede, e esse arquivo e a fonte
+# dessa informacao.
+$versao = "6000.4.1f1"
+$arquivoVersao = Join-Path $projeto "ProjectSettings\ProjectVersion.txt"
+if (Test-Path $arquivoVersao) {
+    $m = [regex]::Match((Get-Content $arquivoVersao -Raw), "m_EditorVersion:\s*(\S+)")
+    if ($m.Success) { $versao = $m.Groups[1].Value }
+}
+
+# O Hub instala em qualquer drive e aceita um caminho secundario configurado
+# pelo usuario. Procurar nos lugares plausiveis evita ter que editar o script
+# a cada maquina nova.
+function AcharUnity($versao) {
+    if ($Unity) { return $Unity }
+    if ($env:UNITY_PATH) { return $env:UNITY_PATH }
+
+    $raizes = @(
+        "$env:ProgramFiles\Unity\Hub\Editor",
+        "${env:ProgramFiles(x86)}\Unity\Hub\Editor",
+        "$env:LOCALAPPDATA\Programs\Unity\Hub\Editor"
+    )
+
+    $secundario = Join-Path $env:APPDATA "UnityHub\secondaryInstallPath.json"
+    if (Test-Path $secundario) {
+        $caminho = (Get-Content $secundario -Raw).Trim().Trim('"')
+        if ($caminho) { $raizes += (Join-Path $caminho "Editor") }
+    }
+
+    foreach ($letra in (Get-PSDrive -PSProvider FileSystem).Name) {
+        $raizes += "${letra}:\Unity\Hub\Editor"
+        $raizes += "${letra}:\Program Files\Unity\Hub\Editor"
+    }
+
+    $raizes = $raizes | Where-Object { $_ } | Select-Object -Unique
+
+    foreach ($raiz in $raizes) {
+        $exe = Join-Path $raiz "$versao\Editor\Unity.exe"
+        if (Test-Path $exe) { return $exe }
+    }
+
+    # Sem a versao exata: outro Editor da mesma major costuma abrir o projeto
+    # (fazendo upgrade dos assets), entao vale avisar e usar em vez de so falhar.
+    $major = $versao.Split('.')[0]
+    foreach ($raiz in $raizes) {
+        if (-not (Test-Path $raiz)) { continue }
+        $alt = Get-ChildItem $raiz -Directory -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name.StartsWith("$major.") } |
+            Sort-Object Name -Descending |
+            ForEach-Object { Join-Path $_.FullName "Editor\Unity.exe" } |
+            Where-Object { Test-Path $_ } |
+            Select-Object -First 1
+        if ($alt) {
+            Write-Host "Unity $versao nao encontrado; usando $alt" -ForegroundColor Yellow
+            return $alt
+        }
+    }
+
+    return $null
+}
+
+$unity = AcharUnity $versao
+
+if (-not $unity -or -not (Test-Path $unity)) {
+    Write-Host "Unity $versao nao encontrado nesta maquina." -ForegroundColor Red
+    Write-Host "Instale essa versao pelo Unity Hub, ou aponte o Editor na mao:"
+    Write-Host "  .\montar.ps1 -Unity `"D:\Unity\Hub\Editor\$versao\Editor\Unity.exe`""
     exit 1
 }
 

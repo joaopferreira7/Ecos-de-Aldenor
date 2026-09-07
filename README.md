@@ -108,6 +108,12 @@ etapa que falhe interrompe a build e aponta o log em `Logs\`.
 Saída: `Build\Ecos de Aldenor.exe` (a pasta é recriada do zero a cada build, para
 não levar sobra da anterior no pacote da entrega).
 
+Em outra máquina, o script acha o Editor sozinho: lê a versão em
+`ProjectSettings/ProjectVersion.txt` e procura nos caminhos do Unity Hub, em
+todos os drives. Se o Hub estiver num lugar incomum, aponte na mão com
+`-Unity "D:\...\Unity.exe"`. Quem preferir duplo clique: `montar.cmd` chama o
+`montar.ps1` sem esbarrar na *execution policy* e mantém a janela aberta no fim.
+
 ### Pelo Editor
 
 Menu **Ecos de Aldenor → Gerar build Windows** (mesmas verificações), ou
