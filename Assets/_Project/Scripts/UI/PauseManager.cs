@@ -68,7 +68,11 @@ namespace EcosDeAldenor.UI
 
         public void OnMainMenuButtonClicked()
         {
-            Time.timeScale = 1f;
+            // Sai da pausa de verdade: o GameManager e persistente, e deixar
+            // isPaused ligado fazia o primeiro ESC da partida seguinte nao pausar.
+            if (GameManager.Instance != null) GameManager.Instance.ResetPauseState();
+            else Time.timeScale = 1f;
+
             SceneController.Instance?.LoadMainMenu();
         }
     }
