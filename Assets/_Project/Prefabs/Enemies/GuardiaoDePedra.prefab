@@ -327,7 +327,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 512
-  contactDamage: 2
+  contactDamage: 1
   contactRadius: 0.5
   contactDamageCooldown: 0.6
   deathPoofFrames:
