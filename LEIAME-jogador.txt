@@ -1,0 +1,79 @@
+ECOS DE ALDENOR
+Jogo 2D de plataforma e acao - tematica gotica/espectral
+Disciplina: Desenvolvimento de Jogos Digitais (Ciencia da Computacao)
+
+===============================================================
+COMO JOGAR
+===============================================================
+
+1. EXTRAIA A PASTA INTEIRA do arquivo .zip (clique com o botao
+   direito > "Extrair tudo...").
+
+2. Abra "Ecos de Aldenor.exe" DE DENTRO da pasta extraida.
+
+IMPORTANTE: nao separe o "Ecos de Aldenor.exe" dos outros
+arquivos. Ele sozinho tem menos de 1 MB e NAO funciona - o jogo
+de verdade esta na pasta "Ecos de Aldenor_Data" e na
+"UnityPlayer.dll" que ficam ao lado dele. Se voce copiar so o
+.exe, ele abre e fecha na hora.
+
+===============================================================
+SE O WINDOWS BLOQUEAR
+===============================================================
+
+Pode aparecer a tela azul "O Windows protegeu o seu PC".
+Isso acontece com qualquer programa sem assinatura digital
+(que e paga) - nao e virus.
+
+   Clique em "Mais informacoes" > "Executar assim mesmo".
+
+===============================================================
+CONTROLES
+===============================================================
+
+   Mover .............. A / D   ou   setas
+   Pular .............. Espaco
+   Atacar ............. Botao esquerdo do mouse
+   Esquivar (rolar) ... Shift   ou   botao direito do mouse
+   Pausar ............. ESC
+
+===============================================================
+OBJETIVO
+===============================================================
+
+Reuna as 6 almas espalhadas pelas fases para abrir a igreja -
+e derrote A Vigilia.
+
+   - As almas ficam sobre as plataformas mais altas, fora do
+     caminho reto: a porta de cada fase so abre quando voce
+     recolher todas as daquela regiao.
+   - Os altares acesos sao checkpoints (curam uma vez).
+   - Cair no abismo custa um coracao e devolve voce ao ultimo
+     altar.
+   - Na luta final, a marca no chao mostra onde o golpe vai
+     cair: role para fora dela.
+
+A dificuldade (Facil / Medio / Dificil) se escolhe no Menu
+Principal, antes de jogar.
+
+===============================================================
+REQUISITOS
+===============================================================
+
+   Windows 10 ou 11, 64 bits
+   Placa de video com DirectX 11 (praticamente qualquer PC
+   dos ultimos 15 anos, incluindo video integrado)
+   Cerca de 300 MB livres
+
+===============================================================
+INTEGRANTES
+===============================================================
+
+   Gabriel Quirino Bressanin
+   Guilherme Barros Oliveira
+   Heitor Lupino
+   Joao Pedro Ferreira
+   Matheus Risso
+
+Os creditos completos, com as fontes de todos os assets
+utilizados, estao na tela "Creditos" dentro do jogo.

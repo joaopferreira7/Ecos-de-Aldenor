@@ -82,7 +82,7 @@ namespace EcosDeAldenor.Systems
         /// </summary>
         private bool PodePassar()
         {
-            int faltam = Object.FindObjectsByType<Fragment>(FindObjectsSortMode.None).Length;
+            int faltam = Object.FindObjectsByType<Fragment>(FindObjectsInactive.Exclude).Length;
             if (faltam <= 0) return true;
 
             if (Time.unscaledTime >= proximoAviso)

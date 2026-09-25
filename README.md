@@ -122,6 +122,34 @@ Menu **Ecos de Aldenor → Gerar build Windows** (mesmas verificações), ou
 O caminho manual por **File → Build Settings** também funciona, mas pula as
 verificações.
 
+### Como entregar/enviar a build ⚠️
+
+**Envie sempre a pasta inteira, compactada — nunca só o `.exe`.**
+
+O `Ecos de Aldenor.exe` tem **0,6 MB** de uma build de **141 MB**: ele é apenas o
+carregador. Sem a pasta `Ecos de Aldenor_Data` (as 8 cenas e os assets), a
+`UnityPlayer.dll` e a `MonoBleedingEdge` ao lado dele, ele **abre e fecha na hora** —
+nem chega a escrever um log. Foi o que aconteceu quando a build foi enviada a colegas.
+
+1. Gere a build (o comando já coloca o `LEIAME.txt` dentro dela e remove a pasta de
+   símbolos do Burst, que o próprio Unity marca como *DoNotShip*).
+2. Compacte a pasta `Build/` inteira em um `.zip` (~60 MB).
+3. Quem receber deve **extrair tudo** e abrir o `.exe` de dentro da pasta extraída.
+
+O `LEIAME-jogador.txt` na raiz do repositório é a fonte desse arquivo: ele explica
+isso ao jogador, junto dos controles e do aviso do SmartScreen ("O Windows protegeu o
+seu PC" → *Mais informações* → *Executar assim mesmo*, porque o executável não tem
+assinatura digital paga).
+
+O `.zip` pronto fica em `Entrega/`, que o `.gitignore` ignora.
+
+### Compatibilidade
+
+O jogo é construído para **Windows 64 bits** com **Direct3D 11** em primeiro lugar e
+Direct3D 12 como reserva. A ordem importa: com o DX12 na frente — o padrão do Unity —
+a inicialização falha em placas integradas com driver antigo, que é o caso comum de
+notebook de laboratório.
+
 ---
 
 ## 🎨 Créditos e fontes dos assets

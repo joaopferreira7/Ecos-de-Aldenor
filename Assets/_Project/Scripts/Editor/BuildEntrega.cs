@@ -185,10 +185,45 @@ namespace EcosDeAldenor.EditorTools
             sb.AppendLine(string.Format("  erros: {0} | avisos: {1}", resumo.totalErrors, resumo.totalWarnings));
             sb.AppendLine("  cenas: " + string.Join(", ", cenas.Select(c => Path.GetFileNameWithoutExtension(c.path)).ToArray()));
 
-            relatorio = sb.ToString();
             bool ok = resumo.result == BuildResult.Succeeded;
+            if (ok) PrepararPacote(destino, raiz, sb);
+
+            relatorio = sb.ToString();
             if (ok) Debug.Log(relatorio); else Debug.LogError(relatorio);
             return ok;
+        }
+
+        /// <summary>
+        /// Deixa a pasta de saida pronta para ser zipada e enviada a alguem.
+        ///
+        /// Isto existe por um motivo concreto: a build foi enviada a colegas e
+        /// nao rodou em nenhuma maquina. O "Ecos de Aldenor.exe" tem 0,6 MB de
+        /// 141 MB - ele e so o carregador, e sem a pasta _Data e a UnityPlayer.dll
+        /// ao lado abre e fecha na hora (nem chega a escrever log). Quem recebe
+        /// um executavel por mensagem copia o executavel, nao a pasta.
+        ///
+        /// Entao o LEIAME vai DENTRO do pacote, dizendo em primeiro lugar para
+        /// extrair a pasta inteira e nao separar o .exe. E a pasta de simbolos
+        /// do Burst - que o proprio Unity nomeia "DoNotShip" - sai fora.
+        /// </summary>
+        static void PrepararPacote(string destino, string raiz, StringBuilder sb)
+        {
+            string leiame = Path.Combine(raiz, "LEIAME-jogador.txt");
+            if (File.Exists(leiame))
+            {
+                File.Copy(leiame, Path.Combine(destino, "LEIAME.txt"), true);
+                sb.AppendLine("  LEIAME.txt copiado para a pasta da build");
+            }
+            else
+            {
+                sb.AppendLine("  AVISO: LEIAME-jogador.txt nao encontrado na raiz do projeto");
+            }
+
+            foreach (var pasta in Directory.GetDirectories(destino, "*DoNotShip*"))
+            {
+                Directory.Delete(pasta, true);
+                sb.AppendLine("  removido do pacote: " + Path.GetFileName(pasta));
+            }
         }
     }
 }
