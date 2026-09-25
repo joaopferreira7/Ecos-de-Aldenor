@@ -106,6 +106,13 @@ Com o **Editor fechado**, na raiz do projeto:
 .\montar.ps1 -Build -Zip    # idem, e ainda compacta o pacote de entrega
 ```
 
+Prefere duplo clique? Use o **`montar.cmd`** — ele verifica, gera o executável e
+compacta o pacote, tudo de uma vez.
+
+> ⚠️ **Não clique duas vezes no `montar.ps1`.** O Windows associa arquivos `.ps1` ao
+> Bloco de Notas: o duplo clique abre o código do script num editor e **nada acontece**.
+> É para isso que existe o `montar.cmd`.
+
 **Antes do primeiro build em uma máquina nova**, garanta os arquivos do Git LFS:
 
 ```powershell
