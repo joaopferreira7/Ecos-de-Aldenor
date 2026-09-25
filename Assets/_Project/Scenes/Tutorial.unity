@@ -3813,6 +3813,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.PhaseExit
   nextScene: 0
+  exigirAlmasDaFase: 1
+  intervaloDoAviso: 2.5
+  portaTrancadaSfx: {fileID: 0}
 --- !u!61 &1066552803
 BoxCollider2D:
   m_ObjectHideFlags: 0

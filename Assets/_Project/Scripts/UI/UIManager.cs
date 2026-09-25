@@ -123,12 +123,42 @@ namespace EcosDeAldenor.UI
         }
 
         /// <summary>
-        /// Anuncio central de que as almas exigidas foram reunidas. O aviso e
-        /// construido em codigo para nao depender de fiacao em cada cena.
+        /// Anuncio central de que as almas exigidas foram reunidas.
         /// </summary>
         private System.Collections.IEnumerator AnunciarFaseFinal()
         {
-            AudioManager.Instance?.PlaySfx(finalPhaseUnlockedSfx);
+            yield return Aviso("AS ALMAS FORAM REUNIDAS\n" +
+                               "<size=20><color=#B9A7D6>O santuario final se abriu</color></size>",
+                               finalPhaseUnlockedSfx, 2.4f);
+            unlockBanner = null;
+        }
+
+        /// <summary>
+        /// Mostra um aviso no centro da tela. Usado tambem pela porta de saida
+        /// de uma fase quando ainda ha alma para recolher: e o unico lugar onde
+        /// o jogador pode descobrir que faltou algo, e antes disso a porta
+        /// simplesmente nao reagia - sem mensagem, sem som, sem pista.
+        /// </summary>
+        public void MostrarAviso(string texto, float permanencia = 1.8f)
+        {
+            if (unlockBanner != null) StopCoroutine(unlockBanner);
+            unlockBanner = StartCoroutine(AvisoAvulso(texto, permanencia));
+        }
+
+        private System.Collections.IEnumerator AvisoAvulso(string texto, float permanencia)
+        {
+            yield return Aviso(texto, null, permanencia);
+            unlockBanner = null;
+        }
+
+        /// <summary>
+        /// O aviso propriamente dito: entra, permanece legivel e sai. O texto e
+        /// construido em codigo para nao depender de fiacao em cada cena, e o
+        /// tempo e nao-escalonado para nao ser afetado por hit stop ou pausa.
+        /// </summary>
+        private System.Collections.IEnumerator Aviso(string texto, AudioClip som, float permanencia)
+        {
+            AudioManager.Instance?.PlaySfx(som);
 
             if (unlockText == null)
             {
@@ -150,26 +180,23 @@ namespace EcosDeAldenor.UI
                 unlockText.font = fragmentsText != null ? fragmentsText.font
                     : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
                 unlockText.fontSize = 34;
-                unlockText.color = new Color(1f, 0.85f, 0.55f, 1f);
-                unlockText.text = "AS ALMAS FORAM REUNIDAS\n<size=20><color=#B9A7D6>O santuario final se abriu</color></size>";
 
                 var sombra = go.AddComponent<Shadow>();
                 sombra.effectColor = new Color(0f, 0f, 0f, 0.85f);
                 sombra.effectDistance = new Vector2(2f, -2f);
             }
 
+            unlockText.text = texto;
+            unlockText.color = new Color(1f, 0.85f, 0.55f, 1f);
             unlockText.gameObject.SetActive(true);
             Color baseCor = unlockText.color;
 
-            // Entra, permanece legivel e sai. Tempo nao-escalonado para o aviso
-            // nao ser afetado por hit stop ou pausa.
             yield return Fade(baseCor, 0f, 1f, 0.35f);
             float t = 0f;
-            while (t < 2.4f) { t += Time.unscaledDeltaTime; yield return null; }
+            while (t < permanencia) { t += Time.unscaledDeltaTime; yield return null; }
             yield return Fade(baseCor, 1f, 0f, 0.7f);
 
             unlockText.gameObject.SetActive(false);
-            unlockBanner = null;
         }
 
         private System.Collections.IEnumerator Fade(Color baseCor, float de, float para, float dur)
