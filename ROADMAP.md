@@ -87,13 +87,13 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 ## 🐞 Bugs de fundo corrigidos
 
-**Rodada anterior**
+**Primeiras rodadas**
 - **Pulo no ar**: o `GroundCheck` do Ren estava 0,94 u abaixo dos pés.
 - **Pulo e ataque se anulavam**: estavam numa cadeia `else if`.
 - **Nascimento dentro da rocha** na Phase2, e **inimigo colado ao nascimento**.
 - **Chefe afundado 0,2 u no chão**.
 
-**Esta rodada**
+**Rodada do level design**
 - **Altar curava para sempre**: cair saía de graça (perdia-se um coração e recuperava-se
   ao reaparecer sobre o altar) e dava para recuperar vida andando de um lado para o outro
   em cima dele. Agora o altar se consome ao ser aceso.
@@ -128,6 +128,25 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   aparecia atravessada no rosto do jogador durante a luta. Agora ocupa 30,6%–69,4% da
   largura, a 5,5% do topo.
 
+**Auditoria final (25/09/2026)**
+- **Dava para tornar o jogo invencível sem perceber**: as seis almas ficam sobre
+  plataformas (y entre 2,3 e 3,6) e todas as saídas ficam no chão (y 0,5) — o caminho
+  natural, correr para a direita, não passava por alma nenhuma. Quem pulasse uma só
+  descobria no fim da Fase 2, e descobria mal: `LoadFinalPhase` recusa em silêncio quando
+  faltam almas, então **a porta simplesmente não reagia** — sem mensagem, sem som e sem
+  caminho de volta. Agora a porta de cada fase cobra as almas daquela região e diz quantas
+  faltam e onde procurar.
+- **Morrer custava o jogo inteiro**: a tela de Game Over só levava ao Menu Principal, que
+  recomeça do Tutorial. Ganhou **"Tentar Novamente"**, que repete só a fase, devolvendo a
+  contagem de almas ao valor de quando a fase começou (sem isso o mesmo fragmento contaria
+  duas vezes e o HUD marcaria "8 / 6").
+- **A pausa ficava invertida**: sair para o menu pelo botão da pausa restaurava o
+  `Time.timeScale`, mas deixava o `GameManager` — que é persistente — marcado como pausado.
+  Na partida seguinte o primeiro ESC "despausava" e não abria nada.
+- **Guardião de Pedra tirava 2 dos 3 corações**, com o altar curando uma vez só: dois
+  encostões acabavam a partida. Voltou a 1 no Médio; o Difícil devolve o golpe pesado.
+
+
 ---
 
 ## 🔲 P1 — Obrigatório para a entrega (18/11)
@@ -150,9 +169,9 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - 🔎 **Playtest de balanceamento jogado à mão**. O que já foi medido, para orientar o teste:
   - o pulo sobe **1,73 u** e alcança **2,97 u** no mesmo nível (simulado com a física real
     do jogo: `jumpForce` 11, `gravityScale` 3, damping 0,5);
-  - o **Guardião de Pedra causa 2 de dano** e o Ren tem **3 corações**: dois toques matam, e
-    com o altar curando uma única vez a Phase2 pode ter ficado dura demais — é o primeiro
-    número a observar no teste;
+  - o **Guardião de Pedra** causava 2 de dano contra os 3 corações do Ren (dois toques
+    matavam, com o altar curando uma única vez); **passou a 1 na auditoria de 25/09** — o
+    que observar agora é se a Phase2 não ficou fácil demais;
   - chefe com **12 de vida** e golpe do jogador em **1 por 0,4 s**: cerca de 5 s de acertos
     limpos, fora o tempo de desviar.
 - ✅ Mixagem de áudio revisada (música 0,55 × SFX 0,90)
