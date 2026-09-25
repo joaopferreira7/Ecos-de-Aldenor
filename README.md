@@ -90,14 +90,33 @@ O jogo tem **8 cenas** encadeadas:
 
 ## 📦 Como gerar a build (executável)
 
+> ⚠️ **Isto é para quem desenvolve o jogo.** Para alguém apenas **jogar**, não mande
+> este repositório nem o `montar.ps1`: mande o **`Ecos de Aldenor - Windows.zip`**
+> (veja *Como entregar/enviar a build*, logo abaixo). Construir o jogo do código exige
+> o Unity 6000.4.1f1 instalado e licenciado (~10 GB), o **Git LFS** (827 arquivos de
+> arte e áudio do projeto estão lá) e dezenas de minutos na primeira importação.
+
 ### Pelo terminal (recomendado)
 
 Com o **Editor fechado**, na raiz do projeto:
 
 ```powershell
-.\montar.ps1           # só verifica o projeto e as fases
-.\montar.ps1 -Build    # verifica e gera o executável
+.\montar.ps1                # só verifica o projeto e as fases
+.\montar.ps1 -Build         # verifica e gera o executável
+.\montar.ps1 -Build -Zip    # idem, e ainda compacta o pacote de entrega
 ```
+
+**Antes do primeiro build em uma máquina nova**, garanta os arquivos do Git LFS:
+
+```powershell
+git lfs install
+git lfs pull
+```
+
+Sem isso, cada PNG e cada WAV do projeto é um arquivo de texto de ~130 bytes
+apontando para o conteúdo real — e o Unity constrói assim mesmo, **sem erro
+nenhum**, gerando um jogo sem sprites e sem som. O `montar.ps1` detecta esse
+estado e para antes de construir.
 
 O script chama o Unity em modo batch e faz, nesta ordem: confere a lista de
 cenas (8, com **MainMenu** em primeiro), roda o verificador de geometria das
