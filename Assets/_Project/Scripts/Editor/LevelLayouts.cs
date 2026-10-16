@@ -155,6 +155,7 @@ namespace EcosDeAldenor.EditorTools
                 var cena = EditorSceneManager.OpenScene(CaminhoDaCena(f.cena), OpenSceneMode.Single);
 
                 LevelTerrainBuilder.Construir(f.segmentos, f.plataformas, f.xMundoMin, f.xMundoMax);
+                LevelTerrainBuilder.VestirDecoracoes(cena);
 
                 // Porta e nascimento saem da propria cena: sao ancoras de arte e
                 // de fluxo, nao medidas de relevo, e ficam onde o artista pos.

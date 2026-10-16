@@ -359,19 +359,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 60
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: d27b6484bf4e7d44ba724eab13b64ae8, type: 3}
+    m_FontSize: 72
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 60
+    m_MaxSize: 72
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "CR\xC9DITOS"
+  m_Text: "Cr\xE9ditos"
 --- !u!222 &1174261306
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -587,7 +587,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: c70934fb06f4e5a4abe824af80222781, type: 3}
     m_FontSize: 22
     m_FontStyle: 0
     m_BestFit: 0
@@ -596,16 +596,17 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "Hero Knight \u2013 Pixel Art \u2014 LuizMelo (luizmelo.itch.io)\nBandits
-    \u2013 Pixel Art \u2014 Sven Thole (sventhole.itch.io)\nGothicvania (Cemiterio,
+    \u2013 Pixel Art \u2014 Sven Thole (sventhole.itch.io)\nGothicVania (Cemit\xE9rio,
     Igreja, Cidade) \u2014 Luis Zuno \"Ansimuz\" (CC0)\nBrackeys 2D Mega Pack \u2014
     Brackeys (gratuito / CC0)\n2D Dungeon Tilemap e Free GameUI \u2014 Aether2D (CC0)\nTrilhas:
     Seth_Makes_Sounds (fases), Juhani Junkala (chefe), Pascal Belisle (vila)\nHitspark
     FX \u2014 Jason Lee (jasontomlee.itch.io)\nRPG Essentials SFX \u2014 Leohpaz
-    (itch.io)\nFonte: Legacy Runtime (Unity)"
+    (itch.io)\nFontes: New Rocker (Pablo Impallari) e Pixelify Sans (Stefie Justprince)
+    \u2014 SIL OFL 1.1"
 --- !u!222 &1437131701
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -672,16 +673,16 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: d27b6484bf4e7d44ba724eab13b64ae8, type: 3}
+    m_FontSize: 48
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "\u2014 Equipe \u2014"
@@ -1082,7 +1083,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: c70934fb06f4e5a4abe824af80222781, type: 3}
     m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
@@ -1091,7 +1092,7 @@ MonoBehaviour:
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "Desenvolvido pelo grupo da disciplina\nDesenvolvimento de Jogos Digitais
@@ -1163,16 +1164,16 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 24
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: c70934fb06f4e5a4abe824af80222781, type: 3}
+    m_FontSize: 30
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Voltar
@@ -1242,16 +1243,16 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
-    m_FontStyle: 1
+    m_Font: {fileID: 12800000, guid: d27b6484bf4e7d44ba724eab13b64ae8, type: 3}
+    m_FontSize: 48
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 48
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "\u2014 Assets & Fontes \u2014"

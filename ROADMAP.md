@@ -179,9 +179,26 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - ✅ *Hit stop*/flash também ao levar dano
 - ✅ Percurso das 4 fases verificado por geometria (*Verificar fases*) — ritmo e
   dificuldade seguem dependendo do playtest acima
+- ✅ **Renovação visual** (menu *Ecos de Aldenor → Renovar visual*, refeita a cada execução):
+  - **tipografia**: o jogo inteiro estava em Arial. Títulos em **New Rocker** (gótica com
+    maiúsculas legíveis — a primeira tentativa, a Jacquard 24, transformava o "A" em "X" e o
+    "V" em "D", e foi descartada) e o resto em **Pixelify Sans**; títulos em caixa normal;
+  - **câmera**: `minY` de 1 para 2,2 — o chão saiu do meio da tela (36% dela era terra e
+    preto) para o terço de baixo;
+  - **chão do cemitério**: borda de grama com ossos do próprio pacote, recortada sem os
+    espinhos roxos (repetidos, eles pareciam armadilha);
+  - **objetos de cenário**: crânios, pedras e a lápide "RIP" do Brackeys (cartum, maiores que
+    o Ren) trocados pelas lápides, cruz e arbustos do `objects.png` do cemitério; na igreja,
+    nada de lápide — balaustradas com vela;
+  - **altar**: estátua encapuzada com uma **chama de alma** desenhada para o jogo (azul apagada,
+    verde acesa), no lugar da pedra com o mesmo sprite da alma coletável;
+  - **entrada**: portão de pilares no cemitério e porta em arco na igreja, no lugar do
+    retângulo marrom;
+  - **Tutorial**: tela sem texto sobreposto (layout empilhado), placas com acento, sem setas
+    ASCII, com placa de fundo e uma placa nova de **esquiva**; ícone da Vitória fora do título
 - 🔲 Passe visual final: **legibilidade das plataformas no escuro** (são o que o jogador
   precisa enxergar de relance e hoje contrastam pouco com o fundo), consistência de escala
-  dos inimigos, legibilidade dos textos no escuro
+  dos inimigos
 
 ---
 

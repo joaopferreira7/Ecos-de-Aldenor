@@ -97,12 +97,9 @@ namespace EcosDeAldenor.UI
             if (trailImage != null) trailImage.fillAmount = trailFill;
         }
 
-        private static Font GetFont()
-        {
-            Font f = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            if (f == null) f = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            return f;
-        }
+        // O nome do chefe usa a fonte gotica de titulo: e o unico texto da tela
+        // durante a luta, e e ele que diz "isto e o chefe final".
+        private static Font GetFont() => UIFactory.FonteTitulo();
 
         /// <summary>
         /// Gera (uma unica vez) um sprite branco solido. Necessario para que os
@@ -236,8 +233,8 @@ namespace EcosDeAldenor.UI
         {
             t.text = bossName;
             t.font = GetFont();
-            t.fontSize = 22;
-            t.fontStyle = FontStyle.Bold;
+            t.fontSize = 26;
+            t.fontStyle = FontStyle.Normal;     // negrito sintetico borra o pixel
             t.alignment = TextAnchor.MiddleCenter;
             t.color = color;
             t.horizontalOverflow = HorizontalWrapMode.Overflow;

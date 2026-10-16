@@ -36,6 +36,11 @@ namespace EcosDeAldenor.EditorTools
         static readonly Color CorBordaPlataforma = new Color(0.78f, 0.74f, 0.95f);
         static readonly Color CorAbismo = new Color(0.04f, 0.035f, 0.06f);
 
+        // Borda de grama com ossos do pacote do cemiterio, recortada sem os
+        // espinhos roxos da ponta direita (repetidos pelo chao, eles pareciam
+        // armadilha). So nas fases de cemiterio: a igreja tem piso de pedra.
+        public const string SpriteGrama = "Assets/_Project/Art/Cenario/grama-cemiterio.png";
+
         public const float TopoChao = -0.4f;
         public const float EspessuraChao = 1.6f;
 
@@ -83,6 +88,11 @@ namespace EcosDeAldenor.EditorTools
             Bloco(raiz, "Abismo", xMundoMin - 1f, xMundoMax + 1f, TopoChao, 46f,
                   spriteSolido, CorAbismo, -6, false, matLit);
 
+            // No cemiterio o topo do chao vira grama com ossos; na igreja continua
+            // o friso claro sobre o piso de pedra.
+            bool cemiterio = EditorSceneManager.GetActiveScene().name != "FinalPhase";
+            Sprite grama = cemiterio ? AssetDatabase.LoadAssetAtPath<Sprite>(SpriteGrama) : null;
+
             for (int i = 0; i < segmentos.Length; i++)
             {
                 string nome = "Chao_" + (char)('A' + i);
@@ -90,8 +100,21 @@ namespace EcosDeAldenor.EditorTools
                       spriteSolido, CorTerra, -2, false, matLit);
                 Bloco(raiz, nome, segmentos[i].x, segmentos[i].y, TopoChao, EspessuraChao,
                       spritePedra, CorPedra, 0, true, matLit);
-                Bloco(raiz, nome + "_Borda", segmentos[i].x, segmentos[i].y, TopoChao, 0.16f,
-                      spriteSolido, CorBorda, 1, false, matLit);
+
+                if (grama != null)
+                {
+                    // A grama passa um pouco acima do topo do colisor: os pes do
+                    // personagem afundam nela alguns pixels, em vez de flutuar
+                    // sobre uma linha reta.
+                    float altura = grama.bounds.size.y;
+                    Bloco(raiz, nome + "_Grama", segmentos[i].x, segmentos[i].y, TopoChao + 0.07f, altura,
+                          grama, Color.white, 1, false, matLit);
+                }
+                else
+                {
+                    Bloco(raiz, nome + "_Borda", segmentos[i].x, segmentos[i].y, TopoChao, 0.16f,
+                          spriteSolido, CorBorda, 1, false, matLit);
+                }
             }
 
             for (int i = 0; i < plataformas.Length; i++)
@@ -190,6 +213,115 @@ namespace EcosDeAldenor.EditorTools
         /// acima da acao e as luzes precisam cobrir a fase inteira, inclusive
         /// sobre plataformas e abismos.
         /// </summary>
+        // ------------------------------------------------------------------
+        // Pecas de chao no estilo do proprio cenario
+        // ------------------------------------------------------------------
+
+        const string ObjetosCemiterio = "Assets/GameAssets/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/objects.png";
+        const string TilesetIgreja = "Assets/GameAssets/gothicvania church files/gothicvania church files/Assets/ENVIRONMENT/tileset.png";
+
+        /// <summary>
+        /// Troca a arte das pecas de chao (cranios, pedras, lapides) pela arte
+        /// do pacote que fornece o fundo da fase.
+        ///
+        /// As pecas eram do pacote Brackeys: desenho de cartum, contorno grosso,
+        /// e grandes demais - um cranio do tamanho das pernas do Ren, uma lapide
+        /// "RIP" mais alta que ele. Ao lado do fundo GothicVania, eram a primeira
+        /// coisa que denunciava o jogo como colagem. O objects.png do cemiterio
+        /// tem lapides, cruz e arbustos no mesmo traco do fundo.
+        ///
+        /// Na igreja, cranio e lapide nao fazem sentido: saem, e as lapides
+        /// grandes viram a balaustrada com vela do tileset da igreja.
+        ///
+        /// So troca sprite, escala e altura; a posicao horizontal continua com
+        /// EspalharDecoracoes, que mede as larguras novas.
+        /// </summary>
+        public static void VestirDecoracoes(UnityEngine.SceneManagement.Scene cena)
+        {
+            bool igreja = cena.name == "FinalPhase";
+            var objetos = FatiasOrdenadas(ObjetosCemiterio);
+            var igrejaFatias = FatiasOrdenadas(TilesetIgreja);
+            if (objetos.Count < 10 || igrejaFatias.Count < 11)
+            {
+                Debug.LogWarning("VestirDecoracoes: fatias dos pacotes nao encontradas; cenario mantido.");
+                return;
+            }
+
+            Sprite[] lapides = { objetos[0], objetos[3], objetos[2] };
+            Sprite cruz = objetos[1], lapideLarga = objetos[2];
+            Sprite arbustoPequeno = objetos[6], arbustoComCruz = objetos[5];
+            Sprite balaustrada = igrejaFatias[10];
+            int nLapide = 0, nArbusto = 0;
+
+            foreach (var root in cena.GetRootGameObjects())
+            {
+                if (!root.name.StartsWith("Decoration")) continue;
+                if (root.name == "Decoration_Door" || root.name == "Decoration_Fundo") continue;
+
+                var alvos = new List<Transform>();
+                if (root.GetComponent<SpriteRenderer>() != null) alvos.Add(root.transform);
+                foreach (Transform c in root.transform) alvos.Add(c);
+
+                foreach (var t in alvos)
+                {
+                    var sr = t.GetComponent<SpriteRenderer>();
+                    if (sr == null || t.name.StartsWith("Chain")) continue;
+
+                    bool cranio = t.name.StartsWith("Skull");
+                    bool entulho = t.name.StartsWith("Rubble");
+                    bool lapideGrande = t.name.StartsWith("Gravestone") || t == root.transform;
+
+                    if (igreja)
+                    {
+                        if (cranio || entulho) { Object.DestroyImmediate(t.gameObject); continue; }
+                        // Menor e mais escura que as pecas do cemiterio: a
+                        // balaustrada clara em 1,5x competia com o chefe.
+                        if (lapideGrande) Vestir(t, sr, balaustrada, 1.0f, 0.02f, new Color(0.58f, 0.52f, 0.68f, 1f));
+                        continue;
+                    }
+
+                    if (cranio) Vestir(t, sr, lapides[nLapide++ % lapides.Length], 1.7f, 0.06f);
+                    else if (entulho)
+                    {
+                        bool pequeno = nArbusto++ % 2 == 0;
+                        Vestir(t, sr, pequeno ? arbustoPequeno : arbustoComCruz, pequeno ? 1.7f : 1.1f, 0.06f);
+                    }
+                    else if (lapideGrande)
+                        Vestir(t, sr, t.name.EndsWith("3") ? lapideLarga : cruz, t == root.transform ? 2.2f : 2.0f, 0.06f);
+                }
+            }
+        }
+
+        static void Vestir(Transform t, SpriteRenderer sr, Sprite sprite, float escala, float afundar,
+                           Color? cor = null)
+        {
+            sr.sprite = sprite;
+            sr.drawMode = SpriteDrawMode.Simple;
+            sr.flipX = false;
+            sr.color = cor ?? new Color(0.86f, 0.84f, 0.93f, 1f);
+
+            // O sinal da escala X e o espelhamento escolhido para variar a cena.
+            float sinal = t.localScale.x < 0f ? -1f : 1f;
+            t.localScale = new Vector3(sinal * escala, escala, 1f);
+
+            float altura = sprite.bounds.size.y * escala;
+            t.position = new Vector3(t.position.x, TopoChao + altura * 0.5f - afundar, t.position.z);
+        }
+
+        static List<Sprite> FatiasOrdenadas(string caminho)
+        {
+            return AssetDatabase.LoadAllAssetsAtPath(caminho).OfType<Sprite>()
+                   .OrderBy(sp => IndiceDaFatia(sp.name))
+                   .ToList();
+        }
+
+        static int IndiceDaFatia(string nome)
+        {
+            int k = nome.LastIndexOf("_");
+            int n;
+            return k >= 0 && int.TryParse(nome.Substring(k + 1), out n) ? n : 0;
+        }
+
         public static int EspalharDecoracoes(UnityEngine.SceneManagement.Scene cena,
                                              Vector2[] segmentos, Vector3[] plataformas,
                                              float xPorta, float xNascimento,

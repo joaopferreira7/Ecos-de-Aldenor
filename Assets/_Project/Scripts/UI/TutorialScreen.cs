@@ -85,73 +85,102 @@ namespace EcosDeAldenor.UI
             if (aberta) Time.timeScale = 1f;
         }
 
+        // Altura do painel e espaco entre blocos. O layout e EMPILHADO: cada
+        // bloco pede a propria altura e o cursor desce sozinho. Antes as posicoes
+        // eram fixas, e quando a linha "Esquivar" entrou na tabela de controles
+        // a ultima linha caiu em cima do objetivo - texto sobre texto.
+        private const float AlturaPainel = 820f;
+        private const float Folga = 14f;
+        private float cursor;
+
+        /// <summary>Reserva uma faixa de altura e devolve o centro dela.</summary>
+        private float Proximo(float altura, float folgaDepois = Folga)
+        {
+            float centro = cursor - altura * 0.5f;
+            cursor -= altura + folgaDepois;
+            return centro;
+        }
+
         private void Construir()
         {
             canvas = UIFactory.CriarCanvas("TutorialScreenCanvas", 4000);
 
             // Escurecimento cobrindo a cena inteira: a fase continua visivel ao
             // fundo, mas apagada, entao fica claro que o jogo ainda nao comecou.
-            UIFactory.Painel(canvas.transform, "Escurecer", new Color(0.02f, 0.01f, 0.04f, 0.88f),
+            // Quase opaco: as placas do tutorial no cenario nao podem competir
+            // com a tela por atencao.
+            UIFactory.Painel(canvas.transform, "Escurecer", new Color(0.02f, 0.01f, 0.04f, 0.97f),
                              Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             var painel = UIFactory.Painel(canvas.transform, "Painel", UIFactory.CorFundoPainel,
                                           new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
                                           Vector2.zero, Vector2.zero);
-            painel.sizeDelta = new Vector2(1080f, 720f);
+            painel.sizeDelta = new Vector2(1080f, AlturaPainel);
             painel.anchoredPosition = Vector2.zero;
 
             // Fio dourado no topo e na base, como moldura discreta.
-            UIFactory.Linha(painel, new Vector2(1080f, 3f), new Vector2(0f, 360f), UIFactory.CorAcento);
-            UIFactory.Linha(painel, new Vector2(1080f, 3f), new Vector2(0f, -360f), UIFactory.CorAcento);
+            float meia = AlturaPainel * 0.5f;
+            UIFactory.Linha(painel, new Vector2(1080f, 3f), new Vector2(0f, meia), UIFactory.CorAcento);
+            UIFactory.Linha(painel, new Vector2(1080f, 3f), new Vector2(0f, -meia), UIFactory.CorAcento);
 
-            UIFactory.Texto(painel, "Titulo", "COMO JOGAR", 52, UIFactory.CorTitulo,
-                            TextAnchor.MiddleCenter, new Vector2(1000f, 70f), new Vector2(0f, 288f),
-                            FontStyle.Bold);
+            cursor = meia - 28f;
+
+            UIFactory.Titulo(painel, "Titulo", "Como Jogar", 72, UIFactory.CorTitulo,
+                             new Vector2(1000f, 80f), new Vector2(0f, Proximo(80f, 2f)));
 
             UIFactory.Texto(painel, "Subtitulo", "Ren desperta no cemitério de Aldenor",
-                            22, UIFactory.CorTextoFraco, TextAnchor.MiddleCenter,
-                            new Vector2(1000f, 34f), new Vector2(0f, 244f));
+                            24, UIFactory.CorTextoFraco, TextAnchor.MiddleCenter,
+                            new Vector2(1000f, 30f), new Vector2(0f, Proximo(30f, 22f)));
 
             // --- Controles: acao a esquerda, tecla a direita ------------------
-            float y = 190f;
-            LinhaDeControle(painel, "Mover", "A  /  D     ou     ←  →", ref y);
-            LinhaDeControle(painel, "Pular", "Espaço", ref y);
-            LinhaDeControle(painel, "Atacar", "Botão esquerdo do mouse", ref y);
-            LinhaDeControle(painel, "Esquivar", "Shift  ou  botão direito", ref y);
-            LinhaDeControle(painel, "Pausar", "ESC", ref y);
+            LinhaDeControle(painel, "Mover", "A / D  ou  setas");
+            LinhaDeControle(painel, "Pular", "Espaço");
+            LinhaDeControle(painel, "Atacar", "Botão esquerdo do mouse");
+            LinhaDeControle(painel, "Esquivar", "Shift  ou  botão direito");
+            LinhaDeControle(painel, "Pausar", "Esc");
 
-            UIFactory.Linha(painel, new Vector2(880f, 1f), new Vector2(0f, -46f),
+            cursor -= 8f;
+            UIFactory.Linha(painel, new Vector2(880f, 1f), new Vector2(0f, Proximo(1f, 20f)),
                             new Color(0.5f, 0.42f, 0.62f, 0.45f));
 
             // --- Objetivo e avisos --------------------------------------------
+            // Duas linhas de altura reservadas: o objetivo quebra em telas
+            // estreitas e nao pode invadir o bloco de baixo.
             UIFactory.Texto(painel, "Objetivo",
-                            "Reúna as 6 almas espalhadas pelas fases para abrir a igreja — e derrote A Vigília.",
+                            "Reúna as 6 almas espalhadas pelas fases para abrir a igreja\ne derrote A Vigília.",
                             26, UIFactory.CorAcento, TextAnchor.MiddleCenter,
-                            new Vector2(940f, 40f), new Vector2(0f, -80f), FontStyle.Bold);
+                            new Vector2(960f, 64f), new Vector2(0f, Proximo(64f, 16f)));
 
             UIFactory.Texto(painel, "Avisos",
                             "Os altares acesos são checkpoints.\n" +
                             "Cair no abismo custa um coração e devolve você ao último altar.\n" +
                             "Na luta final, a marca no chão mostra onde o golpe vai cair: role para fora dela.",
-                            22, UIFactory.CorTexto, TextAnchor.UpperCenter,
-                            new Vector2(940f, 110f), new Vector2(0f, -160f));
+                            22, UIFactory.CorTexto, TextAnchor.MiddleCenter,
+                            new Vector2(980f, 90f), new Vector2(0f, Proximo(90f, 18f)));
 
             UIFactory.Texto(painel, "Dificuldade",
                             "Dificuldade: " + DifficultySettings.Nome + "  (altere no Menu Principal)",
                             20, UIFactory.CorTextoFraco, TextAnchor.MiddleCenter,
-                            new Vector2(940f, 30f), new Vector2(0f, -232f));
+                            new Vector2(940f, 28f), new Vector2(0f, Proximo(28f, 18f)));
 
             // --- Comecar -------------------------------------------------------
             UIFactory.Botao(painel, "BotaoComecar", "COMEÇAR", 30,
-                            new Vector2(340f, 66f), new Vector2(0f, -288f), Continuar);
+                            new Vector2(340f, 66f), new Vector2(0f, Proximo(66f, 8f)), Continuar);
 
             UIFactory.Texto(painel, "Atalho", "ou pressione Espaço", 18, UIFactory.CorTextoFraco,
-                            TextAnchor.MiddleCenter, new Vector2(600f, 26f), new Vector2(0f, -338f));
+                            TextAnchor.MiddleCenter, new Vector2(600f, 26f), new Vector2(0f, Proximo(26f, 0f)));
+
+            // Se um dia o conteudo crescer alem do painel, o aviso aparece no
+            // console em vez de o texto vazar silenciosamente pela moldura.
+            if (cursor < -meia)
+                Debug.LogWarning("TutorialScreen: o conteudo passou da borda do painel em " + (-meia - cursor) + " px.");
         }
 
-        /// <summary>Uma linha da tabela de controles, e desce o cursor vertical.</summary>
-        private void LinhaDeControle(Transform pai, string acao, string tecla, ref float y)
+        /// <summary>Uma linha da tabela de controles.</summary>
+        private void LinhaDeControle(Transform pai, string acao, string tecla)
         {
+            float y = Proximo(46f, 10f);
+
             var rotulo = UIFactory.Texto(pai, "Acao_" + acao, acao, 28, UIFactory.CorTextoFraco,
                                          TextAnchor.MiddleRight, new Vector2(300f, 44f),
                                          new Vector2(-230f, y));
@@ -163,11 +192,8 @@ namespace EcosDeAldenor.UI
             img.color = new Color(0.18f, 0.14f, 0.24f, 0.9f);
 
             var texto = UIFactory.Texto(caixa, "Valor", tecla, 26, UIFactory.CorTexto,
-                                        TextAnchor.MiddleCenter, new Vector2(470f, 46f), Vector2.zero,
-                                        FontStyle.Bold);
+                                        TextAnchor.MiddleCenter, new Vector2(470f, 46f), Vector2.zero);
             texto.horizontalOverflow = HorizontalWrapMode.Overflow;
-
-            y -= 58f;
         }
     }
 }

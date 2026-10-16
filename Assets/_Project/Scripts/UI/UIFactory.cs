@@ -25,10 +25,41 @@ namespace EcosDeAldenor.UI
         public static readonly Color CorTitulo = new Color(0.78f, 0.92f, 1f, 1f);
         public static readonly Color CorAcento = new Color(0.95f, 0.80f, 0.42f, 1f);
 
+        // TIPOGRAFIA
+        //
+        // O jogo inteiro era escrito em Arial (a LegacyRuntime do Unity), e era
+        // o que mais o fazia parecer prototipo: uma fonte de sistema, lisa,
+        // ao lado de arte em pixel. Agora sao duas fontes (licenca OFL, em
+        // Resources/Fonts com os textos de licenca):
+        //   - New Rocker, gotica, so para TITULOS - e a voz do jogo;
+        //   - Pixelify Sans, de pixel, para todo o resto.
+        // A primeira escolha de titulo foi uma gotica de pixel (Jacquard 24), e
+        // ela foi trocada porque as maiusculas goticas confundem justamente as
+        // palavras do jogo: o "A" vira "X" e o "V" vira "D" ("X Bigilia",
+        // "Ditoria"). A New Rocker mantem o ar gotico com maiusculas legiveis.
+        // As duas tem todos os acentos do portugues. NAO tem setas (← →): quem
+        // escreve texto de controle usa a palavra "setas".
+        private static Font fonteTexto;
+        private static Font fonteTitulo;
+
+        /// <summary>Fonte de texto corrido, botoes e HUD.</summary>
         public static Font Fonte()
         {
-            Font f = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            if (f == null) f = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            if (fonteTexto == null) fonteTexto = Carregar("Fonts/PixelifySans");
+            return fonteTexto;
+        }
+
+        /// <summary>Fonte gotica dos titulos.</summary>
+        public static Font FonteTitulo()
+        {
+            if (fonteTitulo == null) fonteTitulo = Carregar("Fonts/NewRocker");
+            return fonteTitulo;
+        }
+
+        private static Font Carregar(string caminho)
+        {
+            Font f = Resources.Load<Font>(caminho);
+            if (f == null) f = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             return f;
         }
 
@@ -97,11 +128,23 @@ namespace EcosDeAldenor.UI
             t.text = conteudo;
             t.font = Fonte();
             t.fontSize = tamanhoFonte;
-            t.fontStyle = estilo;
+            // Negrito e italico sao SINTETICOS na fonte de pixel (o Unity engrossa
+            // ou inclina o desenho), e em pixel isso borra o contorno. A hierarquia
+            // vem de tamanho, cor e da fonte de titulo, nunca de estilo.
+            t.fontStyle = FontStyle.Normal;
             t.color = cor;
             t.alignment = alinhamento;
             t.horizontalOverflow = HorizontalWrapMode.Wrap;
             t.verticalOverflow = VerticalWrapMode.Overflow;
+            return t;
+        }
+
+        /// <summary>Texto na fonte gotica de titulo.</summary>
+        public static Text Titulo(Transform pai, string nome, string conteudo, int tamanhoFonte,
+                                  Color cor, Vector2 tamanho, Vector2 posicao)
+        {
+            var t = Texto(pai, nome, conteudo, tamanhoFonte, cor, TextAnchor.MiddleCenter, tamanho, posicao);
+            t.font = FonteTitulo();
             return t;
         }
 

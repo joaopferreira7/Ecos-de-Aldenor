@@ -177,9 +177,9 @@ namespace EcosDeAldenor.UI
                 unlockText.alignment = TextAnchor.MiddleCenter;
                 unlockText.supportRichText = true;
                 unlockText.raycastTarget = false;
-                unlockText.font = fragmentsText != null ? fragmentsText.font
-                    : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-                unlockText.fontSize = 34;
+                // Anuncio de virada da historia: fonte gotica de titulo.
+                unlockText.font = UIFactory.FonteTitulo();
+                unlockText.fontSize = 48;
 
                 var sombra = go.AddComponent<Shadow>();
                 sombra.effectColor = new Color(0f, 0f, 0f, 0.85f);

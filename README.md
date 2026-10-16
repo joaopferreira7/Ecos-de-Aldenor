@@ -195,6 +195,8 @@ abaixo (e também na **tela de Créditos** dentro do jogo):
 | **Hitspark FX** | Efeito de faísca ao acertar golpes | Jason Lee — [jasontomlee.itch.io](https://jasontomlee.itch.io/) | gratuito |
 | **RPG Essentials SFX** | Efeitos sonoros | Leohpaz — [leohpaz.itch.io](https://leohpaz.itch.io/) | gratuito |
 | **Música (vila / vitória)** | Trilha da tela de Vitória | Pascal Belisle | crédito exigido |
+| **New Rocker** (fonte) | Títulos (menu, telas, nome do chefe) | Pablo Impallari — [Google Fonts](https://fonts.google.com/specimen/New+Rocker) | SIL OFL 1.1 (texto em `Assets/_Project/Resources/Fonts`) |
+| **Pixelify Sans** (fonte) | Todos os demais textos e as placas do Tutorial | Stefie Justprince — [Google Fonts](https://fonts.google.com/specimen/Pixelify+Sans) | SIL OFL 1.1 (texto em `Assets/_Project/Resources/Fonts`) |
 
 > Autoria conferida nas páginas oficiais em 30/08/2026. **Hero Knight e Bandits são de autores
 > diferentes**: os dois já constaram como "Sven Thole", mas Hero Knight é do **LuizMelo** — dele é o
