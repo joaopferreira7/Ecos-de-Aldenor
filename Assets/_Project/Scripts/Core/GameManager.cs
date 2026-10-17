@@ -43,6 +43,13 @@ namespace EcosDeAldenor.Core
         private string lastGameplayScene;
         private int fragmentsAtPhaseStart;
 
+        // Tempo de jogo, para o resumo das telas de Vitoria e Derrota. Conta so
+        // em cena jogavel e com o tempo correndo: menus, pausa e a tela de
+        // tutorial (que congela o tempo) ficam de fora.
+        private bool emCenaJogavel;
+        private float tempoDeJogo;
+        public float TempoDeJogo => tempoDeJogo;
+
         public int TotalFragments => totalFragmentsCollected;
         /// <summary>Ha uma fase de jogo para repetir depois de um Game Over?</summary>
         public bool CanRetryPhase => !string.IsNullOrEmpty(lastGameplayScene);
@@ -81,9 +88,15 @@ namespace EcosDeAldenor.Core
         /// sceneLoaded dispara depois do Awake dos objetos da cena, entao o
         /// jogador ja existe quando esta busca acontece.
         /// </summary>
+        private void Update()
+        {
+            if (emCenaJogavel) tempoDeJogo += Time.deltaTime;
+        }
+
         private void HandleSceneLoaded(Scene cena, LoadSceneMode modo)
         {
-            if (GameObject.FindGameObjectWithTag("Player") == null) return;
+            emCenaJogavel = GameObject.FindGameObjectWithTag("Player") != null;
+            if (!emCenaJogavel) return;
 
             lastGameplayScene = cena.name;
             fragmentsAtPhaseStart = totalFragmentsCollected;
@@ -174,6 +187,7 @@ namespace EcosDeAldenor.Core
             lastCheckpointScene = string.Empty;
             lastGameplayScene = string.Empty;
             fragmentsAtPhaseStart = 0;
+            tempoDeJogo = 0f;
             OnFragmentsChanged?.Invoke(totalFragmentsCollected);
         }
     }

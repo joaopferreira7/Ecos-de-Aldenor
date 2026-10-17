@@ -138,6 +138,13 @@ namespace EcosDeAldenor.Player
         /// <summary>Esta rolando agora? O rolamento manda no movimento e trava o ataque.</summary>
         public bool EstaRolando => rollTimer > 0f;
 
+        /// <summary>
+        /// Tira o controle do jogador durante uma cena (a entrada do chefe, por
+        /// exemplo). O Ren continua sujeito a fisica e animacao - so para de
+        /// ouvir o teclado e o mouse.
+        /// </summary>
+        public bool ControleBloqueado { get; set; }
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -177,6 +184,17 @@ namespace EcosDeAldenor.Player
             ReadInput();
             CheckGrounded();
             HandleAttackCooldown();
+
+            if (ControleBloqueado)
+            {
+                horizontalInput = 0f;
+                jumpHeld = false;
+                jumpBufferTimer = 0f;
+                UpdateAnimatorMovementParams();
+                UpdateAnimationState();
+                return;
+            }
+
             UpdateJumpTimers();
             UpdateFacing();
             UpdateAnimatorMovementParams();

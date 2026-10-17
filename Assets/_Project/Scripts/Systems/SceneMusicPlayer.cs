@@ -19,7 +19,17 @@ namespace EcosDeAldenor.Systems
         [Range(0f, 2f)]
         [SerializeField] private float trackGain = 1f;
 
+        [Tooltip("Desligado: a cena comeca em silencio e alguem chama Tocar() na hora " +
+                 "certa (a arena do chefe so tem trilha quando ele se revela).")]
+        [SerializeField] private bool tocarAoIniciar = true;
+
         private void Start()
+        {
+            if (tocarAoIniciar) Tocar();
+            else AudioManager.Instance?.StopMusic();
+        }
+
+        public void Tocar()
         {
             AudioManager.Instance?.PlayMusic(sceneMusic, loop, trackGain);
         }

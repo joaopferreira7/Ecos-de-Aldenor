@@ -30,6 +30,9 @@ namespace EcosDeAldenor.Systems
         [Range(0f, 1f)]
         [SerializeField] private float sfxVolume = 0.9f;
 
+        private const string ChaveMusica = "EcosDeAldenor.VolumeMusica";
+        private const string ChaveEfeitos = "EcosDeAldenor.VolumeEfeitos";
+
         // Ganho da faixa que esta tocando e intensidade momentanea dela. Nao sao
         // ajustes do jogador: sao mixagem, e por isso nao aparecem no Inspector.
         private float trackGain = 1f;
@@ -57,6 +60,11 @@ namespace EcosDeAldenor.Systems
                 sfxSource = gameObject.AddComponent<AudioSource>();
                 sfxSource.loop = false;
             }
+
+            // A escolha do jogador (tela de Opcoes) vale mais que o padrao do
+            // Inspector, e sobrevive a fechar o jogo.
+            musicVolume = PlayerPrefs.GetFloat(ChaveMusica, musicVolume);
+            sfxVolume = PlayerPrefs.GetFloat(ChaveEfeitos, sfxVolume);
 
             // Aplicado aqui, e nao so quando alguem pedir: sem isto a mixagem
             // depende de um chamador que nunca existiu.
@@ -107,6 +115,25 @@ namespace EcosDeAldenor.Systems
         {
             if (musicSource != null)
                 musicSource.volume = Mathf.Clamp01(musicVolume * trackGain * musicIntensity);
+        }
+
+        /// <summary>
+        /// Silencia a trilha. Usado na arena do chefe: a luta comeca em
+        /// silencio e a trilha so entra quando ele se revela.
+        /// </summary>
+        public void StopMusic()
+        {
+            if (musicSource == null) return;
+            musicSource.Stop();
+            musicSource.clip = null;
+        }
+
+        /// <summary>Grava os volumes atuais como escolha do jogador.</summary>
+        public void SalvarVolumes()
+        {
+            PlayerPrefs.SetFloat(ChaveMusica, musicVolume);
+            PlayerPrefs.SetFloat(ChaveEfeitos, sfxVolume);
+            PlayerPrefs.Save();
         }
 
         public void PlaySfx(AudioClip clip)

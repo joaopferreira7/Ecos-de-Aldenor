@@ -67,6 +67,29 @@ namespace EcosDeAldenor.UI
             {
                 group.alpha = 0f; // sem chefe, esconde
             }
+
+            // Com uma entrada de chefe na cena, a barra so aparece quando ele se
+            // revela: barra cheia na tela antes de o chefe existir estraga a
+            // apresentacao.
+            if (group != null && FindAnyObjectByType<IntroDoChefe>() != null)
+                group.alpha = 0f;
+        }
+
+        /// <summary>Faz a barra surgir (chamado pela entrada do chefe).</summary>
+        public void Revelar(float duracao = 0.6f)
+        {
+            if (group != null && bossHealth != null && !bossHealth.IsDead)
+                StartCoroutine(Surgir(duracao));
+        }
+
+        private System.Collections.IEnumerator Surgir(float duracao)
+        {
+            for (float t = 0f; t < duracao; t += Time.deltaTime)
+            {
+                group.alpha = t / duracao;
+                yield return null;
+            }
+            group.alpha = 1f;
         }
 
         private void OnDestroy()

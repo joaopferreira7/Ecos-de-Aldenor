@@ -66,6 +66,28 @@ namespace EcosDeAldenor.UI
             GameManager.Instance?.TogglePause();
         }
 
+        /// <summary>
+        /// Recomeca a fase atual do inicio, com as almas que o jogador tinha ao
+        /// entrar nela - o mesmo caminho do "Tentar novamente" da derrota.
+        /// </summary>
+        public void OnRestartClicked()
+        {
+            var gerente = GameManager.Instance;
+            if (gerente == null)
+            {
+                Time.timeScale = 1f;
+                SceneController.Instance?.ReloadCurrentScene();
+                return;
+            }
+
+            gerente.PrepareRetry();
+            SceneController.Instance?.ReloadCurrentScene();
+        }
+
+        public void OnOptionsClicked() => PainelOpcoes.Abrir();
+
+        public void OnControlsClicked() => Controles.AbrirPainel();
+
         public void OnMainMenuButtonClicked()
         {
             // Sai da pausa de verdade: o GameManager e persistente, e deixar

@@ -196,6 +196,21 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
     retângulo marrom;
   - **Tutorial**: tela sem texto sobreposto (layout empilhado), placas com acento, sem setas
     ASCII, com placa de fundo e uma placa nova de **esquiva**; ícone da Vitória fora do título
+- ✅ **Renovação das telas** (menu *Ecos de Aldenor → Renovar telas*, refeita a cada execução):
+  - **entrada da Vigília**: a arena começa em silêncio e sem a barra do chefe; ao cruzar o
+    gatilho, o controle trava, a câmera vai até ela, entra o nome "A Vigília — Guardiã da
+    Igreja de Aldenor" com um toque de encontro e tremor, a trilha começa nesse instante e a
+    barra surge quando a câmera volta. Pulo, clique ou Enter encurtam a cena;
+  - **telas finais**: fundo com a arte do jogo (nave da igreja na vitória, cemitério
+    avermelhado na derrota), o Ren animado (parado / caindo), **resumo da partida** (almas,
+    mortes, tempo, dificuldade), botão de **Créditos** na vitória; "Game Over" virou
+    **"Fim de Jogo"**;
+  - **menu**: cemitério com a lua, montanhas e túmulos deslizando em parallax, almas subindo,
+    botões **Opções** (volume de música e efeitos, salvo entre sessões) e **Controles**;
+    "Créditos" com acento; o clique tocava duas vezes (ouvinte duplicado) e agora toca uma;
+  - **pausa**: moldura no estilo do menu (os botões eram pretos), com **Reiniciar fase**,
+    **Opções** e **Controles**;
+  - **créditos**: fundo da igreja e botão Voltar com caixa (estava sem altura no layout)
 - 🔲 Passe visual final: **legibilidade das plataformas no escuro** (são o que o jogador
   precisa enxergar de relance e hoje contrastam pouco com o fundo), consistência de escala
   dos inimigos
@@ -204,13 +219,12 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 ## 🔲 P3 — Extras (opcionais, se sobrar tempo)
 
-- 🔲 Menu de **opções** (controle de volume música/SFX) — o `AudioManager` já expõe
-  `SetMusicVolume`/`SetSfxVolume` e guarda os valores; falta só a tela
+- ✅ Menu de **opções** (controle de volume música/SFX), no menu e na pausa
 - 🔲 **Salvar progresso** (fragmentos/último checkpoint) entre sessões
 - 🔲 Mais variedade de inimigos ou uma fase extra
 - 🔲 Efeitos de partículas nas almas/checkpoints; ataque especial do chefe com sprite
   dedicado (wizard/Fire já disponível no pack)
-- 🔲 Tela de **controles** acessível pelo menu principal
+- ✅ Tela de **controles** acessível pelo menu principal e pela pausa
 - 🔲 Remover a `Assets/Scenes/SampleScene.unity`, sobra do template
 
 ---

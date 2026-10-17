@@ -133,11 +133,8 @@ namespace EcosDeAldenor.UI
                             new Vector2(1000f, 30f), new Vector2(0f, Proximo(30f, 22f)));
 
             // --- Controles: acao a esquerda, tecla a direita ------------------
-            LinhaDeControle(painel, "Mover", "A / D  ou  setas");
-            LinhaDeControle(painel, "Pular", "Espaço");
-            LinhaDeControle(painel, "Atacar", "Botão esquerdo do mouse");
-            LinhaDeControle(painel, "Esquivar", "Shift  ou  botão direito");
-            LinhaDeControle(painel, "Pausar", "Esc");
+            foreach (var (acao, tecla) in Controles.Lista)
+                LinhaDeControle(painel, acao, tecla);
 
             cursor -= 8f;
             UIFactory.Linha(painel, new Vector2(880f, 1f), new Vector2(0f, Proximo(1f, 20f)),
@@ -176,24 +173,10 @@ namespace EcosDeAldenor.UI
                 Debug.LogWarning("TutorialScreen: o conteudo passou da borda do painel em " + (-meia - cursor) + " px.");
         }
 
-        /// <summary>Uma linha da tabela de controles.</summary>
+        /// <summary>Uma linha da tabela de controles, no cursor de empilhamento.</summary>
         private void LinhaDeControle(Transform pai, string acao, string tecla)
         {
-            float y = Proximo(46f, 10f);
-
-            var rotulo = UIFactory.Texto(pai, "Acao_" + acao, acao, 28, UIFactory.CorTextoFraco,
-                                         TextAnchor.MiddleRight, new Vector2(300f, 44f),
-                                         new Vector2(-230f, y));
-            rotulo.horizontalOverflow = HorizontalWrapMode.Overflow;
-
-            var caixa = UIFactory.Caixa(pai, "Tecla_" + acao, new Vector2(470f, 46f), new Vector2(160f, y));
-            var img = caixa.gameObject.AddComponent<Image>();
-            img.sprite = Systems.RuntimeSprites.Solido();
-            img.color = new Color(0.18f, 0.14f, 0.24f, 0.9f);
-
-            var texto = UIFactory.Texto(caixa, "Valor", tecla, 26, UIFactory.CorTexto,
-                                        TextAnchor.MiddleCenter, new Vector2(470f, 46f), Vector2.zero);
-            texto.horizontalOverflow = HorizontalWrapMode.Overflow;
+            Controles.Linha(pai, acao, tecla, Proximo(46f, 10f));
         }
     }
 }

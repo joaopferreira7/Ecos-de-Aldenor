@@ -40,6 +40,10 @@ namespace EcosDeAldenor.UI
             SceneController.Instance?.LoadScene(gerente.LastGameplayScene);
         }
 
+        public void OnOptionsClicked() => PainelOpcoes.Abrir();
+
+        public void OnControlsClicked() => Controles.AbrirPainel();
+
         public void OnCreditsClicked()
         {
             SceneController.Instance?.LoadScene("Credits");

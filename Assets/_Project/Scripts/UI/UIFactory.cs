@@ -17,7 +17,7 @@ namespace EcosDeAldenor.UI
     /// </summary>
     public static class UIFactory
     {
-        public static readonly Color CorFundoPainel = new Color(0.07f, 0.05f, 0.10f, 0.94f);
+        public static readonly Color CorFundoPainel = new Color(0.07f, 0.05f, 0.10f, 1f);   // opaco: em espaco linear, 0.94 ja deixava o fundo vazar
         public static readonly Color CorBotao = new Color(0.14f, 0.10f, 0.18f, 0.92f);
         public static readonly Color CorBotaoDestaque = new Color(0.35f, 0.18f, 0.45f, 1f);
         public static readonly Color CorTexto = new Color(0.90f, 0.85f, 0.98f, 1f);
@@ -193,6 +193,83 @@ namespace EcosDeAldenor.UI
             var img = rt.gameObject.AddComponent<Image>();
             img.sprite = RuntimeSprites.Solido();
             img.color = cor;
+        }
+
+        // ------------------------------------------------------------------
+        // Janela modal (Opcoes, Controles)
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// Janela por cima de tudo, no mesmo desenho da tela de tutorial: fundo
+        /// escurecido, painel com fio dourado em cima e embaixo, titulo gotico e
+        /// um botao "Voltar" no rodape. Devolve o painel; o conteudo vai entre o
+        /// titulo e o rodape. Funciona com o jogo pausado (a UI nao depende do
+        /// timeScale), entao serve tanto ao menu quanto a pausa.
+        /// </summary>
+        public static RectTransform AbrirModal(string titulo, Vector2 tamanho, System.Action aoFechar = null)
+        {
+            GarantirEventSystem();
+            var canvas = CriarCanvas("Modal_" + titulo, 4500);
+
+            Painel(canvas.transform, "Escurecer", new Color(0.02f, 0.01f, 0.04f, 0.9f),
+                   Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            var painel = Painel(canvas.transform, "Painel", CorFundoPainel,
+                                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+            painel.sizeDelta = tamanho;
+
+            float meia = tamanho.y * 0.5f;
+            Linha(painel, new Vector2(tamanho.x, 3f), new Vector2(0f, meia), CorAcento);
+            Linha(painel, new Vector2(tamanho.x, 3f), new Vector2(0f, -meia), CorAcento);
+
+            Titulo(painel, "Titulo", titulo, 72, CorTitulo, new Vector2(tamanho.x - 40f, 90f),
+                   new Vector2(0f, meia - 70f));
+
+            var go = canvas.gameObject;
+            Botao(painel, "Voltar", "Voltar", 30, new Vector2(260f, 60f), new Vector2(0f, -meia + 60f),
+                  () => { aoFechar?.Invoke(); Object.Destroy(go); });
+            return painel;
+        }
+
+        /// <summary>
+        /// Controle deslizante no estilo da UI do jogo: trilho escuro, trilha
+        /// roxa preenchida e um puxador dourado.
+        /// </summary>
+        public static Slider Deslizante(Transform pai, string nome, Vector2 tamanho, Vector2 posicao,
+                                        float valor, UnityEngine.Events.UnityAction<float> aoMudar)
+        {
+            var raiz = Caixa(pai, nome, tamanho, posicao);
+            var slider = raiz.gameObject.AddComponent<Slider>();
+
+            Painel(raiz, "Trilho", new Color(0.18f, 0.14f, 0.24f, 1f),
+                   new Vector2(0f, 0.3f), new Vector2(1f, 0.7f), Vector2.zero, Vector2.zero);
+
+            var areaFill = new GameObject("AreaPreenchida", typeof(RectTransform)).GetComponent<RectTransform>();
+            areaFill.SetParent(raiz, false);
+            areaFill.anchorMin = new Vector2(0f, 0.3f);
+            areaFill.anchorMax = new Vector2(1f, 0.7f);
+            areaFill.offsetMin = Vector2.zero;
+            areaFill.offsetMax = Vector2.zero;
+            var fill = Painel(areaFill, "Preenchido", CorBotaoDestaque, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            var areaPuxador = new GameObject("AreaPuxador", typeof(RectTransform)).GetComponent<RectTransform>();
+            areaPuxador.SetParent(raiz, false);
+            areaPuxador.anchorMin = Vector2.zero;
+            areaPuxador.anchorMax = Vector2.one;
+            areaPuxador.offsetMin = new Vector2(10f, 0f);
+            areaPuxador.offsetMax = new Vector2(-10f, 0f);
+            var puxador = Painel(areaPuxador, "Puxador", CorAcento, Vector2.zero, new Vector2(0f, 1f), Vector2.zero, Vector2.zero);
+            puxador.sizeDelta = new Vector2(20f, 0f);
+
+            slider.fillRect = fill;
+            slider.handleRect = puxador;
+            slider.targetGraphic = puxador.GetComponent<Image>();
+            slider.direction = Slider.Direction.LeftToRight;
+            slider.minValue = 0f;
+            slider.maxValue = 1f;
+            slider.value = valor;
+            if (aoMudar != null) slider.onValueChanged.AddListener(aoMudar);
+            return slider;
         }
 
         /// <summary>
