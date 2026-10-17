@@ -17,7 +17,7 @@ namespace EcosDeAldenor.Systems
         private float timer;
         private int index;
 
-        public static void Spawn(Sprite[] frames, Vector3 position, float scale, float fps, int sortingOrder = 20, Color? tint = null)
+        public static void Spawn(Sprite[] frames, Vector3 position, float scale, float fps, int sortingOrder = 20, Color? tint = null, bool flipX = false)
         {
             if (frames == null || frames.Length == 0) return;
 
@@ -28,6 +28,7 @@ namespace EcosDeAldenor.Systems
             sr.sprite = frames[0];
             sr.sortingOrder = sortingOrder;
             if (tint.HasValue) sr.color = tint.Value;
+            sr.flipX = flipX;
 
             var vfx = go.AddComponent<OneShotVFX>();
             vfx.frames = frames;

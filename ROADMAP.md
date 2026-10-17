@@ -211,9 +211,22 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   - **pausa**: moldura no estilo do menu (os botões eram pretos), com **Reiniciar fase**,
     **Opções** e **Controles**;
   - **créditos**: fundo da igreja e botão Voltar com caixa (estava sem altura no layout)
-- 🔲 Passe visual final: **legibilidade das plataformas no escuro** (são o que o jogador
-  precisa enxergar de relance e hoje contrastam pouco com o fundo), consistência de escala
-  dos inimigos
+- ✅ **Polimento final** (menu *Ecos de Aldenor → Polimento final*, refeito a cada execução):
+  - **plataformas**: no cemitério, a mesma grama do chão no topo (roxo sobre céu roxo, elas
+    sumiam); embaixo, uma faixa de sombra que descola a laje do fundo;
+  - **HUD**: corações e almas em placas escuras com friso dourado (os corações tinham ~100 px
+    de vão entre si); o coração perdido incha e pisca; com uma vida só, o último bate;
+    contador de almas maior; a barra do chefe escurece junto com a pausa;
+  - **faíscas**: um risco curto no 1º golpe, um risco longo no 2º e uma estrela maior no golpe
+    final do combo (antes os três usavam a mesma);
+  - **movimento de fundo**: névoa rasteira em duas camadas e almas subindo devagar
+    (`AmbienteVivo`, gerado em código, sem arte nova);
+  - **cenário**: correntes diagonais soltas no céu removidas; emenda vertical do fundo da
+    igreja fechada (a fatia tem 1 px transparente na borda);
+  - **créditos**: equipe em duas linhas (sobrava uma vírgula), blocos surgindo em sequência;
+  - **áudio**: trilhas longas em *Streaming* (eram descomprimidas inteiras ao carregar);
+  - **limpeza**: pastas `__MACOSX` importadas como asset e a `SampleScene` apagadas
+- 🔲 Consistência de escala dos inimigos
 
 ---
 
@@ -225,7 +238,7 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 - 🔲 Efeitos de partículas nas almas/checkpoints; ataque especial do chefe com sprite
   dedicado (wizard/Fire já disponível no pack)
 - ✅ Tela de **controles** acessível pelo menu principal e pela pausa
-- 🔲 Remover a `Assets/Scenes/SampleScene.unity`, sobra do template
+- ✅ Remover a `Assets/Scenes/SampleScene.unity`, sobra do template
 
 ---
 

@@ -857,6 +857,7 @@ GameObject:
   - component: {fileID: 1549295607}
   - component: {fileID: 1549295609}
   - component: {fileID: 1549295608}
+  - component: {fileID: 1549295610}
   m_Layer: 0
   m_Name: CreditsContent
   m_TagString: Untagged
@@ -929,6 +930,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1549295610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549295606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d2a9c9bd7a784048b7a630dc70036cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.UI.EntradaEmSequencia
+  atrasoInicial: 0.3
+  intervalo: 0.35
+  duracao: 0.6
 --- !u!1 &1686876686
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,8 +1197,8 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "Desenvolvido pelo grupo da disciplina\nDesenvolvimento de Jogos Digitais
-    (P2)\nIntegrantes: Gabriel Bressanin, \nGuilherme Barros\nHeitor Lupino\nJo\xE3o
-    Pedro Ferreira\nMatheus Risso"
+    (P2)\n\nGabriel Bressanin  \xB7  Guilherme Barros  \xB7  Heitor Lupino\nJo\xE3o
+    Pedro Ferreira  \xB7  Matheus Risso"
 --- !u!222 &1865145602
 CanvasRenderer:
   m_ObjectHideFlags: 0

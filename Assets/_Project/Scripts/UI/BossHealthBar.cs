@@ -35,6 +35,10 @@ namespace EcosDeAldenor.UI
         private Image fillImage;   // preenchimento vermelho (vida atual)
         private Image trailImage;  // trilha clara que recua devagar
         private CanvasGroup group;
+        // Visibilidade "propria" da barra (escondida, surgindo, visivel). O
+        // alpha do grupo e ela vezes o escurecimento da pausa: a barra fica num
+        // canvas proprio e ficava acesa por cima do veu da pausa.
+        private float alphaBase = 1f;
 
         private static Sprite _solidSprite;
 
@@ -65,14 +69,14 @@ namespace EcosDeAldenor.UI
             }
             else if (group != null)
             {
-                group.alpha = 0f; // sem chefe, esconde
+                alphaBase = 0f; // sem chefe, esconde
             }
 
             // Com uma entrada de chefe na cena, a barra so aparece quando ele se
             // revela: barra cheia na tela antes de o chefe existir estraga a
             // apresentacao.
             if (group != null && FindAnyObjectByType<IntroDoChefe>() != null)
-                group.alpha = 0f;
+                alphaBase = 0f;
         }
 
         /// <summary>Faz a barra surgir (chamado pela entrada do chefe).</summary>
@@ -86,10 +90,10 @@ namespace EcosDeAldenor.UI
         {
             for (float t = 0f; t < duracao; t += Time.deltaTime)
             {
-                group.alpha = t / duracao;
+                alphaBase = t / duracao;
                 yield return null;
             }
-            group.alpha = 1f;
+            alphaBase = 1f;
         }
 
         private void OnDestroy()
@@ -112,6 +116,13 @@ namespace EcosDeAldenor.UI
                 trailFill = displayFill;
 
             ApplyFill();
+
+            if (group != null)
+            {
+                bool pausado = EcosDeAldenor.Core.GameManager.Instance != null &&
+                               EcosDeAldenor.Core.GameManager.Instance.IsPaused;
+                group.alpha = alphaBase * (pausado ? 0.15f : 1f);
+            }
         }
 
         private void ApplyFill()
@@ -287,7 +298,7 @@ namespace EcosDeAldenor.UI
         private void HandleBossDeath()
         {
             targetFill = 0f;
-            if (group != null) group.alpha = 0f;
+            alphaBase = 0f;
         }
     }
 }

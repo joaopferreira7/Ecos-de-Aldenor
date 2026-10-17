@@ -26,6 +26,8 @@ namespace EcosDeAldenor.UI
         [SerializeField] private AudioClip finalPhaseUnlockedSfx;
 
         private Image[] heartImages;
+        private int ultimaVida = -1;
+        private RectTransform ultimoCoracao;   // pulsa quando resta so ele
         private int lastFragmentCount = -1;
         private Coroutine iconPulse;
         private Coroutine unlockBanner;
@@ -42,6 +44,7 @@ namespace EcosDeAldenor.UI
             if (playerHealth != null)
             {
                 BuildHearts(playerHealth.MaxHealth);
+                MontarPlacas(playerHealth.MaxHealth);
                 playerHealth.OnHealthChanged += UpdateHearts;
                 UpdateHearts(playerHealth.CurrentHealth, playerHealth.MaxHealth);
             }
@@ -77,7 +80,9 @@ namespace EcosDeAldenor.UI
                 img.preserveAspect = true;
 
                 RectTransform rect = heartObj.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(40f, 40f);
+                rect.sizeDelta = new Vector2(TamCoracao, TamCoracao);
+                var le = heartObj.AddComponent<LayoutElement>();
+                le.preferredWidth = le.preferredHeight = TamCoracao;
 
                 heartImages[i] = img;
             }
@@ -89,8 +94,144 @@ namespace EcosDeAldenor.UI
 
             for (int i = 0; i < heartImages.Length; i++)
             {
-                heartImages[i].sprite = i < current ? heartFullSprite : heartEmptySprite;
+                bool perdeuAgora = ultimaVida >= 0 && i >= current && i < ultimaVida;
+                bool ganhouAgora = ultimaVida >= 0 && i < current && i >= ultimaVida;
+                if (perdeuAgora) StartCoroutine(PiscarCoracao(heartImages[i]));
+                else heartImages[i].sprite = i < current ? heartFullSprite : heartEmptySprite;
+                if (ganhouAgora) StartCoroutine(Pulsar((RectTransform)heartImages[i].transform, 0.35f, 0.4f));
             }
+
+            // Com uma vida so, o ultimo coracao bate - o aviso de perigo que a
+            // fileira parada nao dava.
+            ultimoCoracao = current == 1 ? (RectTransform)heartImages[0].transform : null;
+            if (current != 1) heartImages[0].transform.localScale = Vector3.one;
+            ultimaVida = current;
+        }
+
+        private void Update()
+        {
+            if (ultimoCoracao == null) return;
+            float s = 1f + 0.12f * Mathf.Max(0f, Mathf.Sin(Time.unscaledTime * 7f));
+            ultimoCoracao.localScale = Vector3.one * s;
+        }
+
+        /// <summary>
+        /// O coracao perdido incha e pisca antes de apagar: um coracao que so
+        /// trocava de sprite passava despercebido no meio da luta.
+        /// </summary>
+        private System.Collections.IEnumerator PiscarCoracao(Image coracao)
+        {
+            var rt = (RectTransform)coracao.transform;
+            coracao.sprite = heartFullSprite;
+            for (int i = 0; i < 6; i++)
+            {
+                coracao.enabled = i % 2 == 0;
+                rt.localScale = Vector3.one * (1.45f - i * 0.075f);
+                float t = 0f;
+                while (t < 0.07f) { t += Time.unscaledDeltaTime; yield return null; }
+            }
+            coracao.enabled = true;
+            coracao.sprite = heartEmptySprite;
+            rt.localScale = Vector3.one;
+        }
+
+        private System.Collections.IEnumerator Pulsar(RectTransform alvo, float dur, float forca)
+        {
+            float t = 0f;
+            while (t < dur)
+            {
+                t += Time.unscaledDeltaTime;
+                alvo.localScale = Vector3.one * (1f + forca * Mathf.Sin(Mathf.Clamp01(t / dur) * Mathf.PI));
+                yield return null;
+            }
+            alvo.localScale = Vector3.one;
+        }
+
+        // ------------------------------------------------------------------
+        // Placas do HUD
+        // ------------------------------------------------------------------
+
+        const float TamCoracao = 44f;
+        static readonly Color CorPlaca = new Color(0.04f, 0.03f, 0.07f, 0.88f);
+
+        /// <summary>
+        /// Os coracoes ficavam soltos no canto com um vao de ~100 px entre eles
+        /// (o layout esticava os filhos) e o contador de almas era pequeno e
+        /// sem apoio. Agora cada um fica numa placa escura com friso dourado,
+        /// legivel sobre qualquer parte do cenario.
+        /// </summary>
+        private void MontarPlacas(int vidas)
+        {
+            if (heartsContainer != null)
+            {
+                var layout = heartsContainer.GetComponent<HorizontalLayoutGroup>();
+                if (layout != null)
+                {
+                    layout.spacing = 6f;
+                    layout.childForceExpandWidth = false;
+                    layout.childForceExpandHeight = false;
+                    layout.childAlignment = TextAnchor.MiddleLeft;
+                }
+                float largura = vidas * TamCoracao + (vidas - 1) * 6f + 32f;
+                var placa = Placa("PlacaVida", heartsContainer.parent, new Vector2(0f, 1f),
+                                  new Vector2(18f, -18f), new Vector2(largura, 66f));
+                var hc = (RectTransform)heartsContainer;
+                hc.SetParent(placa, false);
+                hc.anchorMin = Vector2.zero;
+                hc.anchorMax = Vector2.one;
+                hc.pivot = new Vector2(0.5f, 0.5f);
+                hc.offsetMin = new Vector2(16f, 0f);
+                hc.offsetMax = new Vector2(-16f, 0f);
+            }
+
+            if (fragmentsText != null && fragmentIcon != null)
+            {
+                var placa = Placa("PlacaAlmas", fragmentsText.transform.parent, new Vector2(1f, 1f),
+                                  new Vector2(-18f, -18f), new Vector2(196f, 66f));
+                fragmentIcon.SetParent(placa, false);
+                fragmentIcon.anchorMin = fragmentIcon.anchorMax = new Vector2(0f, 0.5f);
+                fragmentIcon.pivot = new Vector2(0.5f, 0.5f);
+                fragmentIcon.sizeDelta = new Vector2(50f, 50f);
+                fragmentIcon.anchoredPosition = new Vector2(44f, 0f);
+
+                var tr = fragmentsText.rectTransform;
+                tr.SetParent(placa, false);
+                tr.anchorMin = Vector2.zero;
+                tr.anchorMax = Vector2.one;
+                tr.pivot = new Vector2(0.5f, 0.5f);
+                tr.offsetMin = new Vector2(80f, 0f);
+                tr.offsetMax = new Vector2(-12f, 0f);
+                fragmentsText.alignment = TextAnchor.MiddleLeft;
+                fragmentsText.fontSize = 40;
+                fragmentsText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            }
+        }
+
+        private static RectTransform Placa(string nome, Transform pai, Vector2 canto, Vector2 pos, Vector2 tamanho)
+        {
+            var go = new GameObject(nome, typeof(RectTransform), typeof(Image));
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(pai, false);
+            rt.SetAsFirstSibling();   // atras do resto do HUD (e da pausa)
+            rt.anchorMin = rt.anchorMax = rt.pivot = canto;
+            rt.anchoredPosition = pos;
+            rt.sizeDelta = tamanho;
+            var img = go.GetComponent<Image>();
+            img.color = CorPlaca;
+            img.raycastTarget = false;
+
+            var friso = new GameObject("Friso", typeof(RectTransform), typeof(Image));
+            var fr = (RectTransform)friso.transform;
+            fr.SetParent(rt, false);
+            fr.anchorMin = new Vector2(0f, 0f);
+            fr.anchorMax = new Vector2(1f, 0f);
+            fr.pivot = new Vector2(0.5f, 0f);
+            fr.offsetMin = Vector2.zero;
+            fr.offsetMax = new Vector2(0f, 3f);
+            var fi = friso.GetComponent<Image>();
+            fi.color = new Color(UIFactory.CorAcento.r, UIFactory.CorAcento.g, UIFactory.CorAcento.b, 0.8f);
+            fi.raycastTarget = false;
+            return rt;
         }
 
         private void UpdateFragmentsText(int total)
@@ -99,7 +240,7 @@ namespace EcosDeAldenor.UI
             {
                 int goal = GameManager.Instance != null ? GameManager.Instance.FragmentsRequired : total;
                 // Contador grande em destaque + objetivo em tom menor/discreto.
-                fragmentsText.text = $"{total}<size=18><color=#C9A24B> / {goal}</color></size>";
+                fragmentsText.text = $"{total}<size=26><color=#C9A24B> / {goal}</color></size>";
             }
 
             // Pulso no icone apenas quando o total aumenta (coleta), nao na inicializacao.
@@ -127,8 +268,8 @@ namespace EcosDeAldenor.UI
         /// </summary>
         private System.Collections.IEnumerator AnunciarFaseFinal()
         {
-            yield return Aviso("AS ALMAS FORAM REUNIDAS\n" +
-                               "<size=20><color=#B9A7D6>O santuario final se abriu</color></size>",
+            yield return Aviso("As almas foram reunidas\n" +
+                               "<size=26><color=#B9A7D6>O santuário final se abriu</color></size>",
                                finalPhaseUnlockedSfx, 2.4f);
             unlockBanner = null;
         }

@@ -34,7 +34,8 @@ namespace EcosDeAldenor.EditorTools
         static readonly Color CorTerra = new Color(0.11f, 0.10f, 0.16f);
         static readonly Color CorBorda = new Color(0.58f, 0.55f, 0.74f);
         static readonly Color CorBordaPlataforma = new Color(0.78f, 0.74f, 0.95f);
-        static readonly Color CorAbismo = new Color(0.04f, 0.035f, 0.06f);
+        static readonly Color CorSombraPlataforma = new Color(0.08f, 0.06f, 0.12f);
+        static readonly Color CorAbismo =new Color(0.04f, 0.035f, 0.06f);
 
         // Borda de grama com ossos do pacote do cemiterio, recortada sem os
         // espinhos roxos da ponta direita (repetidos pelo chao, eles pareciam
@@ -132,7 +133,18 @@ namespace EcosDeAldenor.EditorTools
                 // degrau macico mesmo, feito para subir em cima.
                 float espessura = EspessuraDaPlataforma(p.z);
                 Bloco(raiz, nome, p.x, p.y, p.z, espessura, spritePedra, CorPedraPlataforma, 0, true, matLit);
-                Bloco(raiz, nome + "_Borda", p.x, p.y, p.z, 0.16f, spriteSolido, CorBordaPlataforma, 1, false, matLit);
+
+                // Roxo sobre ceu roxo: a plataforma sumia no fundo. No
+                // cemiterio ela ganha a mesma grama do chao (o olho ja aprendeu
+                // que grama = onde pisar); na igreja, o friso claro. Embaixo,
+                // uma faixa de sombra descola a laje do ceu.
+                if (grama != null)
+                    Bloco(raiz, nome + "_Grama", p.x, p.y, p.z + 0.07f, grama.bounds.size.y,
+                          grama, Color.white, 1, false, matLit);
+                else
+                    Bloco(raiz, nome + "_Borda", p.x, p.y, p.z, 0.16f, spriteSolido, CorBordaPlataforma, 1, false, matLit);
+                Bloco(raiz, nome + "_Sombra", p.x, p.y, p.z - espessura + 0.14f, 0.14f,
+                      spriteSolido, CorSombraPlataforma, 1, false, matLit);
             }
 
             // Devolve os vaos (x = inicio, y = fim) para quem precisar desviar

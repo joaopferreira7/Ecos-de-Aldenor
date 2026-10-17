@@ -91,6 +91,14 @@ namespace EcosDeAldenor.Player
         [Header("VFX de Impacto")]
         [Tooltip("Frames da faisca de impacto (Hitspark FX) disparada ao acertar um inimigo.")]
         [SerializeField] private Sprite[] hitSparkFrames;
+        // Os tres golpes do combo usavam a mesma faisca, e o terceiro (o mais
+        // forte) nao se distinguia dos outros. Agora os dois cortes soltam um
+        // risco na direcao do golpe e o golpe final, uma estrela maior.
+        [Tooltip("Faisca do 2o golpe (vazio = usa a do 1o).")]
+        [SerializeField] private Sprite[] hitSparkGolpe2;
+        [Tooltip("Faisca do golpe final do combo (vazio = usa a do 1o).")]
+        [SerializeField] private Sprite[] hitSparkFinal;
+        [SerializeField] private float hitSparkFinalScale = 1.5f;
         [SerializeField] private float hitSparkScale = 1.1f;
         [SerializeField] private float hitSparkFps = 24f;
         [SerializeField] private Color hitSparkTint = Color.white;
@@ -429,6 +437,18 @@ namespace EcosDeAldenor.Player
             }
         }
 
+        private Sprite[] FaiscaDoGolpe(int golpe, out float escala)
+        {
+            escala = hitSparkScale;
+            if (golpe == 3 && hitSparkFinal != null && hitSparkFinal.Length > 0)
+            {
+                escala = hitSparkFinalScale;
+                return hitSparkFinal;
+            }
+            if (golpe == 2 && hitSparkGolpe2 != null && hitSparkGolpe2.Length > 0) return hitSparkGolpe2;
+            return hitSparkFrames;
+        }
+
         private void Attack()
         {
             attackTimer = attackCooldown;
@@ -454,10 +474,11 @@ namespace EcosDeAldenor.Player
                 hitSomething = true;
 
                 // Faisca de impacto no ponto de contato: da peso e clareza ao golpe.
-                if (hitSparkFrames != null && hitSparkFrames.Length > 0)
+                Sprite[] faisca = FaiscaDoGolpe(currentAttack, out float escala);
+                if (faisca != null && faisca.Length > 0)
                 {
                     Vector3 sparkPos = enemy.ClosestPoint(attackPoint.position);
-                    OneShotVFX.Spawn(hitSparkFrames, sparkPos, hitSparkScale, hitSparkFps, 25, hitSparkTint);
+                    OneShotVFX.Spawn(faisca, sparkPos, escala, hitSparkFps, 25, hitSparkTint, facingDirection < 0);
                 }
 
                 // Recuo (knockback) na direcao do golpe.
