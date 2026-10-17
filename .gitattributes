@@ -169,3 +169,11 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# Scripts e textos de Windows: sempre CRLF, qualquer que seja o core.autocrlf
+# de quem clonou. O cmd.exe le .cmd com LF de forma instavel (rotulos e blocos
+# se perdem), e o LEIAME e aberto pelo jogador no Bloco de Notas.
+*.cmd                   text eol=crlf
+*.bat                   text eol=crlf
+*.ps1                   text eol=crlf
+LEIAME-jogador.txt      text eol=crlf

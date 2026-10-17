@@ -104,7 +104,14 @@ Com o **Editor fechado**, na raiz do projeto:
 .\montar.ps1                # só verifica o projeto e as fases
 .\montar.ps1 -Build         # verifica e gera o executável
 .\montar.ps1 -Build -Zip    # idem, e ainda compacta o pacote de entrega
+.\montar.ps1 -SoZip        # só compacta a Build\ gerada pelo menu do Editor
+.\montar.ps1 -Diagnostico  # não constrói nada: lista o que a máquina tem e o que falta
 ```
+
+> 🩺 **O script não funcionou no seu computador?** Rode `montar.cmd -Diagnostico`
+> e mande a saída para o grupo: ela mostra versão do Windows e do PowerShell, se a
+> pasta é um clone com a arte do LFS baixada, quais Editores do Unity o Hub conhece
+> e qual seria usado, se há um Editor aberto no projeto e o espaço livre em disco.
 
 Prefere duplo clique? Use o **`montar.cmd`** — ele verifica, gera o executável e
 compacta o pacote, tudo de uma vez.
@@ -135,10 +142,29 @@ Saída: `Build\Ecos de Aldenor.exe` (a pasta é recriada do zero a cada build, p
 não levar sobra da anterior no pacote da entrega).
 
 Em outra máquina, o script acha o Editor sozinho: lê a versão em
-`ProjectSettings/ProjectVersion.txt` e procura nos caminhos do Unity Hub, em
-todos os drives. Se o Hub estiver num lugar incomum, aponte na mão com
-`-Unity "D:\...\Unity.exe"`. Quem preferir duplo clique: `montar.cmd` chama o
-`montar.ps1` sem esbarrar na *execution policy* e mantém a janela aberta no fim.
+`ProjectSettings/ProjectVersion.txt` e **pergunta ao próprio Unity Hub** onde cada
+Editor está instalado (`Unity Hub.exe -- --headless editors -i`); sem o Hub, procura
+nas pastas de instalação conhecidas. Se não houver a versão exata, só aceita uma
+**mais nova** da mesma série — uma mais antiga não abre os pacotes do projeto — e
+mostra o link `unityhub://` que instala a versão certa. Ainda dá para apontar na
+mão com `-Unity "D:\...\Unity.exe"`. Quem preferir duplo clique: `montar.cmd` chama
+o `montar.ps1` sem esbarrar na *execution policy* e mantém a janela aberta no fim.
+
+**Por que o script falhava em alguns computadores** (corrigido):
+
+| Sintoma | Causa | O que mudou |
+|---|---|---|
+| "Unity não encontrado", com ele instalado | Hub com a pasta de instalação trocada (outro disco): o script procurava em `<pasta>\Editor\<versão>`, mas o Hub instala em `<pasta>\<versão>` | a lista vem do próprio Hub |
+| Erros de compilação na primeira abertura | outra versão do Unity aceita, até mais antiga (ex.: 6000.0 LTS) | só a exata ou uma mais nova; link de instalação |
+| "Feche o Unity" com ele fechado | Unity encerrado à força deixa o `Temp\UnityLockfile` | testa se o arquivo está mesmo em uso |
+| Jogo sem arte / "git lfs pull" não roda | projeto baixado pelo *Download ZIP* do GitHub (sem LFS e sem `.git`) | reconhece o caso e manda clonar |
+| `.cmd` instável | `montar.cmd` estava salvo com quebra de linha LF | `.gitattributes` força CRLF em `.cmd`/`.ps1` |
+| Só "veja o log" | — | lê o log e aponta licença, pacotes sem internet, compilação, versão, módulo ou disco |
+
+O que o script **não** tem como resolver sozinho: Unity instalado sem licença ativa
+(entre no Hub e ative a Personal), máquina sem internet na primeira abertura (os
+pacotes vêm de `packages.unity.com`), e a cota gratuita de banda do Git LFS no
+GitHub — cada clone baixa ~240 MB de arte e áudio.
 
 ### Pelo Editor
 
