@@ -23,6 +23,18 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   vermelha no chão) e o dano só vale dentro da área anunciada — esquivar funciona
 - ✅ **Tela inicial de tutorial**: controles, objetivo e avisos antes da primeira fase, com o tempo
   congelado até o jogador escolher *Começar*
+- ✅ **Prólogo** (cena `Prologo`, entre o menu e o tutorial): a história de Aldenor em cinco quadros
+  vivos — cidade ao entardecer com quatro moradores andando (pacote *Town*, até então só a trilha
+  era usada), o anjo na igreja, a névoa com espectros, a Vigília encapuzada, o Ren no cemitério —
+  com narração letra por letra. Planta a transformação do chefe. Ferramenta **Ecos de Aldenor →
+  Montar prologo** refaz a cena
+- ✅ **Chefe em duas formas**: salva tripla a partir de 75%; **transformação** aos 50% (cena com
+  convulsão, trovão e clarão, cartão *A Vigília Desvelada*) no **anjo** do pacote Church, com golpe
+  de asa, **investida** e **chuva de fogo**; **fúria** abaixo de 25%. Vida 12 → 16 para caberem as
+  duas formas. Barra com divisores nos limiares reais e troca de nome/cor
+- ✅ **Inimigos olhando para o lado certo**: os prefabs vieram do pacote Bandits (sprite olhando
+  para a esquerda) e a arte GothicVania olha para a direita — fantasma e esqueleto andavam de
+  costas, e o chefe lançava a bola de fogo virado para o lado oposto ao do Ren
 - ✅ **Esquiva (rolamento) do Ren**: a animação `Roll` estava no Animator desde o começo sem nada
   acioná-la. Agora `Shift` / botão direito rola na direção do movimento, com quadros invulneráveis
   (menos que a animação inteira, para exigir tempo certo) e poeira do `SlideDust` — que também
@@ -153,7 +165,7 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 - 🔲 **GDD** entregue (ver `GDD.md`) — revisar com o grupo e exportar em PDF se exigido
 - 🔲 **Build final `.exe`** gerada e **testada em uma máquina limpa** (sem o Unity).
-  O comando **Ecos de Aldenor → Gerar build Windows** monta o pacote com as 8 cenas e
+  O comando **Ecos de Aldenor → Gerar build Windows** monta o pacote com as 9 cenas e
   MainMenu como inicial; falta rodar o `.exe` num PC sem Unity.
 - ✅ **Autoria dos assets nos créditos** conferida nas páginas oficiais (30/08/2026):
   Hero Knight → LuizMelo (CC0); Bandits → Sven Thole; 2D Dungeon Tilemap → Aether2D (CC0);

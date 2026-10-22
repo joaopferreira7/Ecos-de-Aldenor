@@ -57,18 +57,25 @@ Nenhum golpe mata com a vida cheia, em nenhum nível.
 
 ## 🗺️ Estrutura do jogo
 
-O jogo tem **8 cenas** encadeadas:
+O jogo tem **9 cenas** encadeadas:
 
-`MainMenu → Tutorial → Phase1 → Phase2 → FinalPhase → Victory / GameOver / Credits`
+`MainMenu → Prologo → Tutorial → Phase1 → Phase2 → FinalPhase → Victory / GameOver / Credits`
+
+- **Prologo:** a história de Aldenor em cinco quadros ilustrados com a arte dos próprios pacotes —
+  a cidade ao entardecer, o anjo da igreja, a névoa, a Vigília encapuzada e o Ren no cemitério —
+  narrada letra por letra. `Espaço` avança, `ESC` pula.
 
 - **Tutorial:** abre com a **tela de tutorial** (controles e objetivo) e depois entrega uma área
   segura, com placas reforçando cada comando no lugar onde ele é usado.
 - **Phase1 / Phase2:** cemitério espectral, com espectros (*Sombra Rastejante*) e esqueletos (*Guardião de Pedra*).
-- **FinalPhase:** arena na igreja, com o chefe **A Vigília** (barra de vida própria e fases de combate).
-  Todo golpe dele é anunciado antes: o mago **conjura** (animação de 10 quadros), o corpo muda de cor
-  e incha, e um indicador mostra onde vai bater — faixa âmbar à frente no golpe curto, marca vermelha
-  no chão no golpe forte. No golpe forte uma **bola de fogo** sai das mãos dele e pousa na marca no
-  instante exato em que o círculo se completa. Sair da marca a tempo faz o golpe errar.
+- **FinalPhase:** arena na igreja, com o chefe **A Vigília** em **duas formas**. Como mago, ele
+  **conjura** bolas de fogo sobre um círculo de runas, **some em fumaça e reaparece** perto do Ren,
+  **ergue esqueletos do chão** aos 75% e, a partir daí, lança uma **salva** de três que caem em fila.
+  Na metade da vida ele **se transforma**: o manto se desfaz e revela o anjo que a Vigília era antes
+  da névoa (*A Vigília Desvelada*), que **investe** pela arena deixando um rastro de imagens e faz **chover
+  fogo** do alto, com colunas de luz sobre cada marca;
+  abaixo de 25% entra em **fúria**. Todo golpe é anunciado antes — faixa âmbar (golpe de perto),
+  marca vermelha (fogo), faixa lilás (investida) — e só acerta quem ficar dentro da área mostrada.
 
 ---
 
@@ -179,7 +186,7 @@ verificações.
 **Envie sempre a pasta inteira, compactada — nunca só o `.exe`.**
 
 O `Ecos de Aldenor.exe` tem **0,6 MB** de uma build de **141 MB**: ele é apenas o
-carregador. Sem a pasta `Ecos de Aldenor_Data` (as 8 cenas e os assets), a
+carregador. Sem a pasta `Ecos de Aldenor_Data` (as 9 cenas e os assets), a
 `UnityPlayer.dll` e a `MonoBleedingEdge` ao lado dele, ele **abre e fecha na hora** —
 nem chega a escrever um log. Foi o que aconteceu quando a build foi enviada a colegas.
 
@@ -237,6 +244,6 @@ Assets/
 ├── _Project/            # Código, prefabs e cenas próprias do jogo
 │   ├── Scripts/         # C# (Core, Player, Enemies, Systems, UI)
 │   ├── Prefabs/         # Player, inimigos, itens, UI, ambiente
-│   └── Scenes/          # As 8 cenas do jogo, MainMenu inclusive
+│   └── Scenes/          # As 9 cenas do jogo, MainMenu inclusive
 └── ...                  # Pacotes de assets de terceiros (ver Créditos)
 ```

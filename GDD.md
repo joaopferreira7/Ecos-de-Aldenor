@@ -43,13 +43,31 @@ condição de progressão e uma **luta de chefe** com fases e barra de vida pró
 
 ## 3. Narrativa e ambientação
 
-> *Premissa de trabalho — o grupo pode expandir/ajustar conforme a visão narrativa.*
+Aldenor foi um reino de sinos e lampiões, vigiado do alto da colina por uma
+igreja — e a igreja, por um anjo, **A Vigília**: enquanto ela velasse, nenhuma alma
+do reino se perderia. Numa noite, uma **névoa espectral** desceu sobre Aldenor; os
+sinos se calaram e as almas do povo foram arrancadas dos corpos e espalhadas pelo
+cemitério como **ecos**. A Vigília não as protegeu: cobriu-se com um capuz e passou
+a guardá-las como prisioneiras. **Ren**, o último cavaleiro de pé, desperta entre
+as lápides para reunir os seis ecos, subir à igreja e encerrar a vigília.
 
-Aldenor foi um reino tomado por uma névoa espectral. As almas de seus habitantes
-ficaram presas como **fragmentos** dispersos pelo cemitério e pela velha igreja.
-**Ren**, o último cavaleiro desperto, precisa recolher esses ecos para quebrar a
-vigília que mantém o reino aprisionado — um guardião corrompido conhecido como
-**A Vigília**, que aguarda no altar da igreja.
+**O prólogo** conta essa história antes do tutorial (cena `Prologo`), em cinco
+capítulos encenados com a arte dos próprios pacotes, enquadrados como cinema (faixas
+pretas, vinheta, câmera deslizando, nome do capítulo em fonte gótica). A frase de cada
+capítulo só começa depois que o momento acontece:
+
+| Capítulo | O que se vê |
+|---|---|
+| I · Aldenor | a cidade ao entardecer, moradores andando, vaga-lumes, o sol atrás da igreja |
+| II · A Vigília | o anjo diante do altar sob colunas de luz, almas douradas |
+| III · A Névoa | relâmpago e trovão; os moradores se apagam e se desfazem em almas que sobem; espectros surgem na névoa |
+| IV · O Manto | o anjo se dissolve numa fumaça vermelha e no lugar dele surge o mago encapuzado |
+| V · O Último Cavaleiro | o Ren se levanta do chão (a animação de morte dele ao contrário) e os seis ecos acendem um a um |
+
+Espaço/Enter/clique avança; ESC pula direto para o tutorial.
+
+O quarto quadro planta a virada da luta final: *"Dizem que o anjo ainda está lá,
+sob aquele manto."* Na metade da vida, a Vigília se transforma e revela o anjo.
 
 - **Mundo:** cemitério espectral (fases iniciais) → igreja em ruínas (arena final).
 - **Tom:** sombrio, frio, melancólico; luz de velas e almas contra a escuridão.
@@ -59,7 +77,8 @@ vigília que mantém o reino aprisionado — um guardião corrompido conhecido c
 - **Ren** — o cavaleiro jogável. Ágil, ataca com a espada em combos.
 - **Sombra Rastejante** — espectro que patrulha o cemitério.
 - **Guardião de Pedra** — esqueleto guardião, mais resistente.
-- **A Vigília** — o chefe: um mago encapuzado que protege o altar final.
+- **A Vigília** — o chefe: o anjo guardião da igreja, escondido sob o manto de um
+  mago encapuzado. Na metade da luta, o manto se desfaz (*A Vigília Desvelada*).
 
 ---
 
@@ -178,26 +197,50 @@ alma está ao alcance de quem pisa na superfície sob ela.
 - **Sombra Rastejante** (espectro) — mais frágil, presente nas fases iniciais.
 - **Guardião de Pedra** (esqueleto) — mais resistente, aparece a partir da Phase2.
 
-### 6.2 Chefe — A Vigília
-- Máquina de estados: **Idle → Perseguir → Ataque básico → Telegrafo → Ataque especial → Recuar**.
-- **Barra de vida de chefe** própria no topo, com **trilha de dano** (*chip damage*) e
-  divisores marcando as **3 fases** do combate.
-- **Telegrafo** visível (piscar) antes do ataque especial; efeitos de explosão e *screen shake*.
+### 6.2 Chefe — A Vigília (duas formas, quatro atos)
+
+| Vida | Forma | Golpes |
+|------|-------|--------|
+| 100% – 75% | **Mago** | golpe curto (faixa âmbar, corte de fogo) · bola de fogo numa marca vermelha · **passo sombrio** (some em fumaça e reaparece perto do Ren; a marca do destino aparece antes) |
+| **75%** | **Invocação** | ergue os braços sobre um círculo verde e dois Guardiões de Pedra se levantam do chão, longe do Ren |
+| 75% – 50% | **Mago** | + **Salva**: três marcas em fila na direção do Ren, as bolas caem em ordem |
+| **50%** | **Transformação** | cena de ~4 s: golpes cancelados, controle travado, convulsão com fumaça, trovão, clarão branco — por trás dele o mago vira anjo; cartão *"A Vigília Desvelada — O anjo que velava Aldenor"* |
+| 50% – 25% | **Anjo** | golpe de asa (corte de luz e penas) · **Investida** (faixa lilás no chão; ele a atravessa deixando imagens residuais, com onda de choque na chegada) · **Chuva de fogo** (3 marcas com colunas de luz descendo do alto, fogo caindo uma por vez) |
+| 25% – 0% | **Anjo em fúria** | avisos e respiros 15% mais curtos, 4 marcas na chuva, mais investidas, corpo avermelhado |
+
+- Todo golpe segue **carga → impacto → respiro**: o chefe para, toca a animação de ataque
+  esticada para caber no aviso, e um indicador mostra *onde* vai bater. O dano só vale dentro
+  da área mostrada — rolar para fora (ou por cima no tempo certo) faz o golpe errar.
+- **Código de cores fixo:** âmbar = golpe de perto; vermelho = fogo numa marca; lilás = caminho
+  da investida.
+- **Mago:** conjura sobre um círculo de runas que gira no chão, solta brasas pelas mãos; as bolas
+  de fogo deixam rastro de brasas e o chão fica chamuscado onde caem. Acompanha o Ren com o corpo
+  nas cargas de golpes à distância (nos de perto a direção fica travada no aviso).
+- **Anjo:** luz dourada atrás dele o tempo todo e penas se soltando das asas; em fúria a luz fica
+  vermelha e brasas sobem do corpo. Na transformação, os mortos invocados desabam.
+- **Barra de vida** própria com trilha de dano; os divisores marcam os limiares reais (75%, a
+  transformação em dourado nos 50%, 25%). Na transformação ela troca de nome e de cor.
+- **Arte:** o mago e o anjo são do mesmo pacote (*GothicVania Church*), os dois de manto
+  vermelho — a transformação lê como "a mesma criatura, sem disfarce". Animações usadas: mago
+  parado (5) e conjuração (10); anjo batendo asas (8) e ataque (3); bola de fogo (3); morte (9).
+- **Vida:** 16 no Médio (11 no Fácil, 22 no Difícil) — oito golpes por forma.
 - Sequência de morte com atraso para leitura antes da tela de Vitória.
 
 ---
 
 ## 7. Progressão e fluxo de cenas
 
-O jogo tem **8 cenas** encadeadas:
+O jogo tem **9 cenas** encadeadas:
 
 ```
-MainMenu → Tutorial → Phase1 → Phase2 → FinalPhase → Victory
+MainMenu → Prologo → Tutorial → Phase1 → Phase2 → FinalPhase → Victory
                                               ↘ GameOver ↘  (→ MainMenu)
                                     Credits (a partir do MainMenu)
 ```
 
 - **MainMenu** — título estilizado e navegação (Jogar, Créditos, Sair).
+- **Prologo** — a história de Aldenor em cinco quadros ilustrados (ver §3). Só aparece ao
+  começar um jogo novo; ESC pula.
 - **Tutorial** — área segura, sem inimigos, com placas ensinando os controles.
 - **Phase1 / Phase2** — cemitério espectral com plataformas, inimigos, fragmentos e checkpoints.
 - **FinalPhase** — arena na igreja com o chefe A Vigília. É a única fase **sem porta de
