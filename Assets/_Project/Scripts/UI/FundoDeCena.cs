@@ -47,6 +47,17 @@ namespace EcosDeAldenor.UI
         private readonly List<(RectTransform faixa, float largura, float velocidade)> moveis =
             new List<(RectTransform, float, float)>();
 
+        /// <summary>
+        /// Configura por codigo, antes do Start (o prologo monta um cenario
+        /// destes por quadro da historia, sem objetos de cena para cada um).
+        /// </summary>
+        public void Configurar(Camada[] novasCamadas, Color novaCorDeBase, Color novoEscurecer)
+        {
+            camadas = novasCamadas;
+            corDeBase = novaCorDeBase;
+            escurecer = novoEscurecer;
+        }
+
         private void Start()
         {
             var raiz = (RectTransform)transform;

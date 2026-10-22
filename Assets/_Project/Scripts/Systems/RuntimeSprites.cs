@@ -18,6 +18,7 @@ namespace EcosDeAldenor.Systems
         private static Sprite disco;
         private static Sprite anel;
         private static Sprite brilho;
+        private static Sprite vinheta;
 
         /// <summary>Quadrado branco opaco. Serve de base para paineis e barras.</summary>
         public static Sprite Solido()
@@ -73,6 +74,36 @@ namespace EcosDeAldenor.Systems
             tex.Apply();
             brilho = Criar(tex, "RuntimeBrilho");
             return brilho;
+        }
+
+        /// <summary>
+        /// Vinheta: transparente no meio, escurecendo para as bordas. Esticada
+        /// sobre uma imagem, fecha o olhar no centro - o enquadramento de
+        /// "cena de historia" do prologo.
+        /// </summary>
+        public static Sprite Vinheta()
+        {
+            if (vinheta != null) return vinheta;
+
+            const int tam = 128;
+            const float meio = tam / 2f;
+            var tex = NovaTextura(tam);
+            var px = new Color32[tam * tam];
+            for (int y = 0; y < tam; y++)
+            {
+                for (int x = 0; x < tam; x++)
+                {
+                    float dx = (x + 0.5f - meio) / meio;
+                    float dy = (y + 0.5f - meio) / meio;
+                    float d = Mathf.Sqrt(dx * dx + dy * dy) / 1.41421f;
+                    float a = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.35f, 1f, d));
+                    px[y * tam + x] = new Color32(0, 0, 0, (byte)(a * 255f));
+                }
+            }
+            tex.SetPixels32(px);
+            tex.Apply();
+            vinheta = Criar(tex, "RuntimeVinheta");
+            return vinheta;
         }
 
         /// <summary>Anel branco (so a borda) - contorno da area de impacto.</summary>

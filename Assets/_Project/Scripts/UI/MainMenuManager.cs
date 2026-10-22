@@ -14,7 +14,8 @@ namespace EcosDeAldenor.UI
         public void OnPlayClicked()
         {
             GameManager.Instance?.ResetProgress();
-            SceneController.Instance?.LoadTutorial();
+            // Jogo novo comeca pela historia (o prologo segue para o tutorial).
+            SceneController.Instance?.LoadPrologue();
         }
 
         /// <summary>

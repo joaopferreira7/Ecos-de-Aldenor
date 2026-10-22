@@ -17,6 +17,15 @@ namespace EcosDeAldenor.UI
         [SerializeField] private Vector2 velocidade = new Vector2(18f, 38f);
         [SerializeField] private Color cor = new Color(1f, 0.75f, 0.9f, 1f);
 
+        /// <summary>Configura por codigo, antes do Start.</summary>
+        public void Configurar(Sprite novoSprite, int novaQuantidade, Color novaCor, Vector2? novoTamanho = null)
+        {
+            sprite = novoSprite;
+            quantidade = novaQuantidade;
+            cor = novaCor;
+            if (novoTamanho.HasValue) tamanho = novoTamanho.Value;
+        }
+
         private RectTransform[] almas;
         private Image[] imagens;
         private float[] vel, fase, alphaMax;

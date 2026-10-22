@@ -23,6 +23,17 @@ namespace EcosDeAldenor.UI
         private Image imagem;
         private float tempo;
 
+        /// <summary>Configura por codigo (o prologo cria os personagens em runtime).</summary>
+        public void Configurar(Sprite[] novosQuadros, float novoFps, bool emLoop = true)
+        {
+            quadros = novosQuadros;
+            fps = novoFps;
+            repetir = emLoop;
+            tempo = 0f;
+            if (imagem == null) imagem = GetComponent<Image>();
+            if (quadros != null && quadros.Length > 0) imagem.sprite = quadros[0];
+        }
+
         private void Awake()
         {
             imagem = GetComponent<Image>();

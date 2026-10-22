@@ -1,0 +1,1186 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 10
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_UseRadianceAmbientProbe: 0
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
+  m_LightmapEditorSettings:
+    serializedVersion: 12
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_AtlasSize: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_ExtractAmbientOcclusion: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_ReflectionCompression: 2
+    m_MixedBakeMode: 2
+    m_BakeBackend: 2
+    m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
+    m_PVRSampleCount: 512
+    m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 256
+    m_PVREnvironmentReferencePointCount: 2048
+    m_PVRFilteringMode: 1
+    m_PVRDenoiserTypeDirect: 1
+    m_PVRDenoiserTypeIndirect: 1
+    m_PVRDenoiserTypeAO: 1
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
+    m_PVREnvironmentMIS: 1
+    m_PVRCulling: 1
+    m_PVRFilteringGaussRadiusDirect: 1
+    m_PVRFilteringGaussRadiusIndirect: 1
+    m_PVRFilteringGaussRadiusAO: 1
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
+  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingSettings: {fileID: 0}
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 3
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    buildHeightMesh: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
+    debug:
+      m_Flags: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &553897441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 553897443}
+  - component: {fileID: 553897442}
+  m_Layer: 0
+  m_Name: Prologo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &553897442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553897441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9609d0b935a17d40b65042ddb459c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.UI.Prologo
+  quadros:
+  - capitulo: "I  \xB7  Aldenor"
+    texto: "Aldenor j\xE1 foi um reino de sinos e lampi\xF5es acesos. No alto da
+      colina, a velha igreja velava por todos."
+    atrasoDoTexto: 0.6
+    camadas:
+    - nome: Ceu
+      sprites:
+      - {fileID: -7443756053782179069, guid: 08a1da879600c3b4d90e6e6ab20054d1, type: 3}
+      zoom: 6
+      y: 0
+      cobrirTela: 1
+      velocidade: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+    - nome: Cidade
+      sprites:
+      - {fileID: -919256408230115659, guid: a9dbd19ee6e0bba4eaa65ce24cc23831, type: 3}
+      zoom: 3
+      y: 0
+      cobrirTela: 0
+      velocidade: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+    corDeBase: {r: 0, g: 0, b: 0, a: 0}
+    veu: {r: 0.05, g: 0.02, b: 0.06, a: 0.1}
+    atores:
+    - nome: Velho
+      quadros:
+      - {fileID: 8565860976698278145, guid: 0bd8a1b8e7cf7e7459690b7a06c1b861, type: 3}
+      - {fileID: -6271998558422568852, guid: da761c97c578ece4d9bd806040cf4c35, type: 3}
+      - {fileID: -1438847727309829007, guid: 3ab876f316b30354cb2ba85fe09c3bc7, type: 3}
+      - {fileID: -8672285945517931699, guid: f5d16c5391958b348995f24e1e3a6427, type: 3}
+      - {fileID: -5836571639153145084, guid: 79edc644edf38944d8d633d5fe8e2a11, type: 3}
+      - {fileID: 4399429918762984867, guid: baec9516e58a8be4bb2916c330ea33d6, type: 3}
+      - {fileID: -606668465887097680, guid: fbc5446d9de750248a06643f73cd52ab, type: 3}
+      - {fileID: 2680373895128034403, guid: 07e0a787d64043d4cbd879b5b6316453, type: 3}
+      - {fileID: 4508163347841641650, guid: 2b74e04e94b51394fb9e09f4186ac39f, type: 3}
+      - {fileID: -1158722351822395825, guid: 05a45f21bc7997040818f9eff8f66175, type: 3}
+      - {fileID: -6003142357209733381, guid: fadb51c3bd6f4da4798cc6dd9d4f7f5f, type: 3}
+      - {fileID: 8581442494082061387, guid: c588cc29672554f428f58a5d76ba4517, type: 3}
+      fps: 9
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -650, y: 40}
+      espelhar: 0
+      andar: 28
+      flutuar: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 0
+      sumir: -1
+      fade: 0.6
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Barbudo
+      quadros:
+      - {fileID: 7095889761123657688, guid: 01bd0fb4c73f12548ab02fdfcd60f6ad, type: 3}
+      - {fileID: -1882150543740450041, guid: 0399ba540d3e88841b64954c9e8bf18e, type: 3}
+      - {fileID: -5762752729365661027, guid: 515dbe70dab351d4fbec086793205775, type: 3}
+      - {fileID: -7666068405268895180, guid: a92bdc852ec79214583e8dbb45f41e55, type: 3}
+      - {fileID: -8228856018704402712, guid: 87475ead97feae940b88b9407f0c596b, type: 3}
+      fps: 7
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -250, y: 40}
+      espelhar: 0
+      andar: 0
+      flutuar: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 0
+      sumir: -1
+      fade: 0.6
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Chapeu
+      quadros:
+      - {fileID: 2421033381500368825, guid: 0c1c67b423b5b114ab291eb7d0794efe, type: 3}
+      - {fileID: -3948674360335768650, guid: 545b559a86b97cc4aab96fc7e29ced3b, type: 3}
+      - {fileID: 3485435179778080878, guid: a223cfdd8bebeb04abae7e50ab081969, type: 3}
+      - {fileID: -2644083979928466542, guid: 37559a0284927864298974f7470ec4aa, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 330, y: 40}
+      espelhar: 1
+      andar: 0
+      flutuar: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 0
+      sumir: -1
+      fade: 0.6
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Mulher
+      quadros:
+      - {fileID: 3520026821235216271, guid: 15400ae593a9f1b41ad607c972dc3339, type: 3}
+      - {fileID: -4489653087990266289, guid: 0b896cffa4ab45e4688367a59c62a124, type: 3}
+      - {fileID: 1013771571331984713, guid: 6c98614a72d2aab4189665ab3931ed08, type: 3}
+      - {fileID: -2064711598760814632, guid: ef84845a083654749b6ea22a0416e9c9, type: 3}
+      - {fileID: 5423396133000701980, guid: 97b6e8fd0ef6dc94ba2c948e05f24183, type: 3}
+      - {fileID: -2769361541895879609, guid: 1476dd6a956adf34c8c698fe824d9af9, type: 3}
+      fps: 9
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 720, y: 40}
+      espelhar: 1
+      andar: -32
+      flutuar: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 0
+      sumir: -1
+      fade: 0.6
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    luzes:
+    - posicao: {x: 0, y: 470}
+      tamanho: {x: 2200, y: 520}
+      cor: {r: 1, g: 0.6, b: 0.3, a: 0.28}
+      pulso: 0.08
+      surgir: 0
+    - posicao: {x: 40, y: 520}
+      tamanho: {x: 380, y: 380}
+      cor: {r: 1, g: 0.85, b: 0.5, a: 0.22}
+      pulso: 0.2
+      surgir: 0
+    alma: {fileID: 0}
+    quantidadeDeAlmas: 14
+    corDaAlma: {r: 1, g: 0.85, b: 0.45, a: 1}
+    tamanhoDaAlma: {x: 10, y: 18}
+    nevoa: {r: 0, g: 0, b: 0, a: 0}
+    relampagos: []
+    somDoRelampago: {fileID: 0}
+    panoramica: 6
+  - capitulo: "II  \xB7  A Vig\xEDlia"
+    texto: "Diziam que um anjo guardava aquela igreja. Chamavam-na de A Vig\xEDlia:
+      enquanto ela velasse, nenhuma alma de Aldenor se perderia."
+    atrasoDoTexto: 1
+    camadas:
+    - nome: Nave
+      sprites:
+      - {fileID: 2583609812203033409, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 4544235448077845365, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 6172491537803308644, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 4544235448077845365, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 2583609812203033409, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      zoom: 4
+      y: 0
+      cobrirTela: 0
+      velocidade: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+    corDeBase: {r: 0.153, g: 0.149, b: 0.22, a: 1}
+    veu: {r: 0.05, g: 0.04, b: 0.12, a: 0.08}
+    atores:
+    - nome: Anjo
+      quadros:
+      - {fileID: -5927506780216296808, guid: e87d42efc40f733448a48d46f117f211, type: 3}
+      - {fileID: -2176686178391373125, guid: f166d45bfb27b8843808263a9be9fe9e, type: 3}
+      - {fileID: -7301179835633524511, guid: 77c993b083722fc488692a6a4bf2fbb6, type: 3}
+      - {fileID: -5854508680906126570, guid: a2bdf8158fc38bb48b8f4a8c7f6334cf, type: 3}
+      - {fileID: 7075594664846311672, guid: 0aea28f24e955984f8b6bd369915dc69, type: 3}
+      - {fileID: -192966328997025247, guid: 85a15f897292cae4cb886d91f85222f4, type: 3}
+      - {fileID: -8741561622873583302, guid: 2e778c9538e8c8148a3440f9ed824db6, type: 3}
+      - {fileID: 2687013147448523899, guid: aa526924b2854e14fbec1e4bfe8c9c40, type: 3}
+      fps: 10
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 4
+      posicao: {x: 0, y: 60}
+      espelhar: 0
+      andar: 0
+      flutuar: 14
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 0
+      sumir: -1
+      fade: 0.6
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.9, b: 0.6, a: 0.45}
+      tamanhoDoBrilho: 1.2
+    luzes:
+    - posicao: {x: -270, y: 420}
+      tamanho: {x: 240, y: 1200}
+      cor: {r: 1, g: 0.93, b: 0.7, a: 0.16}
+      pulso: 0.3
+      surgir: 0
+    - posicao: {x: 270, y: 420}
+      tamanho: {x: 240, y: 1200}
+      cor: {r: 1, g: 0.93, b: 0.7, a: 0.16}
+      pulso: 0.3
+      surgir: 0
+    - posicao: {x: 0, y: 300}
+      tamanho: {x: 760, y: 760}
+      cor: {r: 1, g: 0.85, b: 0.5, a: 0.32}
+      pulso: 0.2
+      surgir: 0
+    alma: {fileID: 0}
+    quantidadeDeAlmas: 14
+    corDaAlma: {r: 1, g: 0.92, b: 0.65, a: 1}
+    tamanhoDaAlma: {x: 12, y: 22}
+    nevoa: {r: 0, g: 0, b: 0, a: 0}
+    relampagos: []
+    somDoRelampago: {fileID: 0}
+    panoramica: 4
+  - capitulo: "III  \xB7  A N\xE9voa"
+    texto: "At\xE9 a noite em que a n\xE9voa desceu. Os sinos se calaram, e as almas
+      do povo foram arrancadas dos corpos e espalhadas como ecos pelo cemit\xE9rio."
+    atrasoDoTexto: 2.8
+    camadas:
+    - nome: Ceu
+      sprites:
+      - {fileID: -7443756053782179069, guid: 08a1da879600c3b4d90e6e6ab20054d1, type: 3}
+      zoom: 6
+      y: 0
+      cobrirTela: 1
+      velocidade: 0
+      cor: {r: 0.38, g: 0.36, b: 0.55, a: 1}
+    - nome: Cidade
+      sprites:
+      - {fileID: -919256408230115659, guid: a9dbd19ee6e0bba4eaa65ce24cc23831, type: 3}
+      zoom: 3
+      y: 0
+      cobrirTela: 0
+      velocidade: 0
+      cor: {r: 0.38, g: 0.36, b: 0.55, a: 1}
+    corDeBase: {r: 0, g: 0, b: 0, a: 0}
+    veu: {r: 0.1, g: 0.04, b: 0.16, a: 0.5}
+    atores:
+    - nome: VelhoApagado
+      quadros:
+      - {fileID: 3039496112287855894, guid: fc0891f2e8680cd40ba46a0431e83a5d, type: 3}
+      - {fileID: 1763933718531655315, guid: e496756c94353a748b2cad87e2084bc8, type: 3}
+      - {fileID: 2120909699105258436, guid: a41ab584414b02f42b7b57047a6c3ebf, type: 3}
+      - {fileID: 2963276178802415603, guid: 4c0ed3b52062da04c836339d1a2d11b2, type: 3}
+      - {fileID: -2672090095577900733, guid: 692109be912e44e40ba5c2c39dbba605, type: 3}
+      - {fileID: -938789611516025296, guid: 02f68869087902d47a9025edf623fcc1, type: 3}
+      - {fileID: 4007805418407480689, guid: c6de6876b0dc94547aa329a7483537f0, type: 3}
+      - {fileID: -3927692801011472624, guid: 2548c13e7322001418bc4d7d682dde5b, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -520, y: 40}
+      espelhar: 0
+      andar: 0
+      flutuar: 0
+      cor: {r: 0.55, g: 0.5, b: 0.68, a: 1}
+      surgir: 0
+      sumir: 1.3
+      fade: 0.9
+      almasAoSumir: 1
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: BarbudoApagado
+      quadros:
+      - {fileID: 7095889761123657688, guid: 01bd0fb4c73f12548ab02fdfcd60f6ad, type: 3}
+      - {fileID: -1882150543740450041, guid: 0399ba540d3e88841b64954c9e8bf18e, type: 3}
+      - {fileID: -5762752729365661027, guid: 515dbe70dab351d4fbec086793205775, type: 3}
+      - {fileID: -7666068405268895180, guid: a92bdc852ec79214583e8dbb45f41e55, type: 3}
+      - {fileID: -8228856018704402712, guid: 87475ead97feae940b88b9407f0c596b, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -180, y: 40}
+      espelhar: 0
+      andar: 0
+      flutuar: 0
+      cor: {r: 0.55, g: 0.5, b: 0.68, a: 1}
+      surgir: 0
+      sumir: 1.6
+      fade: 0.9
+      almasAoSumir: 1
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: ChapeuApagado
+      quadros:
+      - {fileID: 2421033381500368825, guid: 0c1c67b423b5b114ab291eb7d0794efe, type: 3}
+      - {fileID: -3948674360335768650, guid: 545b559a86b97cc4aab96fc7e29ced3b, type: 3}
+      - {fileID: 3485435179778080878, guid: a223cfdd8bebeb04abae7e50ab081969, type: 3}
+      - {fileID: -2644083979928466542, guid: 37559a0284927864298974f7470ec4aa, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 240, y: 40}
+      espelhar: 1
+      andar: 0
+      flutuar: 0
+      cor: {r: 0.55, g: 0.5, b: 0.68, a: 1}
+      surgir: 0
+      sumir: 1.9
+      fade: 0.9
+      almasAoSumir: 1
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: MulherApagada
+      quadros:
+      - {fileID: 3562525684888074242, guid: 35e513484e09c9c4aba5f6a915f60745, type: 3}
+      - {fileID: -5462563808129509880, guid: 4feee217e329edd42b7b285cf239fb43, type: 3}
+      - {fileID: 5021776053794636647, guid: 822ab5a1183d83a4cab54025e2d22c2b, type: 3}
+      - {fileID: -850835889937657148, guid: fb25ebc6864e3e747bd19c6f40eeb0e2, type: 3}
+      - {fileID: 4645427292903651324, guid: 9e090cd8d05bf6940877957658c6d4f7, type: 3}
+      - {fileID: -914512417025092425, guid: d5fbd757aa315294ba48462718cc763a, type: 3}
+      - {fileID: -7777566394574125007, guid: 088b731511ab3e34e926f9ea8fe9069b, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 560, y: 40}
+      espelhar: 1
+      andar: 0
+      flutuar: 0
+      cor: {r: 0.55, g: 0.5, b: 0.68, a: 1}
+      surgir: 0
+      sumir: 2.2
+      fade: 0.9
+      almasAoSumir: 1
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Espectro1
+      quadros:
+      - {fileID: -696117140377348211, guid: 2bdca6d4d87cd2140bcf78c8454d1167, type: 3}
+      - {fileID: 7377476498170648722, guid: 44a9b0e6f7c5d2b4d8c87d9c673ece1b, type: 3}
+      - {fileID: 8982032809643238666, guid: da620593e3e124742a8875f48a99998c, type: 3}
+      - {fileID: -4278363009422742616, guid: 72b069d62d7fa124895ddaf7ba4ecf5b, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -560, y: 40}
+      espelhar: 0
+      andar: 14
+      flutuar: 10
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2.3
+      sumir: -1
+      fade: 1.2
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Espectro2
+      quadros:
+      - {fileID: -696117140377348211, guid: 2bdca6d4d87cd2140bcf78c8454d1167, type: 3}
+      - {fileID: 7377476498170648722, guid: 44a9b0e6f7c5d2b4d8c87d9c673ece1b, type: 3}
+      - {fileID: 8982032809643238666, guid: da620593e3e124742a8875f48a99998c, type: 3}
+      - {fileID: -4278363009422742616, guid: 72b069d62d7fa124895ddaf7ba4ecf5b, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 60, y: 40}
+      espelhar: 1
+      andar: -10
+      flutuar: 10
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2.8
+      sumir: -1
+      fade: 1.2
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Espectro3
+      quadros:
+      - {fileID: -696117140377348211, guid: 2bdca6d4d87cd2140bcf78c8454d1167, type: 3}
+      - {fileID: 7377476498170648722, guid: 44a9b0e6f7c5d2b4d8c87d9c673ece1b, type: 3}
+      - {fileID: 8982032809643238666, guid: da620593e3e124742a8875f48a99998c, type: 3}
+      - {fileID: -4278363009422742616, guid: 72b069d62d7fa124895ddaf7ba4ecf5b, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 620, y: 40}
+      espelhar: 1
+      andar: -16
+      flutuar: 10
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 3.3
+      sumir: -1
+      fade: 1.2
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    luzes: []
+    alma: {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+    quantidadeDeAlmas: 8
+    corDaAlma: {r: 1, g: 0.75, b: 0.9, a: 1}
+    tamanhoDaAlma: {x: 22, y: 34}
+    nevoa: {r: 0.5, g: 0.38, b: 0.65, a: 0.38}
+    relampagos:
+    - 1.1
+    - 7.5
+    somDoRelampago: {fileID: 8300000, guid: f1cb5d83282f2904a85f73111d068616, type: 3}
+    panoramica: 5
+  - capitulo: "IV  \xB7  O Manto"
+    texto: "A Vig\xEDlia n\xE3o as protegeu. Cobriu-se com um capuz e passou a guard\xE1-las
+      como prisioneiras. Dizem que o anjo ainda est\xE1 l\xE1, sob aquele manto."
+    atrasoDoTexto: 3
+    camadas:
+    - nome: Nave
+      sprites:
+      - {fileID: 2583609812203033409, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 4544235448077845365, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 6172491537803308644, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 4544235448077845365, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      - {fileID: 2583609812203033409, guid: 564d1ffcddad49f44aabe8e59b8c7f93, type: 3}
+      zoom: 4
+      y: 0
+      cobrirTela: 0
+      velocidade: 0
+      cor: {r: 0.55, g: 0.32, b: 0.38, a: 1}
+    corDeBase: {r: 0.08, g: 0.05, b: 0.09, a: 1}
+    veu: {r: 0.16, g: 0, b: 0.04, a: 0.4}
+    atores:
+    - nome: AnjoQueSeEsconde
+      quadros:
+      - {fileID: -5927506780216296808, guid: e87d42efc40f733448a48d46f117f211, type: 3}
+      - {fileID: -2176686178391373125, guid: f166d45bfb27b8843808263a9be9fe9e, type: 3}
+      - {fileID: -7301179835633524511, guid: 77c993b083722fc488692a6a4bf2fbb6, type: 3}
+      - {fileID: -5854508680906126570, guid: a2bdf8158fc38bb48b8f4a8c7f6334cf, type: 3}
+      - {fileID: 7075594664846311672, guid: 0aea28f24e955984f8b6bd369915dc69, type: 3}
+      - {fileID: -192966328997025247, guid: 85a15f897292cae4cb886d91f85222f4, type: 3}
+      - {fileID: -8741561622873583302, guid: 2e778c9538e8c8148a3440f9ed824db6, type: 3}
+      - {fileID: 2687013147448523899, guid: aa526924b2854e14fbec1e4bfe8c9c40, type: 3}
+      fps: 10
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 4
+      posicao: {x: 0, y: 60}
+      espelhar: 0
+      andar: 0
+      flutuar: 14
+      cor: {r: 0.85, g: 0.78, b: 0.85, a: 1}
+      surgir: 0
+      sumir: 1.7
+      fade: 0.5
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Manto
+      quadros:
+      - {fileID: -3253193444426366541, guid: 15222c8af6cae6543bf9c0d49e301561, type: 3}
+      - {fileID: -737181413011840186, guid: 9321fa25ac885f4469b9685bd16c2faa, type: 3}
+      - {fileID: 1278183561560509872, guid: 4b87c1b92fc0a58438b5bd1c1779de4f, type: 3}
+      - {fileID: -2130145742107678009, guid: 5e1f4c10b294eb64bb6db56e12b7b811, type: 3}
+      - {fileID: 3543433116065506159, guid: 2878d23874da03549a82d5edb0942632, type: 3}
+      - {fileID: -6236713194945363207, guid: 4cafdc3fc9a34244aaf4db9ad7c55e15, type: 3}
+      - {fileID: -4641077647485429793, guid: f0b03808349a7874d99ef77e996261ac, type: 3}
+      - {fileID: 6472947323643325921, guid: 5bb5db41f3be071418be9217cc27c545, type: 3}
+      - {fileID: -285156463949586906, guid: 12d68ea1a65993f4ab6f3adf8c48f7f5, type: 3}
+      fps: 12
+      repetir: 0
+      entrada: []
+      fpsEntrada: 10
+      zoom: 6
+      posicao: {x: 0, y: 20}
+      espelhar: 0
+      andar: 0
+      flutuar: 0
+      cor: {r: 0.6, g: 0.15, b: 0.25, a: 1}
+      surgir: 1.45
+      sumir: 2.35
+      fade: 0.1
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 0}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Vigilia
+      quadros:
+      - {fileID: -5927506780216296808, guid: 6b0965193848a9246a4cc522e54e06df, type: 3}
+      - {fileID: -2176686178391373125, guid: 2057259e8eb03dd40a87e9aefb902c08, type: 3}
+      - {fileID: -7301179835633524511, guid: 8a62c09db61486d46a5b7569011539e9, type: 3}
+      - {fileID: -5854508680906126570, guid: e655b89c1c6ada143b3d0f099caac98f, type: 3}
+      - {fileID: 7075594664846311672, guid: 24c20df01b0ccab47b8a8cea8156f5cc, type: 3}
+      fps: 6
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 7
+      posicao: {x: 0, y: 40}
+      espelhar: 0
+      andar: 0
+      flutuar: 8
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2
+      sumir: -1
+      fade: 0.8
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: acbcb75601b0082458fda8807f67c813, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0.9, g: 0.15, b: 0.2, a: 0.4}
+      tamanhoDoBrilho: 1.4
+    luzes:
+    - posicao: {x: 0, y: 300}
+      tamanho: {x: 900, y: 760}
+      cor: {r: 0.85, g: 0.1, b: 0.15, a: 0.38}
+      pulso: 0.3
+      surgir: 2
+    alma: {fileID: 0}
+    quantidadeDeAlmas: 10
+    corDaAlma: {r: 1, g: 0.3, b: 0.25, a: 1}
+    tamanhoDaAlma: {x: 8, y: 14}
+    nevoa: {r: 0, g: 0, b: 0, a: 0}
+    relampagos: []
+    somDoRelampago: {fileID: 0}
+    panoramica: 3
+  - capitulo: "V  \xB7  O \xDAltimo Cavaleiro"
+    texto: "Ren, o \xFAltimo cavaleiro de p\xE9, desperta entre as l\xE1pides. Seis
+      ecos ainda brilham no escuro. Re\xFAna-os, suba \xE0 igreja e encerre a vig\xEDlia."
+    atrasoDoTexto: 3.4
+    camadas:
+    - nome: Ceu
+      sprites:
+      - {fileID: -7443756053782179069, guid: 284a479174c3ec141a51d5f9b04a5258, type: 3}
+      zoom: 6
+      y: 0
+      cobrirTela: 1
+      velocidade: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+    - nome: Montanhas
+      sprites:
+      - {fileID: 7099607018252260187, guid: e83af9384050a7a41bd75a08f2d4ff8b, type: 3}
+      zoom: 3
+      y: 30
+      cobrirTela: 0
+      velocidade: 4
+      cor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    - nome: Tumulos
+      sprites:
+      - {fileID: -3817167151308085849, guid: 0ef282cddd7a92c49bd455f605f45b6e, type: 3}
+      zoom: 3
+      y: 0
+      cobrirTela: 0
+      velocidade: 8
+      cor: {r: 1, g: 1, b: 1, a: 1}
+    corDeBase: {r: 0, g: 0, b: 0, a: 0}
+    veu: {r: 0.02, g: 0.01, b: 0.05, a: 0.28}
+    atores:
+    - nome: Ren
+      quadros:
+      - {fileID: 21300000, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300002, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300004, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300006, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300008, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300010, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300012, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      - {fileID: 21300014, guid: ae297123f091bbf4e8f1835eb98fb293, type: 3}
+      fps: 8
+      repetir: 1
+      entrada:
+      - {fileID: 21300018, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300016, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300014, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300012, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300010, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300008, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300006, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300004, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300002, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      - {fileID: 21300000, guid: 432e48af0c833ad4587d222b812b844f, type: 3}
+      fpsEntrada: 8
+      zoom: 4
+      posicao: {x: -220, y: 20}
+      espelhar: 0
+      andar: 0
+      flutuar: 0
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 0.3
+      sumir: -1
+      fade: 0.4
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: d654174ef194bd7479bf4b8d8f753318, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 0, g: 0, b: 0, a: 0}
+      tamanhoDoBrilho: 1.6
+    - nome: Eco
+      quadros:
+      - {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+      fps: 1
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -640, y: 250}
+      espelhar: 0
+      andar: 0
+      flutuar: 12
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 1.7
+      sumir: -1
+      fade: 0.7
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.55, b: 0.85, a: 0.6}
+      tamanhoDoBrilho: 3.2
+    - nome: Eco
+      quadros:
+      - {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+      fps: 1
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: -380, y: 420}
+      espelhar: 0
+      andar: 0
+      flutuar: 12
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2
+      sumir: -1
+      fade: 0.7
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.55, b: 0.85, a: 0.6}
+      tamanhoDoBrilho: 3.2
+    - nome: Eco
+      quadros:
+      - {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+      fps: 1
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 60, y: 300}
+      espelhar: 0
+      andar: 0
+      flutuar: 12
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2.3
+      sumir: -1
+      fade: 0.7
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.55, b: 0.85, a: 0.6}
+      tamanhoDoBrilho: 3.2
+    - nome: Eco
+      quadros:
+      - {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+      fps: 1
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 300, y: 460}
+      espelhar: 0
+      andar: 0
+      flutuar: 12
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2.6
+      sumir: -1
+      fade: 0.7
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.55, b: 0.85, a: 0.6}
+      tamanhoDoBrilho: 3.2
+    - nome: Eco
+      quadros:
+      - {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+      fps: 1
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 560, y: 260}
+      espelhar: 0
+      andar: 0
+      flutuar: 12
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 2.9
+      sumir: -1
+      fade: 0.7
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.55, b: 0.85, a: 0.6}
+      tamanhoDoBrilho: 3.2
+    - nome: Eco
+      quadros:
+      - {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+      fps: 1
+      repetir: 1
+      entrada: []
+      fpsEntrada: 10
+      zoom: 3
+      posicao: {x: 780, y: 400}
+      espelhar: 0
+      andar: 0
+      flutuar: 12
+      cor: {r: 1, g: 1, b: 1, a: 1}
+      surgir: 3.2
+      sumir: -1
+      fade: 0.7
+      almasAoSumir: 0
+      somAoSurgir: {fileID: 8300000, guid: 7a9de5c4d998126449cf964a6b27a8b0, type: 3}
+      somAoSumir: {fileID: 0}
+      brilho: {r: 1, g: 0.55, b: 0.85, a: 0.6}
+      tamanhoDoBrilho: 3.2
+    luzes:
+    - posicao: {x: 0, y: 600}
+      tamanho: {x: 800, y: 700}
+      cor: {r: 0.9, g: 0.3, b: 0.6, a: 0.15}
+      pulso: 0.15
+      surgir: 0
+    alma: {fileID: 0}
+    quantidadeDeAlmas: 0
+    corDaAlma: {r: 1, g: 0.75, b: 0.9, a: 1}
+    tamanhoDaAlma: {x: 18, y: 30}
+    nevoa: {r: 0, g: 0, b: 0, a: 0}
+    relampagos: []
+    somDoRelampago: {fileID: 0}
+    panoramica: 5
+  titulo: Ecos de Aldenor
+  subtitulo: As almas ecoam nas trevas
+  proximaCena: Tutorial
+  almaDoTitulo: {fileID: 21300000, guid: ec6b13a5ffa52bc45b7eeb8e5f69c6a9, type: 3}
+  letrasPorSegundo: 38
+  tempoDeFade: 0.9
+  esperaMinima: 2.4
+--- !u!4 &553897443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553897441}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &782202172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 782202174}
+  - component: {fileID: 782202173}
+  m_Layer: 0
+  m_Name: SceneMusic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &782202173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782202172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed373d47767d50f40b8bdc5026ed4674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.SceneMusicPlayer
+  sceneMusic: {fileID: 8300000, guid: 3c581804274b5ee41ac3a6d2fece8127, type: 3}
+  loop: 1
+  trackGain: 1
+  tocarAoIniciar: 1
+--- !u!4 &782202174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782202172}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &900301645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 900301647}
+  - component: {fileID: 900301646}
+  m_Layer: 0
+  m_Name: UISounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &900301646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900301645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b6fbf6b384b7f4091a379c3e2b664b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.UI.UISounds
+  somDeFoco: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+  somDeClique: {fileID: 8300000, guid: c5cb2ac29e89dbf43a9b644caaad45e6, type: 3}
+--- !u!4 &900301647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900301645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1149742940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1149742943}
+  - component: {fileID: 1149742942}
+  - component: {fileID: 1149742941}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1149742941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149742940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.StandaloneInputModule
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1149742942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149742940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1149742943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149742940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2069106408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2069106410}
+  - component: {fileID: 2069106409}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!20 &2069106409
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069106408}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &2069106410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069106408}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 2069106410}
+  - {fileID: 1149742943}
+  - {fileID: 782202174}
+  - {fileID: 900301647}
+  - {fileID: 553897443}

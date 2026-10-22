@@ -18,6 +18,7 @@ namespace EcosDeAldenor.Core
 
         [Header("Nomes das Cenas")]
         [SerializeField] private string mainMenuScene = "MainMenu";
+        [SerializeField] private string prologueScene = "Prologo";
         [SerializeField] private string tutorialScene = "Tutorial";
         [SerializeField] private string phase1Scene = "Phase1";
         [SerializeField] private string phase2Scene = "Phase2";
@@ -91,6 +92,17 @@ namespace EcosDeAldenor.Core
 
         public void LoadMainMenu() => LoadScene(mainMenuScene);
         public void LoadTutorial() => LoadScene(tutorialScene);
+
+        /// <summary>
+        /// Comeco de um jogo novo: a historia antes do tutorial. Se a cena do
+        /// prologo nao estiver na build (alguem a tirou da lista), cai direto
+        /// no tutorial, como era antes - o jogo nao trava por falta dela.
+        /// </summary>
+        public void LoadPrologue()
+        {
+            if (Application.CanStreamedLevelBeLoaded(prologueScene)) LoadScene(prologueScene);
+            else LoadTutorial();
+        }
         public void LoadPhase1() => LoadScene(phase1Scene);
         public void LoadPhase2() => LoadScene(phase2Scene);
         public void LoadVictoryScreen() => LoadScene(victoryScene);

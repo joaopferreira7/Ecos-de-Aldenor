@@ -196,6 +196,80 @@ namespace EcosDeAldenor.UI
         }
 
         // ------------------------------------------------------------------
+        // Momentos de cena (entrada e transformacao do chefe, prologo)
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// Cartao de titulo no meio da tela: faixa escura, nome enorme na fonte
+        /// gotica e um epiteto dourado embaixo. Nasce transparente - quem chama
+        /// decide quando e como ele aparece (ver Desvanecer).
+        ///
+        /// Era montado so pela entrada do chefe; a transformacao da Vigilia usa o
+        /// mesmo cartao, e dois cartoes desenhados em dois lugares acabam
+        /// ficando diferentes um do outro.
+        /// </summary>
+        public static CanvasGroup CartaoDeTitulo(string nome, string epiteto, Color corDoNome, int ordem = 3000)
+        {
+            var canvas = CriarCanvas("CartaoDeTitulo", ordem);
+            var grupo = canvas.gameObject.AddComponent<CanvasGroup>();
+            grupo.alpha = 0f;
+            grupo.interactable = false;
+            grupo.blocksRaycasts = false;
+
+            // Faixa escura atras do nome, para ler sobre qualquer cenario.
+            Painel(canvas.transform, "Faixa", new Color(0f, 0f, 0f, 0.55f),
+                   new Vector2(0f, 0.5f), new Vector2(1f, 0.5f),
+                   new Vector2(0f, 140f), new Vector2(0f, 330f));
+
+            var titulo = Titulo(canvas.transform, "Nome", nome, 120, corDoNome,
+                                new Vector2(1600f, 150f), new Vector2(0f, 255f));
+            var sombra = titulo.gameObject.AddComponent<Shadow>();
+            sombra.effectColor = new Color(0.25f, 0f, 0.1f, 0.9f);
+            sombra.effectDistance = new Vector2(4f, -4f);
+
+            Texto(canvas.transform, "Epiteto", epiteto, 30, CorAcento, TextAnchor.MiddleCenter,
+                  new Vector2(1200f, 40f), new Vector2(0f, 168f));
+            return grupo;
+        }
+
+        /// <summary>
+        /// Clarao de tela cheia (branco, por padrao), ja aceso. E o "corte" de
+        /// uma transformacao: o que muda acontece atras dele, e quando ele se
+        /// apaga o jogador ve o resultado - em vez de ver um sprite trocar de
+        /// desenho de um quadro para o outro.
+        /// </summary>
+        public static CanvasGroup Clarao(Color cor, int ordem = 4800)
+        {
+            var canvas = CriarCanvas("Clarao", ordem);
+            var grupo = canvas.gameObject.AddComponent<CanvasGroup>();
+            grupo.interactable = false;
+            grupo.blocksRaycasts = false;
+            Painel(canvas.transform, "Luz", cor, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero)
+                .GetComponent<Image>().raycastTarget = false;
+            return grupo;
+        }
+
+        /// <summary>
+        /// Leva a transparencia de um grupo de um valor a outro, em tempo REAL
+        /// (funciona com o jogo pausado e com o hit stop zerando o timeScale).
+        /// Com destruirNoFim, some com o canvas inteiro ao terminar.
+        /// </summary>
+        public static System.Collections.IEnumerator Desvanecer(CanvasGroup g, float de, float para,
+                                                                float duracao, bool destruirNoFim = false)
+        {
+            if (g == null) yield break;
+            for (float t = 0f; t < duracao; t += Time.unscaledDeltaTime)
+            {
+                if (g == null) yield break;
+                g.alpha = Mathf.Lerp(de, para, t / duracao);
+                yield return null;
+            }
+            if (g == null) yield break;
+            g.alpha = para;
+            if (destruirNoFim) Object.Destroy(g.gameObject);
+        }
+
+        // ------------------------------------------------------------------
         // Janela modal (Opcoes, Controles)
         // ------------------------------------------------------------------
 

@@ -30,7 +30,7 @@ namespace EcosDeAldenor.EditorTools
     {
         const string Pasta = "Build";
         const string Executavel = "Ecos de Aldenor.exe";
-        const int CenasEsperadas = 8;
+        const int CenasEsperadas = 9;   // + Prologo
 
         // ---------- menu ----------
 
