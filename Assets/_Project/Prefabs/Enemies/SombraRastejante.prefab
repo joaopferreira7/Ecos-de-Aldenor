@@ -323,6 +323,7 @@ MonoBehaviour:
   pointA: {fileID: 7181959927752145931}
   pointB: {fileID: 685718735948148049}
   patrolSpeed: 1.2
+  spriteOlhaParaDireita: 1
   detectionRadius: 2.5
   playerLayer:
     serializedVersion: 2

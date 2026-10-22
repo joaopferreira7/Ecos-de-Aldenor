@@ -31,6 +31,8 @@ namespace EcosDeAldenor.Systems
 
         private Sprite[] framesDeImpacto;
         private float escalaDoImpacto;
+        private Color? corDoRastro;
+        private float relogioDoRastro;
 
         private float timerQuadro;
         private int quadro;
@@ -42,7 +44,7 @@ namespace EcosDeAldenor.Systems
         public static Projetil Lancar(Sprite[] frames, float fps, Vector3 de, Vector3 para,
                                       float tempoDeVoo, float escala = 1f, float arco = 1.2f,
                                       Sprite[] impacto = null, float escalaImpacto = 2.2f,
-                                      Color? tinta = null, int ordem = 6)
+                                      Color? tinta = null, int ordem = 6, Color? rastro = null)
         {
             if (frames == null || frames.Length == 0) return null;
 
@@ -65,6 +67,7 @@ namespace EcosDeAldenor.Systems
             p.altura = arco;
             p.framesDeImpacto = impacto;
             p.escalaDoImpacto = escalaImpacto;
+            p.corDoRastro = rastro;
             return p;
         }
 
@@ -80,6 +83,19 @@ namespace EcosDeAldenor.Systems
             transform.position = pos;
 
             AnimarQuadros();
+
+            // Rastro de brasas: a bola de fogo deixa um risco no ar, e o olho
+            // segue a trajetoria em vez de so ver uma bola mudar de lugar.
+            if (corDoRastro.HasValue)
+            {
+                relogioDoRastro -= Time.deltaTime;
+                if (relogioDoRastro <= 0f)
+                {
+                    relogioDoRastro = 0.03f;
+                    Efeitos.Brasas(transform.position, 1, corDoRastro.Value, forca: 0.5f, subida: 0.2f,
+                                   tamanho: 0.14f, vida: 0.4f);
+                }
+            }
 
             if (t >= 1f) Chegar();
         }

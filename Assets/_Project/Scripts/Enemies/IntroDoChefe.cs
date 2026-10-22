@@ -122,25 +122,8 @@ namespace EcosDeAldenor.Enemies
 
         private CanvasGroup Cartao()
         {
-            var canvas = UIFactory.CriarCanvas("CartaoDoChefe", 3000);
-            var grupo = canvas.gameObject.AddComponent<CanvasGroup>();
-            grupo.interactable = false;
-            grupo.blocksRaycasts = false;
-
-            // Faixa escura atras do nome, para ler sobre qualquer parte da igreja.
-            UIFactory.Painel(canvas.transform, "Faixa", new Color(0f, 0f, 0f, 0.55f),
-                             new Vector2(0f, 0.5f), new Vector2(1f, 0.5f),
-                             new Vector2(0f, 140f), new Vector2(0f, 330f));
-
-            var titulo = UIFactory.Titulo(canvas.transform, "Nome", nome, 120, new Color(0.95f, 0.82f, 1f),
-                                          new Vector2(1600f, 150f), new Vector2(0f, 255f));
-            var sombra = titulo.gameObject.AddComponent<Shadow>();
-            sombra.effectColor = new Color(0.25f, 0f, 0.1f, 0.9f);
-            sombra.effectDistance = new Vector2(4f, -4f);
-
-            UIFactory.Texto(canvas.transform, "Epiteto", epiteto, 30, UIFactory.CorAcento, TextAnchor.MiddleCenter,
-                            new Vector2(1200f, 40f), new Vector2(0f, 168f));
-
+            // O mesmo cartao serve a transformacao da Vigilia (UIFactory).
+            var grupo = UIFactory.CartaoDeTitulo(nome, epiteto, new Color(0.95f, 0.82f, 1f));
             aparecendo = StartCoroutine(Aparecer(grupo, 0.45f));
             return grupo;
         }

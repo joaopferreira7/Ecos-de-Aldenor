@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe8d4300cb12fb341a81c8d21bafad58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.HealthSystem
-  maxHealth: 12
+  maxHealth: 16
   invulnerabilityDuration: 1
   damageSfx: {fileID: 8300000, guid: 7c47b20bb9874304a809dc5580d403ba, type: 3}
   deathSfx: {fileID: 8300000, guid: a652877b012108e41871f867ada9f176, type: 3}
@@ -263,6 +263,7 @@ MonoBehaviour:
   pointA: {fileID: 0}
   pointB: {fileID: 0}
   patrolSpeed: 1.2
+  spriteOlhaParaDireita: 0
   detectionRadius: 5
   playerLayer:
     serializedVersion: 2
@@ -325,6 +326,7 @@ MonoBehaviour:
   - {fileID: 917300222284693428, guid: 7ff58d8de9fbca44197ad3dbc747e661, type: 3}
   - {fileID: 3090450909953986718, guid: 14ccdc6ca5e24bd468e79e5d676b5863, type: 3}
   basicTelegraphColor: {r: 1, g: 0.72, b: 0.3, a: 1}
+  corInvestida: {r: 0.82, g: 0.72, b: 1, a: 1}
   basicAttackRange: 1.2
   specialAttackRange: 3
   basicAttackDamage: 1
@@ -334,8 +336,74 @@ MonoBehaviour:
   specialImpactRadius: 1.7
   retreatDuration: 1
   stateCooldown: 1.2
+  limiarAgressivo: 0.75
+  limiarTransformacao: 0.5
+  limiarFuria: 0.25
+  salvaQuantidade: 3
+  salvaEspaco: 2.6
+  salvaIntervalo: 0.4
+  salvaRaio: 1.3
+  salvaCarga: 0.9
+  nomeDoAnjo: "A Vig\xEDlia Desvelada"
+  epitetoDoAnjo: O anjo que velava Aldenor
+  framesAnjoParado:
+  - {fileID: -5927506780216296808, guid: e87d42efc40f733448a48d46f117f211, type: 3}
+  - {fileID: -2176686178391373125, guid: f166d45bfb27b8843808263a9be9fe9e, type: 3}
+  - {fileID: -7301179835633524511, guid: 77c993b083722fc488692a6a4bf2fbb6, type: 3}
+  - {fileID: -5854508680906126570, guid: a2bdf8158fc38bb48b8f4a8c7f6334cf, type: 3}
+  - {fileID: 7075594664846311672, guid: 0aea28f24e955984f8b6bd369915dc69, type: 3}
+  - {fileID: -192966328997025247, guid: 85a15f897292cae4cb886d91f85222f4, type: 3}
+  - {fileID: -8741561622873583302, guid: 2e778c9538e8c8148a3440f9ed824db6, type: 3}
+  - {fileID: 2687013147448523899, guid: aa526924b2854e14fbec1e4bfe8c9c40, type: 3}
+  fpsAnjoParado: 10
+  framesAnjoAtaque:
+  - {fileID: -5927506780216296808, guid: 6d49732d090fe1e4791b969e8f69373f, type: 3}
+  - {fileID: -2176686178391373125, guid: 26d36c9fc5dce454f9b593e843e16934, type: 3}
+  - {fileID: -7301179835633524511, guid: fc4620c64ad8ce64fa633f5487292252, type: 3}
+  escalaDoAnjo: 4.4
+  colisorDoAnjo: {x: 0.3, y: 0.66}
+  deslocamentoDoColisorDoAnjo: {x: 0, y: -0.3}
+  corDaBarraDoAnjo: {r: 0.92, g: 0.45, b: 0.1, a: 1}
+  alcanceDoGolpeDeAsa: 1.7
+  investidaCarga: 0.9
+  investidaVelocidade: 15
+  investidaAlem: 2.5
+  investidaMaxima: 10
+  chuvaQuantidade: 3
+  chuvaCarga: 1
+  chuvaIntervalo: 0.3
+  chuvaRaio: 1.3
+  chuvaEspalhamento: 4.5
   castSfx: {fileID: 8300000, guid: d1afd3f4d23c24f418ffc315afb04965, type: 3}
   phaseChangeSfx: {fileID: 8300000, guid: 21c4a490b24ba2045bc815f7626a40ef, type: 3}
+  impactoSfx: {fileID: 8300000, guid: a652877b012108e41871f867ada9f176, type: 3}
+  transformacaoInicioSfx: {fileID: 8300000, guid: acbcb75601b0082458fda8807f67c813, type: 3}
+  transformacaoEstouroSfx: {fileID: 8300000, guid: f1cb5d83282f2904a85f73111d068616, type: 3}
+  investidaSfx: {fileID: 8300000, guid: c458b6714dab015479d507b21fd2cead, type: 3}
+  passoSfx: {fileID: 8300000, guid: 8ff2a2d7e79f81c40ac447512f879374, type: 3}
+  invocarSfx: {fileID: 8300000, guid: b7f8695cf65a4f24eb37544298821146, type: 3}
+  faiscaDeCorte:
+  - {fileID: 4239185551365344341, guid: 93aae6f2b95d29043bb8775ba2d38426, type: 3}
+  - {fileID: 5855794022583688693, guid: 93aae6f2b95d29043bb8775ba2d38426, type: 3}
+  - {fileID: 6868827507697175483, guid: 93aae6f2b95d29043bb8775ba2d38426, type: 3}
+  - {fileID: 8370674216170762912, guid: 93aae6f2b95d29043bb8775ba2d38426, type: 3}
+  - {fileID: -6446291853450717263, guid: 93aae6f2b95d29043bb8775ba2d38426, type: 3}
+  - {fileID: -8780297336033176309, guid: 93aae6f2b95d29043bb8775ba2d38426, type: 3}
+  faiscaDeImpacto:
+  - {fileID: 7117451852021796580, guid: ecc72de88d874424bacf26d1fc6d4f1f, type: 3}
+  - {fileID: -3985236400744840864, guid: ecc72de88d874424bacf26d1fc6d4f1f, type: 3}
+  - {fileID: -3487364084512622355, guid: ecc72de88d874424bacf26d1fc6d4f1f, type: 3}
+  - {fileID: -8638650070946485308, guid: ecc72de88d874424bacf26d1fc6d4f1f, type: 3}
+  - {fileID: 5476807652380448064, guid: ecc72de88d874424bacf26d1fc6d4f1f, type: 3}
+  - {fileID: -1246162208151611606, guid: ecc72de88d874424bacf26d1fc6d4f1f, type: 3}
+  passoSumir: 0.35
+  passoEspera: 0.5
+  passoSurgir: 0.3
+  passoDistancia: 3.2
+  limitesDaArena: {x: -12.5, y: 12.5}
+  prefabDoMorto: {fileID: 7181296791506347203, guid: 1074b88b63798dc49b274c2d0acc0e12, type: 3}
+  mortosInvocados: 2
+  anjoOlhaParaDireita: 1
 --- !u!114 &5370883949939185928
 MonoBehaviour:
   m_ObjectHideFlags: 0

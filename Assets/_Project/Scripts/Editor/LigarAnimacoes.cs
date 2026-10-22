@@ -107,10 +107,62 @@ namespace EcosDeAldenor.EditorTools
                 // dois momentos diferentes com o mesmo som viram um so na
                 // cabeca de quem joga. A virada ganha um toque de encontro.
                 Objeto(so, "phaseChangeSfx", Clip(Sfx + "10_Battle_SFX/55_Encounter_02.wav"));
+
+                // Segunda forma: o anjo do mesmo pacote. Quadro de 122x117 (o do
+                // mago e 81x66), por isso a escala e o colisor proprios no script.
+                Sprites(so, "framesAnjoParado", Frames(Igreja + "SPRITES/angel/idle/sprites/f-{0:00}.png", 1, 8));
+                Sprites(so, "framesAnjoAtaque", Frames(Igreja + "SPRITES/angel/attack/sprites/f-{0:00}.png", 1, 3));
+                Objeto(so, "impactoSfx", Clip(Sfx + "8_Atk_Magic_SFX/04_Fire_explosion_04_medium.wav"));
+                Objeto(so, "transformacaoInicioSfx", Clip(Sfx + "8_Buffs_Heals_SFX/21_Debuff_01.wav"));
+                Objeto(so, "transformacaoEstouroSfx", Clip(Sfx + "8_Atk_Magic_SFX/18_Thunder_02.wav"));
+                Objeto(so, "investidaSfx", Clip(Sfx + "10_Battle_SFX/51_Flee_02.wav"));
+
+                // Primeira forma mais viva: o passo sombrio (sumir e surgir em
+                // fumaca), a invocacao dos mortos e os cortes do pacote Hitspark,
+                // que so tinha uma folha em uso de vinte.
+                Objeto(so, "passoSfx", Clip(Sfx + "12_Player_Movement_SFX/88_Teleport_02.wav"));
+                Objeto(so, "invocarSfx", Clip(Sfx + "8_Atk_Magic_SFX/30_Earth_02.wav"));
+                Objeto(so, "prefabDoMorto", AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Prefabs/Enemies/GuardiaoDePedra.prefab"));
+                const string Hitspark = "Assets/GameAssets/Hitspark FX Batch1 sheet (png&jpg)/";
+                Sprites(so, "faiscaDeCorte", SubSpritesEmOrdem(Hitspark + "Hitspark FX Batch1 Line1 sheet.png"));
+                Sprites(so, "faiscaDeImpacto", SubSpritesEmOrdem(Hitspark + "Hitspark FX Batch1 Star2 sheet.png"));
                 so.ApplyModifiedPropertiesWithoutUndo();
                 log.AppendLine("  A Vigilia: conjuracao (10) + bola de fogo (3) + morte (9)");
+                log.AppendLine("             anjo: asas (8) + ataque (3) + sons da transformacao e da investida");
+            }
+
+            // Duas formas pedem mais vida: com 12, cada forma durava seis golpes
+            // - duas janelas de contra-ataque - e o anjo mal chegava a mostrar os
+            // golpes dele. 16 da oito golpes por forma (Facil 11, Dificil 22).
+            var vidaDoChefe = Achar(chefe, "HealthSystem");
+            if (vidaDoChefe != null)
+            {
+                var so = new SerializedObject(vidaDoChefe);
+                so.FindProperty("maxHealth").intValue = 16;
+                so.ApplyModifiedPropertiesWithoutUndo();
+                log.AppendLine("  A Vigilia: vida 16 (era 12) - duas formas");
             }
             Salvar(chefe);
+
+            // Para que lado cada DESENHO olha, conferido quadro a quadro ampliado
+            // (nas previas pequenas do pacote e facil errar - e ja errei):
+            //   - fantasma: rosto e lanterna para a DIREITA;
+            //   - esqueleto: cranio e bracos para a ESQUERDA;
+            //   - mago: arremessa o fogo para a ESQUERDA (quadros 7-9 de Fire).
+            // O anjo e frontal e e tratado pelo proprio script na transformacao.
+            foreach (var (prefab, tipo, direita) in new[] {
+                         (sombra, "SombraRastejante", true),
+                         (guardiao, "GuardiaoDePedra", false),
+                         (chefe, "AVigilia", false) })
+            {
+                var c = Achar(prefab, tipo);
+                if (c == null) continue;
+                var so = new SerializedObject(c);
+                so.FindProperty("spriteOlhaParaDireita").boolValue = direita;
+                so.ApplyModifiedPropertiesWithoutUndo();
+                Salvar(prefab);
+            }
+            log.AppendLine("  Fantasma olha para a direita; esqueleto e mago, para a esquerda");
 
             AssetDatabase.SaveAssets();
             Debug.Log(log.ToString());
@@ -205,6 +257,14 @@ namespace EcosDeAldenor.EditorTools
                                      .OrderBy(s => s.name, System.StringComparer.Ordinal).ToList();
             if (todos.Count == 0) Debug.LogWarning("Sem sprites em " + caminho);
             return todos;
+        }
+
+        /// <summary>Fatias de uma folha na ordem numerica ("_10" depois de "_9").</summary>
+        static List<Sprite> SubSpritesEmOrdem(string caminho)
+        {
+            return AssetDatabase.LoadAllAssetsAtPath(caminho).OfType<Sprite>()
+                   .OrderBy(s => { int i = s.name.LastIndexOf('_'); int n; return i >= 0 && int.TryParse(s.name.Substring(i + 1), out n) ? n : 0; })
+                   .ToList();
         }
 
         /// <summary>Sequencia de PNGs numerados, na ordem dos quadros.</summary>

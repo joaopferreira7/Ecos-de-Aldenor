@@ -23,6 +23,18 @@ namespace EcosDeAldenor.Enemies
         [SerializeField] protected Transform pointB;
         [SerializeField] protected float patrolSpeed = 1.5f;
 
+        // PARA ONDE O SPRITE OLHA
+        //
+        // Os inimigos nasceram dos prefabs do pacote Bandits, cujo desenho olha
+        // para a ESQUERDA - dai a regra "andar para a direita = escala X
+        // negativa". Quando a arte foi trocada pela GothicVania, a regra ficou:
+        // so que fantasma, esqueleto e mago olham para a DIREITA. Resultado:
+        // todos andavam de costas, e o chefe lancava a bola de fogo virado para
+        // o lado oposto ao do jogador. Esta marca diz qual convencao vale.
+        [Tooltip("Ligado para sprites que olham para a direita (pacotes GothicVania). " +
+                 "Desligado para os do pacote Bandits, que olham para a esquerda.")]
+        [SerializeField] protected bool spriteOlhaParaDireita;
+
         [Header("Deteccao do Jogador")]
         [SerializeField] protected float detectionRadius = 3f;
         [SerializeField] protected LayerMask playerLayer;
@@ -213,6 +225,15 @@ namespace EcosDeAldenor.Enemies
         /// transforma "um esqueleto que ja estava andando" em "um esqueleto que
         /// acordou por sua causa".
         /// </summary>
+        /// <summary>
+        /// Ergue-se agora, sem esperar ver o jogador (o chefe invoca os mortos
+        /// e eles se levantam no instante em que sao chamados).
+        /// </summary>
+        public void ErguerAgora()
+        {
+            if (!jaDespertou) Despertar();
+        }
+
         protected virtual void Despertar()
         {
             jaDespertou = true;
@@ -291,18 +312,31 @@ namespace EcosDeAldenor.Enemies
             Vector2 direction = (target - transform.position).normalized;
             rb.linearVelocity = new Vector2(direction.x * speed, rb.linearVelocity.y);
 
-            // Segue a convencao original do asset Bandits: input positivo (para a
-            // direita) espelha a escala para -1 (o sprite base olha para a direita
-            // por padrao neste pacote).
-            if (Mathf.Abs(direction.x) > 0.01f)
-            {
-                Vector3 scale = transform.localScale;
-                float absScale = Mathf.Abs(scale.x);
-                scale.x = direction.x > 0f ? -absScale : absScale;
-                transform.localScale = scale;
-            }
+            if (Mathf.Abs(direction.x) > 0.01f) OlharPara(direction.x);
 
             UpdateAnimator(Mathf.Abs(direction.x) > 0.01f);
+        }
+
+        /// <summary>
+        /// Vira o sprite para o lado indicado (positivo = direita), respeitando
+        /// para que lado o desenho original olha. O flip e feito pela escala X,
+        /// e nao por SpriteRenderer.flipX, porque o chefe tem filhos (a luz dos
+        /// olhos) que precisam virar junto.
+        /// </summary>
+        protected void OlharPara(float direcao)
+        {
+            Vector3 scale = transform.localScale;
+            float absScale = Mathf.Abs(scale.x);
+            bool paraDireita = direcao > 0f;
+            scale.x = (paraDireita == spriteOlhaParaDireita) ? absScale : -absScale;
+            transform.localScale = scale;
+        }
+
+        /// <summary>Lado para onde o inimigo esta olhando agora (+1 direita, -1 esquerda).</summary>
+        protected float LadoQueOlha()
+        {
+            bool espelhado = transform.localScale.x < 0f;
+            return (espelhado != spriteOlhaParaDireita) ? 1f : -1f;
         }
 
         protected void UpdateAnimator(bool isMoving)

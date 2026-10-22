@@ -34,6 +34,10 @@ namespace EcosDeAldenor.UI
 
         private Image fillImage;   // preenchimento vermelho (vida atual)
         private Image trailImage;  // trilha clara que recua devagar
+        private Text nameText;
+        private Text shadowText;
+        private RectTransform painel;
+        private float pulso;       // 0..1, destaque quando o chefe muda de forma
         private CanvasGroup group;
         // Visibilidade "propria" da barra (escondida, surgindo, visivel). O
         // alpha do grupo e ela vezes o escurecimento da pausa: a barra fica num
@@ -116,6 +120,13 @@ namespace EcosDeAldenor.UI
                 trailFill = displayFill;
 
             ApplyFill();
+
+            if (painel != null)
+            {
+                if (pulso > 0f) pulso = Mathf.Max(0f, pulso - Time.unscaledDeltaTime * 1.5f);
+                float e = 1f + 0.12f * Mathf.Sin(pulso * Mathf.PI);
+                painel.localScale = new Vector3(e, e, 1f);
+            }
 
             if (group != null)
             {
@@ -213,6 +224,7 @@ namespace EcosDeAldenor.UI
             prt.pivot = new Vector2(0.5f, 1f);
             prt.anchoredPosition = new Vector2(0f, -22f);
             prt.sizeDelta = new Vector2(760f, 62f);
+            painel = prt;
 
             // Nome do chefe com sombra, para leitura sobre qualquer fundo.
             var shadow = new GameObject("BossNameShadow", typeof(RectTransform));
@@ -223,7 +235,7 @@ namespace EcosDeAldenor.UI
             srt.pivot = new Vector2(0.5f, 1f);
             srt.offsetMin = new Vector2(2f, -28f);
             srt.offsetMax = new Vector2(2f, -2f);
-            var shadowText = shadow.AddComponent<Text>();
+            shadowText = shadow.AddComponent<Text>();
             StyleName(shadowText, new Color(0f, 0f, 0f, 0.65f));
 
             var nameGo = new GameObject("BossName", typeof(RectTransform));
@@ -234,7 +246,7 @@ namespace EcosDeAldenor.UI
             nrt.pivot = new Vector2(0.5f, 1f);
             nrt.offsetMin = new Vector2(0f, -26f);
             nrt.offsetMax = new Vector2(0f, 0f);
-            var nameText = nameGo.AddComponent<Text>();
+            nameText = nameGo.AddComponent<Text>();
             StyleName(nameText, new Color(0.92f, 0.80f, 0.98f));
 
             // Moldura externa (borda) da barra.
@@ -258,9 +270,36 @@ namespace EcosDeAldenor.UI
                 new Vector2(0f, 0f), new Vector2(1f, 1f),
                 Vector2.zero, Vector2.zero, true);
 
-            // Divisores das 3 fases do chefe (marcas em 1/3 e 2/3).
-            AddDivider(bg.transform, 1f / 3f);
-            AddDivider(bg.transform, 2f / 3f);
+            // Divisores nos limiares REAIS do chefe: onde ele se transforma
+            // (marca dourada, mais grossa - e a virada da luta) e onde entra em
+            // furia. Antes eram tercos fixos que nao correspondiam a nada que o
+            // jogador visse acontecer.
+            var chefe = bossHealth != null ? bossHealth.GetComponent<AVigilia>() : null;
+            if (chefe != null)
+            {
+                AddDivider(bg.transform, chefe.LimiarAgressivo, 2f, new Color(0f, 0f, 0f, 0.55f));
+                AddDivider(bg.transform, chefe.LimiarTransformacao, 4f, new Color(0.95f, 0.80f, 0.42f, 0.95f));
+                AddDivider(bg.transform, chefe.LimiarFuria, 2f, new Color(0f, 0f, 0f, 0.55f));
+            }
+            else
+            {
+                AddDivider(bg.transform, 1f / 3f, 2f, new Color(0f, 0f, 0f, 0.55f));
+                AddDivider(bg.transform, 2f / 3f, 2f, new Color(0f, 0f, 0f, 0.55f));
+            }
+        }
+
+        /// <summary>
+        /// Troca o nome e a cor da barra - o chefe mudou de forma. O painel da
+        /// um pulso curto para o olho ir ate ele no meio da confusao.
+        /// </summary>
+        public void Renomear(string nome, Color corDoPreenchimento)
+        {
+            bossName = nome;
+            if (nameText != null) nameText.text = nome;
+            if (shadowText != null) shadowText.text = nome;
+            fillColor = corDoPreenchimento;
+            if (fillImage != null) fillImage.color = corDoPreenchimento;
+            pulso = 1f;
         }
 
         private void StyleName(Text t, Color color)
@@ -275,7 +314,7 @@ namespace EcosDeAldenor.UI
             t.verticalOverflow = VerticalWrapMode.Overflow;
         }
 
-        private void AddDivider(Transform parent, float at)
+        private void AddDivider(Transform parent, float at, float largura, Color cor)
         {
             var go = new GameObject("Divider", typeof(RectTransform));
             var rt = go.GetComponent<RectTransform>();
@@ -283,11 +322,11 @@ namespace EcosDeAldenor.UI
             rt.anchorMin = new Vector2(at, 0f);
             rt.anchorMax = new Vector2(at, 1f);
             rt.pivot = new Vector2(0.5f, 0.5f);
-            rt.sizeDelta = new Vector2(2f, -4f);
+            rt.sizeDelta = new Vector2(largura, -4f);
             rt.anchoredPosition = Vector2.zero;
             var img = go.AddComponent<Image>();
             img.sprite = GetSolidSprite();
-            img.color = new Color(0f, 0f, 0f, 0.55f);
+            img.color = cor;
         }
 
         private void UpdateBar(int current, int max)
