@@ -31,6 +31,10 @@ namespace EcosDeAldenor.UI
     ///
     /// Espaco, Enter ou clique completam a frase; de novo, passam ao proximo
     /// capitulo. ESC (ou o botao Pular) vai direto ao tutorial.
+    ///
+    /// O EPILOGO usa este mesmo componente, com outros quadros e outra cena de
+    /// destino (ver MontarEpilogo): a historia termina no mesmo palco em que
+    /// comecou, e cada capitulo dele desfaz um capitulo daqui.
     /// </summary>
     public class Prologo : MonoBehaviour
     {
@@ -55,6 +59,20 @@ namespace EcosDeAldenor.UI
             [Tooltip("Altura da flutuacao, em px. 0 = parado no chao.")]
             public float flutuar;
             public Color cor = Color.white;
+            [Tooltip("Cor para a qual o personagem muda no meio do capitulo (alfa 0 = nao muda). " +
+                     "O epilogo usa para devolver a cor aos moradores apagados.")]
+            public Color corFinal = Color.clear;
+            [Tooltip("Brilho para o qual a luz propria muda, no mesmo tempo da cor (alfa 0 = nao muda).")]
+            public Color brilhoFinal = Color.clear;
+            [Tooltip("Segundos ate comecar a mudar de cor.")]
+            public float mudarCor;
+            public float tempoDaCor = 1f;
+
+            [Header("Viagem")]
+            [Tooltip("Para onde vai, a partir do instante em que surge (so vale com 'chegada' > 0).")]
+            public Vector2 destino;
+            [Tooltip("Segundos para ir de 'posicao' a 'destino' (0 = nao viaja).")]
+            public float chegada;
 
             [Header("Tempo no capitulo")]
             [Tooltip("Segundos ate aparecer (0 = ja esta la).")]
@@ -111,6 +129,15 @@ namespace EcosDeAldenor.UI
             public AudioClip somDoRelampago;
             [Tooltip("Deslizar lento de camera, px/s.")]
             public float panoramica = 6f;
+            [Tooltip("Tom por cima do cenario no comeco do capitulo (alfa 0 = sem tom). " +
+                     "Com 'tomFinal', o ceu muda de cor durante o capitulo - o amanhecer do epilogo.")]
+            public Color tom = Color.clear;
+            public Color tomFinal = Color.clear;
+            public float inicioDoTom;
+            public float tempoDoTom = 4f;
+            [Tooltip("Instantes (s) em que o sino toca.")]
+            public float[] badaladas;
+            public AudioClip somDoSino;
         }
 
         [SerializeField] private Quadro[] quadros;
@@ -118,6 +145,8 @@ namespace EcosDeAldenor.UI
         [SerializeField] private string subtitulo = "As almas ecoam nas trevas";
         [SerializeField] private string proximaCena = "Tutorial";
         [SerializeField] private Sprite almaDoTitulo;
+        [SerializeField] private Color corDaLuzDoTitulo = new Color(0.55f, 0.25f, 0.6f, 0.45f);
+        [SerializeField] private Color corDasAlmasDoTitulo = new Color(1f, 0.75f, 0.9f, 1f);
 
         [Header("Ritmo")]
         [SerializeField] private float letrasPorSegundo = 38f;
@@ -148,6 +177,8 @@ namespace EcosDeAldenor.UI
             public CanvasGroup grupo;
             public RectTransform conteudo;
             public Image clarao;
+            public Image tom;
+            public int proximaBadalada;
             public readonly List<(Image img, Luz luz)> luzes = new List<(Image, Luz)>();
             public readonly List<(RectTransform rt, Image img, float vel, float fase)> nevoa =
                 new List<(RectTransform, Image, float, float)>();
@@ -285,6 +316,14 @@ namespace EcosDeAldenor.UI
 
             var cenario = Esticar(new GameObject("Cenario", typeof(RectTransform)).GetComponent<RectTransform>(), p.conteudo);
             cenario.gameObject.AddComponent<FundoDeCena>().Configurar(q.camadas, q.corDeBase, q.veu);
+
+            // O tom fica logo acima do cenario: pinta o ceu e a cidade, nao os atores.
+            if (q.tom.a > 0f || q.tomFinal.a > 0f)
+            {
+                p.tom = UIFactory.Painel(p.conteudo, "Tom", q.tom, Vector2.zero, Vector2.one,
+                                         new Vector2(-1500f, 0f), new Vector2(1500f, 0f)).GetComponent<Image>();
+                p.tom.raycastTarget = false;
+            }
 
             if (q.luzes != null)
                 foreach (var luz in q.luzes)
@@ -431,6 +470,18 @@ namespace EcosDeAldenor.UI
                 img.color = new Color(q.nevoa.r, q.nevoa.g, q.nevoa.b, a);
             }
 
+            if (p.tom != null && q.tomFinal.a > 0f)
+                p.tom.color = Color.Lerp(q.tom, q.tomFinal, Mathf.SmoothStep(0f, 1f,
+                                         (p.tempo - q.inicioDoTom) / Mathf.Max(0.01f, q.tempoDoTom)));
+
+            if (q.badaladas != null && p.proximaBadalada < q.badaladas.Length &&
+                p.tempo >= q.badaladas[p.proximaBadalada])
+            {
+                p.proximaBadalada++;
+                // Nenhum pacote traz um sino: sem som ligado, usa o sintetizado.
+                AudioManager.Instance?.PlaySfx(q.somDoSino != null ? q.somDoSino : RuntimeAudio.Sino());
+            }
+
             // Relampago: piscadas brancas e o trovao.
             if (q.relampagos != null && p.proximoRelampago < q.relampagos.Length &&
                 p.tempo >= q.relampagos[p.proximoRelampago])
@@ -475,10 +526,15 @@ namespace EcosDeAldenor.UI
                 }
             }
             a.grupo.alpha = alvo;
+
+            // Mudanca de cor: o corpo e a luz propria passam juntos para a cor final.
+            float k = Mathf.SmoothStep(0f, 1f, (t - d.mudarCor) / Mathf.Max(0.01f, d.tempoDaCor));
+            if (d.corFinal.a > 0f) a.img.color = Color.Lerp(d.cor, d.corFinal, k);
             if (a.brilho != null)
             {
+                var b = d.brilhoFinal.a > 0f ? Color.Lerp(d.brilho, d.brilhoFinal, k) : d.brilho;
                 float respira = 0.8f + 0.2f * Mathf.Sin(t * 2.5f);
-                a.brilho.color = new Color(d.brilho.r, d.brilho.g, d.brilho.b, d.brilho.a * alvo * respira);
+                a.brilho.color = new Color(b.r, b.g, b.b, b.a * alvo * respira);
             }
             if (alvo <= 0f) return;
 
@@ -507,10 +563,18 @@ namespace EcosDeAldenor.UI
                 a.img.sprite = clipe[Mathf.Clamp(a.quadro, 0, clipe.Length - 1)];
             }
 
-            // Movimento.
+            // Movimento: a viagem de um ponto a outro, ou a caminhada de sempre.
             var pos = a.rt.anchoredPosition;
-            pos.x += d.andar * dt;
-            pos.y = d.posicao.y + (d.flutuar > 0f ? Mathf.Sin(t * 1.7f + d.posicao.x * 0.01f) * d.flutuar : 0f);
+            float baseY = d.posicao.y;
+            if (d.chegada > 0f)
+            {
+                var ponto = Vector2.Lerp(d.posicao, d.destino,
+                                         Mathf.SmoothStep(0f, 1f, (t - d.surgir) / d.chegada));
+                pos.x = ponto.x;
+                baseY = ponto.y;
+            }
+            else pos.x += d.andar * dt;
+            pos.y = baseY + (d.flutuar > 0f ? Mathf.Sin(t * 1.7f + d.posicao.x * 0.01f) * d.flutuar : 0f);
             a.rt.anchoredPosition = pos;
             if (a.brilho != null)
                 a.brilho.rectTransform.anchoredPosition = pos + new Vector2(0f, a.rt.sizeDelta.y * 0.45f);
@@ -638,12 +702,12 @@ namespace EcosDeAldenor.UI
             var luz = UIFactory.Caixa(raiz, "Luz", new Vector2(1500f, 700f), new Vector2(0f, 30f));
             var limg = luz.gameObject.AddComponent<Image>();
             limg.sprite = RuntimeSprites.Brilho();
-            limg.color = new Color(0.55f, 0.25f, 0.6f, 0.45f);
+            limg.color = corDaLuzDoTitulo;
             limg.raycastTarget = false;
 
             var almas = Esticar(new GameObject("Almas", typeof(RectTransform)).GetComponent<RectTransform>(), raiz);
             almas.gameObject.AddComponent<AlmasFlutuando>().Configurar(almaDoTitulo != null ? almaDoTitulo : RuntimeSprites.Brilho(),
-                                                                       14, new Color(1f, 0.75f, 0.9f, 1f), new Vector2(18f, 34f));
+                                                                       14, corDasAlmasDoTitulo, new Vector2(18f, 34f));
 
             var nome = UIFactory.Titulo(raiz, "Nome", titulo, 150, UIFactory.CorTitulo, new Vector2(1700f, 190f), new Vector2(0f, 50f));
             var sombra = nome.gameObject.AddComponent<Shadow>();

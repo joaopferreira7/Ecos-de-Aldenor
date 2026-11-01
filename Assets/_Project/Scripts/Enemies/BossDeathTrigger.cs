@@ -5,8 +5,8 @@ using EcosDeAldenor.Systems;
 namespace EcosDeAldenor.Enemies
 {
     /// <summary>
-    /// Escuta o evento de morte do HealthSystem do chefe e carrega a tela de
-    /// vitoria automaticamente. Mantido separado de AVigilia para nao misturar
+    /// Escuta o evento de morte do HealthSystem do chefe e carrega o epilogo
+    /// (e dele a tela de vitoria) automaticamente. Mantido separado de AVigilia para nao misturar
     /// a logica de combate do chefe com a logica de progressao de cena.
     /// </summary>
     [RequireComponent(typeof(HealthSystem))]
@@ -39,7 +39,16 @@ namespace EcosDeAldenor.Enemies
             // victoryDelay de 1,6 s, a chamada era descartada aos 0,6 s sem erro
             // nenhum no console - matava-se o chefe e ficava-se preso na arena
             // para sempre. O SceneController e persistente e nao morre junto.
-            SceneController.Instance?.LoadVictoryScreenAfter(victoryDelay);
+            //
+            // Com o epilogo na build, a luta nao corta para outra cena: a
+            // despedida do anjo acontece aqui mesmo (DespedidaDoAnjo, um objeto
+            // proprio, que tambem nao morre com o chefe) e ela leva ao epilogo.
+            var anjo = GetComponent<AVigilia>();
+            if (anjo != null && Application.CanStreamedLevelBeLoaded("Epilogo"))
+                EcosDeAldenor.UI.DespedidaDoAnjo.Iniciar(transform.position, transform.lossyScale,
+                                                         anjo.FramesAnjoParado, "Epilogo");
+            else
+                SceneController.Instance?.LoadEpilogueAfter(victoryDelay);
         }
     }
 }

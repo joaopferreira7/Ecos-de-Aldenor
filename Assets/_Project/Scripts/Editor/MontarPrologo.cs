@@ -30,12 +30,12 @@ namespace EcosDeAldenor.EditorTools
     public static class MontarPrologo
     {
         const string Cena = "Assets/_Project/Scenes/Prologo.unity";
-        const string Cidade = "Assets/GameAssets/GothicVania-town-files/GothicVania-town-files/PNG/";
-        const string Cemiterio = "Assets/GameAssets/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/";
-        const string Igreja = "Assets/GameAssets/gothicvania church files/gothicvania church files/Assets/";
-        const string HeroKnight = "Assets/GameAssets/Hero Knight - Pixel Art/";
-        const string Sfx = "Assets/GameAssets/Leohpaz/RPG_Essentials_Free/";
-        const string Alma = "Assets/Brackeys/2D Mega Pack/Items & Icons/Gothic/SoulFragment.png";
+        internal const string Cidade = "Assets/GameAssets/GothicVania-town-files/GothicVania-town-files/PNG/";
+        internal const string Cemiterio = "Assets/GameAssets/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/";
+        internal const string Igreja = "Assets/GameAssets/gothicvania church files/gothicvania church files/Assets/";
+        internal const string HeroKnight = "Assets/GameAssets/Hero Knight - Pixel Art/";
+        internal const string Sfx = "Assets/GameAssets/Leohpaz/RPG_Essentials_Free/";
+        internal const string Alma = "Assets/Brackeys/2D Mega Pack/Items & Icons/Gothic/SoulFragment.png";
 
         // Fatias da nave da igreja usadas na tela de Vitoria (backgrounds.png),
         // na mesma ordem: as duas pontas, os vitrais e o altar no meio.
@@ -292,7 +292,7 @@ namespace EcosDeAldenor.EditorTools
         // Cenarios (os mesmos do menu e da vitoria, mais a cidade)
         // ------------------------------------------------------------------
 
-        static FundoDeCena.Camada[] CamadasDaCidade(Color cor)
+        internal static FundoDeCena.Camada[] CamadasDaCidade(Color cor)
         {
             return new[]
             {
@@ -305,7 +305,7 @@ namespace EcosDeAldenor.EditorTools
             };
         }
 
-        static FundoDeCena.Camada[] CamadasDaIgreja(Color cor)
+        internal static FundoDeCena.Camada[] CamadasDaIgreja(Color cor)
         {
             var fatias = AssetDatabase.LoadAllAssetsAtPath(Igreja + "ENVIRONMENT/backgrounds.png").OfType<Sprite>().ToList();
             Sprite Fatia(long id) => fatias.FirstOrDefault(s =>
@@ -331,7 +331,7 @@ namespace EcosDeAldenor.EditorTools
             };
         }
 
-        static Prologo.Ator Ator(string nome, Sprite[] quadros, float fps, float zoom, Vector2 posicao,
+        internal static Prologo.Ator Ator(string nome, Sprite[] quadros, float fps, float zoom, Vector2 posicao,
                                  bool espelhar = false, float andar = 0f, float flutuar = 0f, Color? cor = null,
                                  bool repetir = true, Sprite[] entrada = null, float fpsEntrada = 10f,
                                  float surgir = 0f, float sumir = -1f, float fade = 0.6f, bool almasAoSumir = false,
@@ -358,7 +358,7 @@ namespace EcosDeAldenor.EditorTools
         /// filtro bilinear e compressao: ampliados 3x, ficam borrados e com
         /// manchas. Pixel art pede Point e sem compressao, como o resto do jogo.
         /// </summary>
-        static void CorrigirImportacao()
+        internal static void CorrigirImportacao()
         {
             // So o que o prologo usa: as duas camadas da cidade e os quatro
             // moradores. O resto do pacote fica como veio.
@@ -370,6 +370,9 @@ namespace EcosDeAldenor.EditorTools
                 Cidade + "sprites/woman-walk",
                 Cidade + "sprites/oldman-idle",
                 Cidade + "sprites/woman-idle",
+                // Os que so o epilogo usa: os moradores voltando a andar.
+                Cidade + "sprites/bearded-walk",
+                Cidade + "sprites/hat-man-walk",
             };
             var caminhos = AssetDatabase.FindAssets("t:Texture2D", pastas).Select(AssetDatabase.GUIDToAssetPath).ToList();
             caminhos.Add(Cidade + "environment/layers/background.png");
@@ -394,14 +397,14 @@ namespace EcosDeAldenor.EditorTools
             EditorBuildSettings.scenes = lista.ToArray();
         }
 
-        static Sprite Primeiro(string caminho)
+        internal static Sprite Primeiro(string caminho)
         {
             var s = AssetDatabase.LoadAllAssetsAtPath(caminho).OfType<Sprite>().FirstOrDefault();
             if (s == null) Debug.LogWarning("Sprite nao encontrado: " + caminho);
             return s;
         }
 
-        static Sprite[] Frames(string formato, int de, int ate)
+        internal static Sprite[] Frames(string formato, int de, int ate)
         {
             var lista = new List<Sprite>();
             for (int i = de; i <= ate; i++)
@@ -413,7 +416,7 @@ namespace EcosDeAldenor.EditorTools
         }
 
         /// <summary>Os quadros de um AnimationClip de sprites, na ordem em que ele os toca.</summary>
-        static Sprite[] FramesDoClipe(string caminho)
+        internal static Sprite[] FramesDoClipe(string caminho)
         {
             var clipe = AssetDatabase.LoadAssetAtPath<AnimationClip>(caminho);
             if (clipe == null) { Debug.LogWarning("Clipe nao encontrado: " + caminho); return new Sprite[0]; }
@@ -427,6 +430,6 @@ namespace EcosDeAldenor.EditorTools
             return new Sprite[0];
         }
 
-        static AudioClip Clip(string caminho) => AssetDatabase.LoadAssetAtPath<AudioClip>(caminho);
+        internal static AudioClip Clip(string caminho) => AssetDatabase.LoadAssetAtPath<AudioClip>(caminho);
     }
 }

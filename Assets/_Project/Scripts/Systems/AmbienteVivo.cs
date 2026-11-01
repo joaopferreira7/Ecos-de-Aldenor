@@ -92,6 +92,26 @@ namespace EcosDeAldenor.Systems
             return new Faixa { sr = sr, velocidade = vel, largura = largura, parallax = parallax };
         }
 
+        /// <summary>
+        /// A nevoa se levanta: as faixas somem aos poucos. O amanhecer do
+        /// epilogo usa isto - a nevoa e o que desceu sobre Aldenor no prologo.
+        /// </summary>
+        public System.Collections.IEnumerator Dissipar(float duracao)
+        {
+            var inicio = new System.Collections.Generic.List<float>();
+            foreach (var f in faixas) inicio.Add(f.sr.color.a);
+            for (float t = 0f; t < duracao; t += Time.deltaTime)
+            {
+                for (int i = 0; i < faixas.Count; i++)
+                {
+                    var c = faixas[i].sr.color;
+                    faixas[i].sr.color = new Color(c.r, c.g, c.b, Mathf.Lerp(inicio[i], 0f, t / duracao));
+                }
+                yield return null;
+            }
+            foreach (var f in faixas) f.sr.enabled = false;
+        }
+
         private void LateUpdate()
         {
             float t = Time.time;

@@ -153,6 +153,23 @@ namespace EcosDeAldenor.Player
         /// </summary>
         public bool ControleBloqueado { get; set; }
 
+        private float entradaDoRoteiro;
+
+        /// <summary>
+        /// Faz o Ren andar sozinho durante uma cena (-1 esquerda, 1 direita, 0
+        /// parar), com a mesma fisica e animacao do jogo. So vale com o controle
+        /// bloqueado.
+        /// </summary>
+        public void AndarPorRoteiro(float direcao) => entradaDoRoteiro = Mathf.Clamp(direcao, -1f, 1f);
+
+        /// <summary>Vira o Ren para um lado sem anda-lo (+1 direita, -1 esquerda).</summary>
+        public void OlharPara(float direcao)
+        {
+            if (Mathf.Approximately(direcao, 0f)) return;
+            facingDirection = direcao > 0f ? 1 : -1;
+            spriteRenderer.flipX = facingDirection < 0;
+        }
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -195,9 +212,11 @@ namespace EcosDeAldenor.Player
 
             if (ControleBloqueado)
             {
-                horizontalInput = 0f;
+                // Numa cena, quem anda e o roteiro (AndarPorRoteiro), nao o teclado.
+                horizontalInput = entradaDoRoteiro;
                 jumpHeld = false;
                 jumpBufferTimer = 0f;
+                if (Mathf.Abs(entradaDoRoteiro) > 0f) UpdateFacing();
                 UpdateAnimatorMovementParams();
                 UpdateAnimationState();
                 return;
@@ -512,11 +531,34 @@ namespace EcosDeAldenor.Player
                 if (Mathf.Approximately(dir, 0f)) dir = -facingDirection;
             }
 
-            rb.linearVelocity = new Vector2(dir * hurtKnockbackForce, hurtKnockbackForce * 0.55f);
+            rb.linearVelocity = new Vector2(dir * hurtKnockbackForce * RecuoAteABeira(dir), hurtKnockbackForce * 0.55f);
             hurtLockTimer = hurtControlLock;
 
             if (flashRoutine != null) StopCoroutine(flashRoutine);
             flashRoutine = StartCoroutine(InvulnerabilityFlash(healthSystem.InvulnerabilityDuration));
+        }
+
+        /// <summary>
+        /// Quanto do empurrao de dano cabe antes da beira (0 a 1).
+        ///
+        /// O recuo leva o Ren cerca de 1 u para tras. Em plataforma curta ou
+        /// perto de um vao, isso bastava para jogar o Ren no abismo: o golpe
+        /// custava um coracao e a queda, outro. O dano continua com o pulinho
+        /// e o pisca-pisca; so o deslocamento para tras e encurtado ate a
+        /// beira, com uma folga. No ar nao ha beira a medir.
+        /// </summary>
+        private float RecuoAteABeira(float dir)
+        {
+            if (!isGrounded || groundCheck == null) return 1f;
+
+            const float folga = 0.45f, passo = 0.2f, alcance = 1.4f;
+            for (float d = passo; d <= alcance; d += passo)
+            {
+                var ponto = new Vector2(transform.position.x + dir * d, groundCheck.position.y + 0.15f);
+                if (Physics2D.Raycast(ponto, Vector2.down, 0.6f, groundLayer).collider == null)
+                    return Mathf.Clamp01((d - folga) / alcance);
+            }
+            return 1f;
         }
 
         /// <summary>

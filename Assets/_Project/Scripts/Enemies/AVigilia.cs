@@ -207,7 +207,7 @@ namespace EcosDeAldenor.Enemies
         private float investidaFimX;
         private float investidaLimite;
         private float investidaUltimoX;
-        private int investidaParado;
+        private float investidaParado;   // SEGUNDOS sem sair do lugar
         private bool investidaAcertou;
 
         // Valores ja ajustados pela dificuldade (calculados uma vez, no Awake).
@@ -643,6 +643,12 @@ namespace EcosDeAldenor.Enemies
             currentState = newState;
             float duracao = 0f;
 
+            // Durante a investida o anjo ATRAVESSA o Ren. Com os dois corpos
+            // colidindo, o anjo empurrava o Ren a frente dele pela arena: os
+            // centros nunca chegavam perto o bastante para o golpe contar, e a
+            // investida virava um empurrao sem dano.
+            AtravessarJogador(newState == BossState.Investida);
+
             switch (newState)
             {
                 case BossState.CargaBasica:
@@ -684,7 +690,7 @@ namespace EcosDeAldenor.Enemies
                     Efeitos.Onda(new Vector3(transform.position.x, AlturaDosPes(), 0f), 2.2f, corInvestida);
                     relogioResiduo = 0f;
                     investidaUltimoX = transform.position.x;
-                    investidaParado = 0;
+                    investidaParado = 0f;
                     investidaAcertou = false;
                     duracao = investidaLimite;
                     break;
@@ -806,8 +812,26 @@ namespace EcosDeAldenor.Enemies
             // Acerta UMA vez por investida, quem estiver no caminho do corpo.
             if (!investidaAcertou && jogador != null)
             {
-                Vector2 d = jogador.position - transform.position;
-                if (Mathf.Abs(d.x) < 1.1f && Mathf.Abs(d.y) < 1.8f)
+                // Acerta quando os CORPOS se tocam. A versao anterior media a
+                // distancia entre os centros (menos de 1,1 u na horizontal e
+                // 1,8 u na vertical), e o centro do anjo, maior que o mago,
+                // fica mais alto que isso acima do Ren: a investida passava
+                // por ele sem nunca contar.
+                var meu = GetComponent<Collider2D>();
+                var dele = jogador.GetComponent<Collider2D>();
+                bool tocou;
+                if (meu != null && dele != null)
+                {
+                    var b = dele.bounds;
+                    b.Expand(new Vector3(0.3f, 0.1f, 0f));
+                    tocou = meu.bounds.Intersects(b);
+                }
+                else
+                {
+                    Vector2 d = jogador.position - transform.position;
+                    tocou = Mathf.Abs(d.x) < 1.1f && Mathf.Abs(d.y) < 1.8f;
+                }
+                if (tocou)
                 {
                     investidaAcertou = true;
                     Ferir(specialAttackDamage);
@@ -816,10 +840,15 @@ namespace EcosDeAldenor.Enemies
 
             // Para no fim da faixa, numa parede (parou de andar) ou no limite de tempo.
             bool chegou = direcaoDoGolpe > 0f ? x >= investidaFimX : x <= investidaFimX;
-            investidaParado = Mathf.Abs(x - investidaUltimoX) < 0.01f ? investidaParado + 1 : 0;
+            // Parada contada em TEMPO, nao em quadros. A fisica anda a 50 Hz e o
+            // jogo desenha mais rapido que isso: com 5 quadros seguidos sem
+            // mudar de lugar como regra, a mais de ~250 FPS (o editor, por
+            // exemplo) a investida se dava por "presa numa parede" logo no
+            // primeiro metro e acabava longe do Ren - e por isso nunca acertava.
+            investidaParado = Mathf.Abs(x - investidaUltimoX) < 0.01f ? investidaParado + Time.deltaTime : 0f;
             investidaUltimoX = x;
 
-            if (chegou || investidaParado > 5 || stateTimer <= 0f)
+            if (chegou || investidaParado > 0.12f || stateTimer <= 0f)
             {
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
                 CameraShake.Shake(0.2f, 0.18f);
@@ -1413,6 +1442,17 @@ namespace EcosDeAldenor.Enemies
             if (d.y < -0.5f || d.y > raio + 1f) return;
 
             Ferir(dano);
+        }
+
+        /// <summary>Os quadros do anjo parado, para a despedida depois da luta.</summary>
+        public Sprite[] FramesAnjoParado => framesAnjoParado;
+
+        private void AtravessarJogador(bool atravessar)
+        {
+            if (jogador == null) return;
+            var meu = GetComponent<Collider2D>();
+            var dele = jogador.GetComponent<Collider2D>();
+            if (meu != null && dele != null) Physics2D.IgnoreCollision(meu, dele, atravessar);
         }
 
         private void Ferir(int dano)
