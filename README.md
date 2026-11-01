@@ -3,8 +3,9 @@
 Jogo 2D de plataforma e ação, de temática **gótica/espectral**, desenvolvido na disciplina
 **Desenvolvimento de Jogos Digitais** (Ciência da Computação — trabalho em grupo P2).
 
-O jogador controla **Ren**, que atravessa um cemitério assombrado coletando **fragmentos de alma**
-até enfrentar o chefe final, **A Vigília**, dentro de uma igreja em ruínas.
+O jogador controla **Ren**, que atravessa um cemitério assombrado coletando **fragmentos de alma**,
+faz os sinos da cidade silenciosa tocarem de novo, apaga os círios do claustro e enfrenta o chefe
+final, **A Vigília**, dentro de uma igreja em ruínas.
 
 > **Entrega/apresentação:** 18/11/2026 (via CONNECT+).
 
@@ -57,9 +58,9 @@ Nenhum golpe mata com a vida cheia, em nenhum nível.
 
 ## 🗺️ Estrutura do jogo
 
-O jogo tem **9 cenas** encadeadas:
+O jogo tem **12 cenas** encadeadas:
 
-`MainMenu → Prologo → Tutorial → Phase1 → Phase2 → FinalPhase → Victory / GameOver / Credits`
+`MainMenu → Prologo → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 → FinalPhase → Epilogo → Victory / GameOver / Credits`
 
 - **Prologo:** a história de Aldenor em cinco quadros ilustrados com a arte dos próprios pacotes —
   a cidade ao entardecer, o anjo da igreja, a névoa, a Vigília encapuzada e o Ren no cemitério —
@@ -68,6 +69,12 @@ O jogo tem **9 cenas** encadeadas:
 - **Tutorial:** abre com a **tela de tutorial** (controles e objetivo) e depois entrega uma área
   segura, com placas reforçando cada comando no lugar onde ele é usado.
 - **Phase1 / Phase2:** cemitério espectral, com espectros (*Sombra Rastejante*) e esqueletos (*Guardião de Pedra*).
+- **Phase3 — A Cidade Silenciosa:** Aldenor tomada pela névoa. O *Gato Infernal* se encolhe (o aviso),
+  salta onde o Ren estava e fica atordoado ao pousar: ensina a esquivar. A porta só abre com os
+  **três sinos** tocando de novo; cada badalada atordoa os inimigos por perto.
+- **Phase4 — O Claustro:** a nave da igreja por dentro, em subida. O *Carniçal em Chamas* dispara em
+  linha reta deixando um rastro de fogo (pule por cima), e **braseiros** usam a mesma marca vermelha
+  do chefe. A porta só abre com os **três círios do manto** apagados.
 - **FinalPhase:** arena na igreja, com o chefe **A Vigília** em **duas formas**. Como mago, ele
   **conjura** bolas de fogo sobre um círculo de runas, **some em fumaça e reaparece** perto do Ren,
   **ergue esqueletos do chão** aos 75% e, a partir daí, lança uma **salva** de três que caem em fila.
@@ -76,6 +83,9 @@ O jogo tem **9 cenas** encadeadas:
   fogo** do alto, com colunas de luz sobre cada marca;
   abaixo de 25% entra em **fúria**. Todo golpe é anunciado antes — faixa âmbar (golpe de perto),
   marca vermelha (fogo), faixa lilás (investida) — e só acerta quem ficar dentro da área mostrada.
+- **Epílogo:** uma cena dentro do jogo. Na própria arena, o Ren conversa com o anjo libertado, que se
+  desfaz em luz e solta as almas; depois, na cidade ao amanhecer, as almas devolvem a cor aos
+  moradores, os campanários tocam e os créditos sobem enquanto o Ren olha a igreja na colina.
 
 ---
 
@@ -140,7 +150,7 @@ nenhum**, gerando um jogo sem sprites e sem som. O `montar.ps1` detecta esse
 estado e para antes de construir.
 
 O script chama o Unity em modo batch e faz, nesta ordem: confere a lista de
-cenas (8, com **MainMenu** em primeiro), roda o verificador de geometria das
+cenas (12, com **MainMenu** em primeiro), roda o verificador de geometria das
 fases (alcance de pulo, vãos, atores presos na rocha, patrulha válida), roda os
 testes automatizados quando houver alguma suíte, e só então constrói. Qualquer
 etapa que falhe interrompe a build e aponta o log em `Logs\`.
@@ -186,7 +196,7 @@ verificações.
 **Envie sempre a pasta inteira, compactada — nunca só o `.exe`.**
 
 O `Ecos de Aldenor.exe` tem **0,6 MB** de uma build de **141 MB**: ele é apenas o
-carregador. Sem a pasta `Ecos de Aldenor_Data` (as 9 cenas e os assets), a
+carregador. Sem a pasta `Ecos de Aldenor_Data` (as 12 cenas e os assets), a
 `UnityPlayer.dll` e a `MonoBleedingEdge` ao lado dele, ele **abre e fecha na hora** —
 nem chega a escrever um log. Foi o que aconteceu quando a build foi enviada a colegas.
 
@@ -244,6 +254,6 @@ Assets/
 ├── _Project/            # Código, prefabs e cenas próprias do jogo
 │   ├── Scripts/         # C# (Core, Player, Enemies, Systems, UI)
 │   ├── Prefabs/         # Player, inimigos, itens, UI, ambiente
-│   └── Scenes/          # As 9 cenas do jogo, MainMenu inclusive
+│   └── Scenes/          # As 12 cenas do jogo, MainMenu inclusive
 └── ...                  # Pacotes de assets de terceiros (ver Créditos)
 ```

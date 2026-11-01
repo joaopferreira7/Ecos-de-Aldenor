@@ -28,6 +28,18 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   era usada), o anjo na igreja, a névoa com espectros, a Vigília encapuzada, o Ren no cemitério —
   com narração letra por letra. Planta a transformação do chefe. Ferramenta **Ecos de Aldenor →
   Montar prologo** refaz a cena
+- ✅ **Epílogo dentro do jogo**: a despedida do anjo na própria arena (o Ren caminha até ele, os
+  dois conversam, o anjo se desfaz e solta as almas, a luz dele passa ao Ren) e o amanhecer na
+  cidade da Fase 3 (almas devolvendo a cor aos moradores, campanários tocando, o Ren diante da
+  igreja e os créditos subindo por cima). `Cinema` dá as faixas, a caixa de diálogo e a narração;
+  **Ecos de Aldenor → Montar epilogo** refaz a cena da cidade
+- ✅ **Duas fases novas antes do chefe**: *A Cidade Silenciosa* (pacote Town, até então só no
+  prólogo) com o **Gato Infernal**, que se encolhe, salta e fica atordoado — ensina a esquivar — e
+  três **sinos** a fazer tocar; e *O Claustro* (pacote Church) com o **Carniçal em Chamas**, que
+  dispara deixando rastro de fogo — ensina a pular por cima —, **braseiros** com a marca vermelha
+  do chefe e três **círios do manto** a apagar. A porta de cada uma cobra o objetivo da fase.
+  **Ecos de Aldenor → Montar fases novas (3 e 4)** refaz prefabs e cenas; o relevo está em
+  `LevelLayouts`, e o verificador cobre as duas
 - ✅ **Chefe em duas formas**: salva tripla a partir de 75%; **transformação** aos 50% (cena com
   convulsão, trovão e clarão, cartão *A Vigília Desvelada*) no **anjo** do pacote Church, com golpe
   de asa, **investida** e **chuva de fogo**; **fúria** abaixo de 25%. Vida 12 → 16 para caberem as
@@ -140,6 +152,30 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   aparecia atravessada no rosto do jogador durante a luta. Agora ocupa 30,6%–69,4% da
   largura, a 5,5% do topo.
 
+**Segunda rodada jogando (01/11/2026)**
+- **A investida do anjo continuava sem dano**: ela parava sozinha logo no primeiro metro. O código
+  dava o anjo por "preso numa parede" depois de 5 quadros sem sair do lugar, mas a física anda a
+  50 Hz e, acima de ~250 FPS (o editor), passam 5 quadros entre dois passos de física. Agora a
+  parada é contada em tempo. E o acerto passou a ser "os corpos se tocam", em vez da distância
+  entre os centros, que o anjo (maior que o mago) nunca cumpria na vertical.
+- **Recuo jogando o Ren no abismo**: o empurrão do dano é encurtado até a beira (com folga) quando
+  não há chão atrás dele; o dano, o pulinho e o pisca-pisca continuam iguais.
+- **Sinos e círios pareciam decoração**: ganharam aviso ao entrar na fase, placa "N / 3" no HUD e,
+  no mundo, brilho dourado pulsando e um losango flutuando sobre os pendentes.
+
+**Rodada das fases novas (31/10/2026)** — achados jogando
+- **A investida do anjo só empurrava**: o código acerta o Ren uma vez por investida, mas o corpo
+  do anjo colidia com o dele e o empurrava à frente a 15 u/s — os centros nunca chegavam perto o
+  bastante para o golpe contar. Durante a investida o anjo agora atravessa o Ren.
+- **O Gato Infernal não dava dano**: mesmo defeito por outro caminho. O corpo dele tem 1,6 u de
+  largura e colide com o do Ren, e o raio de dano por contato herdado da Sombra (0,55 u) era menor
+  que a menor distância possível entre os dois. Raio de 1,05 u.
+- **O Claustro era quase impossível**: os inimigos ficavam colados à beira dos abismos, e o
+  empurrão de um golpe jogava o Ren no vazio. Faixas a 1,6 u ou mais das beiras e vãos menores.
+- **Sino e círio destoavam do cenário**: tinham pixels quatro vezes maiores que os do cenário e
+  cores saturadas. O círio passou a ser a vela do tileset da igreja, e o sino pende de um campanário
+  com a madeira do tileset da cidade.
+
 **Auditoria final (25/09/2026)**
 - **Dava para tornar o jogo invencível sem perceber**: as seis almas ficam sobre
   plataformas (y entre 2,3 e 3,6) e todas as saídas ficam no chão (y 0,5) — o caminho
@@ -165,7 +201,7 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 - 🔲 **GDD** entregue (ver `GDD.md`) — revisar com o grupo e exportar em PDF se exigido
 - 🔲 **Build final `.exe`** gerada e **testada em uma máquina limpa** (sem o Unity).
-  O comando **Ecos de Aldenor → Gerar build Windows** monta o pacote com as 9 cenas e
+  O comando **Ecos de Aldenor → Gerar build Windows** monta o pacote com as 12 cenas e
   MainMenu como inicial; falta rodar o `.exe` num PC sem Unity.
 - ✅ **Autoria dos assets nos créditos** conferida nas páginas oficiais (30/08/2026):
   Hero Knight → LuizMelo (CC0); Bandits → Sven Thole; 2D Dungeon Tilemap → Aether2D (CC0);
@@ -246,7 +282,9 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
 
 - ✅ Menu de **opções** (controle de volume música/SFX), no menu e na pausa
 - 🔲 **Salvar progresso** (fragmentos/último checkpoint) entre sessões
-- 🔲 Mais variedade de inimigos ou uma fase extra
+- ✅ Mais variedade de inimigos e fases extras: **Phase3 (A Cidade Silenciosa)** e **Phase4 (O
+  Claustro)** entre o cemitério e o chefe, com o *Gato Infernal*, o *Carniçal em Chamas*, braseiros,
+  sinos e círios (ver GDD §4.5.1 e §6.1), e o **Epílogo** depois do chefe
 - 🔲 Efeitos de partículas nas almas/checkpoints; ataque especial do chefe com sprite
   dedicado (wizard/Fire já disponível no pack)
 - ✅ Tela de **controles** acessível pelo menu principal e pela pausa

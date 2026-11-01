@@ -41,12 +41,15 @@ CONTROLES
 OBJETIVO
 ===============================================================
 
-Reuna as 6 almas espalhadas pelas fases para abrir a igreja -
-e derrote A Vigilia.
+Reuna as 6 almas do cemiterio, faca os sinos da cidade
+voltarem a tocar, apague os cirios do claustro - e derrote
+A Vigilia.
 
    - As almas ficam sobre as plataformas mais altas, fora do
      caminho reto: a porta de cada fase so abre quando voce
      recolher todas as daquela regiao.
+   - Sinos e cirios se ativam com a espada. A badalada de um
+     sino atordoa os inimigos por perto.
    - Os altares acesos sao checkpoints (curam uma vez).
    - Cair no abismo custa um coracao e devolve voce ao ultimo
      altar.

@@ -22,8 +22,9 @@
 
 *Ecos de Aldenor* é um jogo de plataforma e ação em pixel art de ambientação
 gótica. O jogador controla **Ren**, um cavaleiro que atravessa um cemitério
-assombrado e uma igreja em ruínas para reunir os **6 fragmentos de alma** —
-os "ecos" de Aldenor — e enfrentar o guardião corrompido, **A Vigília**.
+assombrado para reunir os **6 fragmentos de alma** — os "ecos" de Aldenor —,
+faz voltar a tocar os sinos da cidade silenciosa, apaga os círios do manto no
+claustro da igreja e enfrenta o guardião corrompido, **A Vigília**.
 
 O jogo combina **exploração de fases**, **combate corpo a corpo** com
 *game feel* (recuo, congelamento de impacto e faíscas), **coleta** como
@@ -69,7 +70,28 @@ Espaço/Enter/clique avança; ESC pula direto para o tutorial.
 O quarto quadro planta a virada da luta final: *"Dizem que o anjo ainda está lá,
 sob aquele manto."* Na metade da vida, a Vigília se transforma e revela o anjo.
 
-- **Mundo:** cemitério espectral (fases iniciais) → igreja em ruínas (arena final).
+**O epílogo** é uma cena **dentro do jogo**, com os personagens de verdade, em duas partes
+(a primeira versão eram quadros no estilo do prólogo; depois de jogar, o grupo pediu a cena):
+
+1. **A despedida, na própria arena** (`DespedidaDoAnjo`). O chefe cai e as faixas de cinema
+   entram; no lugar dele surge o anjo, sem o manto. O controle passa ao roteiro: o Ren caminha
+   até ele e os dois conversam em caixas de diálogo (nome em gótico, fala letra por letra). O
+   anjo sobe e se desfaz em luz e penas, as seis almas giram em volta dele e sobem pelos vitrais
+   enquanto um sino toca longe, e a luz dourada que ficava atrás dele passa para o Ren. Corte em
+   branco.
+2. **O amanhecer, na cidade** (cena `Epilogo`, a cidade da Fase 3 sem nada de jogo,
+   `EpilogoNaCidade`). Noite e névoa; os moradores estão na rua, cinzentos e parados. As almas
+   descem do céu, uma para cada um: quem recebe a sua ganha cor e volta a andar, e a câmera
+   atravessa a cidade com elas. Amanhece — a luz esquenta, a névoa se levanta e os três
+   campanários tocam. O Ren chega com a luz do anjo e para diante da igreja na colina, e os
+   **créditos sobem** por cima dessa imagem. Fecha com o título *"Ecos de Aldenor — Os sinos
+   tocam outra vez"* e segue para a Vitória.
+
+Espaço avança as falas e acelera os créditos; ESC pula a cena. A trilha da cidade é a mesma da
+Vitória, então a música atravessa a troca de cena sem corte.
+
+- **Mundo:** cemitério espectral (fases 1 e 2) → cidade silenciosa (fase 3) → claustro da
+  igreja (fase 4) → nave em ruínas (arena final).
 - **Tom:** sombrio, frio, melancólico; luz de velas e almas contra a escuridão.
 - **Objetivo do herói:** reunir os 6 fragmentos e derrotar A Vigília para libertar Aldenor.
 
@@ -77,6 +99,8 @@ sob aquele manto."* Na metade da vida, a Vigília se transforma e revela o anjo.
 - **Ren** — o cavaleiro jogável. Ágil, ataca com a espada em combos.
 - **Sombra Rastejante** — espectro que patrulha o cemitério.
 - **Guardião de Pedra** — esqueleto guardião, mais resistente.
+- **Gato Infernal** — fera da névoa que ronda a cidade; salta sobre a presa.
+- **Carniçal em Chamas** — morto de cabeça em chamas que guarda o claustro.
 - **A Vigília** — o chefe: o anjo guardião da igreja, escondido sob o manto de um
   mago encapuzado. Na metade da luta, o manto se desfaz (*A Vigília Desvelada*).
 
@@ -135,8 +159,28 @@ horizontal **3,00 u** no mesmo nível. Daí as regras de projeto das fases:
 - O acesso à **fase final** exige os 6 fragmentos (regra em `GameManager`).
 - HUD mostra o progresso como **ícone + "N / 6"**, com pulso ao coletar.
 - Ao reunir a sexta alma, um **anúncio central** ("AS ALMAS FORAM REUNIDAS / O
-  santuário final se abriu") aparece com som próprio — sem ele, o objetivo do
+  caminho até a igreja se abriu") aparece com som próprio — sem ele, o objetivo do
   jogo se cumpriria sem o jogador perceber.
+
+### 4.5.1 Objetivos das fases 3 e 4
+- Além das almas, a porta de saída dessas fases cobra um **objetivo da fase**, ativado com a
+  espada (o golpe já sabe acertá-los: eles têm 1 ponto de vida na camada dos inimigos, com
+  faísca e *hit stop*):
+  - **Phase3 — três sinos.** Cada badalada balança o sino, acende a luz dele e solta uma onda
+    que **atordoa os inimigos** num raio de 4 u por 1,6 s. O som do sino é sintetizado em
+    código (`RuntimeAudio`), porque nenhum pacote trazia um.
+  - **Phase4 — três círios do manto.** Velas com a faixa vermelha do manto da Vigília; o golpe
+    apaga a chama.
+- A cada um cumprido aparece "N / 3"; ao último, um anúncio ("Os sinos voltaram a tocar / O
+  portão da colina se abriu"). A porta trancada diz quantos faltam e o que fazer.
+- **Arte dos objetivos:** o que o pacote tem sai do pacote. O **círio** é o pedestal com vela do
+  tileset da igreja (a mesma arte das balaustradas da arena), e apagado vira o recorte da vela sem
+  chama. O **sino** pende de um campanário montado com as peças de madeira do tileset da cidade
+  (módulos com mão-francesa, viga, postes e sapata). Só o sino de bronze e o braseiro são desenhados
+  em código (`ArteGerada`), porque nenhum pacote os traz — e na **mesma densidade de pixel e paleta**
+  do pacote ao lado: o sino a 100 px/u como os props da cidade, o braseiro a 24 px/u como o tileset
+  da igreja, contorno roxo-escuro e sombras puxadas para o roxo. A primeira versão tinha pixels
+  quatro vezes maiores e cores saturadas, e destoava do cenário.
 
 ---
 
@@ -168,6 +212,15 @@ reconstrói-se a fase.
   primeiro abismo.
 - **Phase2** — 4 segmentos, **3 abismos**, 4 plataformas, 3 inimigos. Alterna
   corredor de aproximação → combate → plataforma → escalada final. 2 checkpoints.
+- **Phase3 (Cidade)** — 4 segmentos, vãos de 1,6 / 2,0 / 2,3 u, um degrau e um telhado alto
+  sobre o segundo vão. Os gatos ficam em chão firme e comprido, longe dos abismos. Sinos no
+  começo (lugar seguro, para ensinar), no telhado e diante da saída. 2 checkpoints.
+- **Phase4 (Claustro)** — 4 segmentos, vãos de 1,4 / 1,6 / 1,9 u e uma subida em três níveis
+  (0,9 → 2,2 → 3,5). Um guardião, dois carniçais nos corredores retos, um braseiro no degrau e
+  outro no alto, sobre o corredor do segundo carniçal. 2 checkpoints. **Nenhuma faixa de patrulha
+  fica a menos de 1,6 u de um abismo**, e o primeiro carniçal dispara contra a rocha do degrau, não
+  contra o vão: na primeira versão os inimigos ficavam colados às beiras, e o empurrão de um golpe
+  (ou o fim da disparada) jogava o Ren no vazio a toda hora. A reta final não tem inimigo.
 - **FinalPhase** — **arena limpa**, sem abismos nem plataformas: o combate com A
   Vigília é horizontal, e qualquer degrau maciço travaria a perseguição do chefe.
 
@@ -196,6 +249,21 @@ alma está ao alcance de quem pisa na superfície sob ela.
   por contato, têm vida própria e reagem a golpes (knockback + *poof* de morte).
 - **Sombra Rastejante** (espectro) — mais frágil, presente nas fases iniciais.
 - **Guardião de Pedra** (esqueleto) — mais resistente, aparece a partir da Phase2.
+- **Gato Infernal** (`hell-gato`, Phase3) — 2 de vida. Ao ver o Ren, **para e se encolhe**
+  por 0,5 s (corpo achatado e avermelhado: o aviso), **salta num arco** de até 3,2 u até onde o
+  Ren estava quando o aviso começou e fica **atordoado 1 s** ao pousar. O salto nunca sai da
+  faixa de patrulha. Golpear durante o aviso cancela o salto. Ensina a **esquivar**.
+- **Carniçal em Chamas** (`burning-ghoul`, Phase4) — 2 de vida. Ao ver o Ren, a chama se
+  **atiça** por 0,4 s e ele **dispara** em linha reta até o fim da própria faixa, sem virar,
+  deixando um **rastro de fogo** que queima por 1,5 s; depois fica **ofegante** 1 s. Ensina a
+  **pular por cima**.
+- **Braseiro** (Phase4, armadilha) — quando o Ren passa a até 5 u, marca o chão sob ele com a
+  **marca vermelha** e, 1 s depois, a bola de fogo cai ali. Mesmo indicador, projétil e cores
+  do chefe: a fase ensina a ler o golpe antes da luta.
+
+Avisos e respiros dos inimigos novos seguem a dificuldade (os mesmos multiplicadores dos
+avisos do chefe). Nenhum dos dois pacotes traz quadros de ataque ou de morte: o aviso é feito
+por cor e deformação, e a morte usa a baforada comum aos inimigos.
 
 ### 6.2 Chefe — A Vigília (duas formas, quatro atos)
 
@@ -205,7 +273,7 @@ alma está ao alcance de quem pisa na superfície sob ela.
 | **75%** | **Invocação** | ergue os braços sobre um círculo verde e dois Guardiões de Pedra se levantam do chão, longe do Ren |
 | 75% – 50% | **Mago** | + **Salva**: três marcas em fila na direção do Ren, as bolas caem em ordem |
 | **50%** | **Transformação** | cena de ~4 s: golpes cancelados, controle travado, convulsão com fumaça, trovão, clarão branco — por trás dele o mago vira anjo; cartão *"A Vigília Desvelada — O anjo que velava Aldenor"* |
-| 50% – 25% | **Anjo** | golpe de asa (corte de luz e penas) · **Investida** (faixa lilás no chão; ele a atravessa deixando imagens residuais, com onda de choque na chegada) · **Chuva de fogo** (3 marcas com colunas de luz descendo do alto, fogo caindo uma por vez) |
+| 50% – 25% | **Anjo** | golpe de asa (corte de luz e penas) · **Investida** (faixa lilás no chão; ele a atravessa — e atravessa o Ren, que leva o golpe — deixando imagens residuais, com onda de choque na chegada) · **Chuva de fogo** (3 marcas com colunas de luz descendo do alto, fogo caindo uma por vez) |
 | 25% – 0% | **Anjo em fúria** | avisos e respiros 15% mais curtos, 4 marcas na chuva, mais investidas, corpo avermelhado |
 
 - Todo golpe segue **carga → impacto → respiro**: o chefe para, toca a animação de ataque
@@ -230,10 +298,10 @@ alma está ao alcance de quem pisa na superfície sob ela.
 
 ## 7. Progressão e fluxo de cenas
 
-O jogo tem **9 cenas** encadeadas:
+O jogo tem **12 cenas** encadeadas:
 
 ```
-MainMenu → Prologo → Tutorial → Phase1 → Phase2 → FinalPhase → Victory
+MainMenu → Prologo → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 → FinalPhase → Epilogo → Victory
                                               ↘ GameOver ↘  (→ MainMenu)
                                     Credits (a partir do MainMenu)
 ```
@@ -243,6 +311,13 @@ MainMenu → Prologo → Tutorial → Phase1 → Phase2 → FinalPhase → Victo
   começar um jogo novo; ESC pula.
 - **Tutorial** — área segura, sem inimigos, com placas ensinando os controles.
 - **Phase1 / Phase2** — cemitério espectral com plataformas, inimigos, fragmentos e checkpoints.
+  As seis almas ficam nessas duas fases.
+- **Phase3 / Phase4** — a cidade silenciosa (pacote *Town*) e o claustro da igreja (pacote
+  *Church*), com os inimigos novos e os objetivos das fases (§4.5.1). A Phase4 é a porta da arena:
+  é ela que chama `LoadFinalPhase`, que confere as seis almas.
+- **Epilogo** — a cidade ao amanhecer e os créditos (§3). Antes dela, a despedida do anjo
+  acontece na própria arena: `BossDeathTrigger` a inicia e ela carrega o `Epilogo`; se a cena não
+  estiver na build, o jogo cai direto na Vitória.
 - **FinalPhase** — arena na igreja com o chefe A Vigília. É a única fase **sem porta de
   saída**: a passagem para a Vitória é derrubar o chefe (`BossDeathTrigger`), e não
   alcançar a borda direita. Um `PhaseExit` aqui seria um atalho que vence o jogo sem
@@ -280,10 +355,10 @@ MainMenu → Prologo → Tutorial → Phase1 → Phase2 → FinalPhase → Victo
 
 - **Música por cena** (componente `SceneMusicPlayer` + `AudioManager` persistente):
   - Menu: tema calmo;
-  - Fases: temas de exploração distintos;
+  - Fases: temas de exploração distintos (a Cidade e o Claustro dividem a *Music 3*, que até então não era usada, e a música atravessa a troca entre as duas sem corte);
   - **Chefe (FinalPhase):** *Epic Boss Battle*, trilha orquestral de combate (172 BPM) —
     as trilhas das fases têm 64–100 BPM e servem à exploração, não ao confronto;
-  - **Vitória:** trilha de "paz restaurada" (em loop);
+  - **Epílogo e Vitória:** trilha de "paz restaurada" (em loop), contínua entre as duas cenas;
   - **Derrota:** *sting* que toca uma única vez.
 - **Escalada na luta do chefe:** a cada terço de vida perdido, A Vigília muda de fase e a
   trilha sobe de intensidade (×1,12 e ×1,25), com um toque de virada e um tremor de câmera.
