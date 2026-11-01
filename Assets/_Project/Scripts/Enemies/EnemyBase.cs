@@ -102,7 +102,7 @@ namespace EcosDeAldenor.Enemies
         /// por conta propria (o chefe) precisa saber para nao apagar o clarao.</summary>
         protected bool EmClarao => clarao > 0f;
 
-        private float contactDamageTimer;
+        protected float contactDamageTimer;
         private int lastAnimState = -1;
         private float stunTimer;
         private float knockbackTimer;
@@ -249,12 +249,23 @@ namespace EcosDeAldenor.Enemies
         /// produzia nenhuma reacao NELE - a faisca aparecia no ar e o bicho
         /// seguia igual, o que faz o golpe parecer que nao contou.
         /// </summary>
-        private void AtualizarClarao()
+        protected void AtualizarClarao()
         {
             if (corpo == null || clarao <= 0f) return;
 
             clarao -= Time.deltaTime / Mathf.Max(0.01f, duracaoDoClarao);
             corpo.color = clarao > 0f ? Color.Lerp(corBase, corDoClarao, Mathf.Clamp01(clarao)) : corBase;
+        }
+
+        /// <summary>
+        /// A faixa de patrulha (x minimo e maximo). Falso quando o inimigo nao
+        /// tem pontos de patrulha - entao nao ha territorio a respeitar.
+        /// </summary>
+        protected bool LimitesDaPatrulha(out float limiteA, out float limiteB)
+        {
+            limiteA = Mathf.Min(pointAPos.x, pointBPos.x);
+            limiteB = Mathf.Max(pointAPos.x, pointBPos.x);
+            return pointA != null && pointB != null;
         }
 
         protected virtual void ChasePlayer()
@@ -386,6 +397,17 @@ namespace EcosDeAldenor.Enemies
                 rb.linearVelocity.y + Mathf.Max(0f, direction.y) * force * 0.3f);
             stunTimer = hitStunDuration;
             knockbackTimer = hitStunDuration;
+        }
+
+        /// <summary>
+        /// Atordoa sem causar dano nem empurrar - a onda do sino da Fase 3.
+        /// </summary>
+        public virtual void Atordoar(float segundos)
+        {
+            if (healthSystem.IsDead) return;
+            stunTimer = Mathf.Max(stunTimer, segundos);
+            knockbackTimer = 0f;
+            if (rb != null) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         }
 
         protected virtual void HandleDamaged()

@@ -22,7 +22,10 @@ namespace EcosDeAldenor.Core
         [SerializeField] private string tutorialScene = "Tutorial";
         [SerializeField] private string phase1Scene = "Phase1";
         [SerializeField] private string phase2Scene = "Phase2";
+        [SerializeField] private string phase3Scene = "Phase3";
+        [SerializeField] private string phase4Scene = "Phase4";
         [SerializeField] private string finalPhaseScene = "FinalPhase";
+        [SerializeField] private string epilogueScene = "Epilogo";
         [SerializeField] private string victoryScene = "VictoryScreen";
         [SerializeField] private string gameOverScene = "GameOverScreen";
 
@@ -105,6 +108,8 @@ namespace EcosDeAldenor.Core
         }
         public void LoadPhase1() => LoadScene(phase1Scene);
         public void LoadPhase2() => LoadScene(phase2Scene);
+        public void LoadPhase3() => LoadScene(phase3Scene);
+        public void LoadPhase4() => LoadScene(phase4Scene);
         public void LoadVictoryScreen() => LoadScene(victoryScene);
         public void LoadGameOverScreen() => LoadScene(gameOverScene);
 
@@ -149,6 +154,15 @@ namespace EcosDeAldenor.Core
         }
 
         public void LoadVictoryScreenAfter(float delay) => LoadSceneAfter(victoryScene, delay);
+
+        /// <summary>
+        /// Depois do chefe vem o epilogo e, dele, a Vitoria. Como no prologo, se
+        /// a cena do epilogo nao estiver na build o jogo cai direto na Vitoria.
+        /// </summary>
+        public void LoadEpilogueAfter(float delay)
+        {
+            LoadSceneAfter(Application.CanStreamedLevelBeLoaded(epilogueScene) ? epilogueScene : victoryScene, delay);
+        }
         public void LoadGameOverScreenAfter(float delay) => LoadSceneAfter(gameOverScene, delay);
 
         private IEnumerator LoadSceneAfterRoutine(string sceneName, float delay)

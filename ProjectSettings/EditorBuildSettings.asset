@@ -21,8 +21,17 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/Phase2.unity
     guid: 3e909f2da7b2ee14099401fc370ea5bc
   - enabled: 1
+    path: Assets/_Project/Scenes/Phase3.unity
+    guid: b738e6dc02c2e974dbf52a92b7255999
+  - enabled: 1
+    path: Assets/_Project/Scenes/Phase4.unity
+    guid: bde693db913aa6d41b9c84f1cd9d606f
+  - enabled: 1
     path: Assets/_Project/Scenes/FinalPhase.unity
     guid: 6d1159eaf7018924bac0c11fad0911ad
+  - enabled: 1
+    path: Assets/_Project/Scenes/Epilogo.unity
+    guid: ae8b1eb8f8488b74bb8a7f4f2fd85a5e
   - enabled: 1
     path: Assets/_Project/Scenes/VictoryScreen.unity
     guid: acfc4c0d7a86b734ba8f4a47b08a5c71

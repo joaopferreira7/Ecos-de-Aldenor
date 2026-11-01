@@ -91,7 +91,9 @@ namespace EcosDeAldenor.EditorTools
 
             // No cemiterio o topo do chao vira grama com ossos; na igreja continua
             // o friso claro sobre o piso de pedra.
-            bool cemiterio = EditorSceneManager.GetActiveScene().name != "FinalPhase";
+            // A Cidade (Phase3) e o Claustro (Phase4) nao sao cemiterio: chao de
+            // rua e de pedra, com o friso claro em vez da grama.
+            bool cemiterio = EhCemiterio(EditorSceneManager.GetActiveScene().name);
             Sprite grama = cemiterio ? AssetDatabase.LoadAssetAtPath<Sprite>(SpriteGrama) : null;
 
             for (int i = 0; i < segmentos.Length; i++)
@@ -201,6 +203,12 @@ namespace EcosDeAldenor.EditorTools
         /// </summary>
         public static float EspessuraDaPlataforma(float topo) => topo >= 1.8f ? 0.6f : 0.9f;
 
+        /// <summary>Fases ambientadas no cemiterio (grama, lapides).</summary>
+        public static bool EhCemiterio(string cena) => cena == "Tutorial" || cena == "Phase1" || cena == "Phase2";
+
+        /// <summary>Fases dentro da igreja (balaustradas no lugar de lapides).</summary>
+        public static bool EhIgreja(string cena) => cena == "FinalPhase" || cena == "Phase4";
+
         /// <summary>
         /// Distribui as decoracoes ao longo do chao solido de forma
         /// DETERMINISTICA, em vez de empurrar as que caem num lugar ruim.
@@ -250,7 +258,8 @@ namespace EcosDeAldenor.EditorTools
         /// </summary>
         public static void VestirDecoracoes(UnityEngine.SceneManagement.Scene cena)
         {
-            bool igreja = cena.name == "FinalPhase";
+            bool igreja = EhIgreja(cena.name);
+            if (!igreja && !EhCemiterio(cena.name)) return;   // a Cidade tem pecas proprias
             var objetos = FatiasOrdenadas(ObjetosCemiterio);
             var igrejaFatias = FatiasOrdenadas(TilesetIgreja);
             if (objetos.Count < 10 || igrejaFatias.Count < 11)
@@ -360,6 +369,10 @@ namespace EcosDeAldenor.EditorTools
                     livres = Subtrair(livres, altar.transform.position.x - 1.2f, altar.transform.position.x + 1.2f);
                 foreach (var saida in root.GetComponentsInChildren<EcosDeAldenor.Systems.PhaseExit>(true))
                     livres = Subtrair(livres, saida.transform.position.x - 1.5f, saida.transform.position.x + 1.5f);
+                // Sinos e cirios tambem: o campanario mede 2 u, e um lampiao
+                // plantado dentro dele escondia o sino que o jogador procura.
+                foreach (var objetivo in root.GetComponentsInChildren<EcosDeAldenor.Systems.ObjetivoDaFase>(true))
+                    livres = Subtrair(livres, objetivo.transform.position.x - 1.3f, objetivo.transform.position.x + 1.3f);
             }
 
             livres = livres.Where(i => i.y - i.x >= 1.0f).OrderBy(i => i.x).ToList();

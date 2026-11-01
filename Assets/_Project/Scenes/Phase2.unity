@@ -5606,10 +5606,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Core.SceneController
   mainMenuScene: MainMenu
+  prologueScene: Prologo
   tutorialScene: Tutorial
   phase1Scene: Phase1
   phase2Scene: Phase2
+  phase3Scene: Phase3
+  phase4Scene: Phase4
   finalPhaseScene: FinalPhase
+  epilogueScene: Epilogo
   victoryScene: VictoryScreen
   gameOverScene: GameOverScreen
   fadeCanvasGroup: {fileID: 0}
@@ -6737,7 +6741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c85daa75f57a244fa6d173ad8545b96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcosDeAldenor.Systems.PhaseExit
-  nextScene: 2
+  nextScene: 4
   exigirAlmasDaFase: 1
   intervaloDoAviso: 2.5
   portaTrancadaSfx: {fileID: 0}

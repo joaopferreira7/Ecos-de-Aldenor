@@ -35,7 +35,11 @@ namespace EcosDeAldenor.Systems
             Phase1,
             Phase2,
             FinalPhase,
-            VictoryScreen
+            VictoryScreen,
+            // No fim da lista: o enum e gravado nas cenas como numero, e
+            // inserir no meio trocaria o destino das portas que ja existem.
+            Phase3,
+            Phase4
         }
 
         [SerializeField] private NextScene nextScene;
@@ -71,6 +75,12 @@ namespace EcosDeAldenor.Systems
                 case NextScene.VictoryScreen:
                     SceneController.Instance?.LoadVictoryScreen();
                     break;
+                case NextScene.Phase3:
+                    SceneController.Instance?.LoadPhase3();
+                    break;
+                case NextScene.Phase4:
+                    SceneController.Instance?.LoadPhase4();
+                    break;
             }
         }
 
@@ -83,12 +93,14 @@ namespace EcosDeAldenor.Systems
         private bool PodePassar()
         {
             int faltam = Object.FindObjectsByType<Fragment>(FindObjectsInactive.Exclude).Length;
-            if (faltam <= 0) return true;
+            int objetivos = ObjetivoDaFase.Pendentes(out var objetivo);
+            if (faltam <= 0 && objetivos <= 0) return true;
 
             if (Time.unscaledTime >= proximoAviso)
             {
                 proximoAviso = Time.unscaledTime + intervaloDoAviso;
-                Avisar(faltam);
+                if (faltam > 0) Avisar(faltam);
+                else AvisarObjetivo(objetivo, objetivos);
             }
             return false;
         }
@@ -111,6 +123,17 @@ namespace EcosDeAldenor.Systems
                     "\n<size=20><color=#B9A7D6>Procure nas plataformas mais altas</color></size>", 2.2f);
             }
 
+            AudioManager.Instance?.PlaySfx(portaTrancadaSfx);
+        }
+
+        /// <summary>
+        /// As fases 3 e 4 cobram, alem das almas, o proprio objetivo (sinos,
+        /// cirios). O texto vem do objetivo, que sabe o proprio nome.
+        /// </summary>
+        private void AvisarObjetivo(ObjetivoDaFase objetivo, int faltam)
+        {
+            var ui = Object.FindAnyObjectByType<UIManager>();
+            if (ui != null) ui.MostrarAviso(objetivo.Pendente(faltam) + "\n" + objetivo.Dica, 2.2f);
             AudioManager.Instance?.PlaySfx(portaTrancadaSfx);
         }
     }

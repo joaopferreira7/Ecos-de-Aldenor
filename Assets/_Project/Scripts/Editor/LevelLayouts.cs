@@ -136,6 +136,72 @@ namespace EcosDeAldenor.EditorTools
             },
             new Fase
             {
+                cena = "Phase3",
+                // A CIDADE SILENCIOSA. A licao nova e o Gato Infernal, que pede
+                // esquiva - entao os gatos ficam em chao firme e comprido, longe
+                // de abismo (o salto deles e limitado a propria faixa). Os tres
+                // sinos marcam o ritmo: o primeiro logo no comeco, em lugar
+                // seguro, para ensinar que sino se golpeia; o segundo no telhado
+                // alto; o terceiro guardando a saida.
+                segmentos = new[]
+                {
+                    new Vector2(-15.0f, -6.0f),
+                    new Vector2( -4.4f,  2.0f),   // vao de 1,60 u
+                    new Vector2(  4.0f,  9.8f),   // vao de 2,00 u
+                    new Vector2( 12.1f, 15.0f),   // vao de 2,30 u
+                },
+                plataformas = new[]
+                {
+                    new Vector3( 0.8f,  2.0f, 0.9f),   // degrau ate o telhado
+                    new Vector3( 2.4f,  4.6f, 2.2f),   // telhado alto, com o segundo sino (o campanario mede 2 u), sobre o vao
+                },
+                patrulhas = new[]
+                {
+                    // Todos a pelo menos 1 u da beira de um abismo: um gato que
+                    // pousa na beira joga o Ren no vazio com o empurrao do golpe.
+                    new Vector3(-7.00f, -8.00f, -7.00f),   // sombra: aquecimento
+                    new Vector3(-1.10f, -2.60f,  0.20f),   // gato 1
+                    new Vector3( 6.00f,  5.40f,  6.60f),   // gato 2
+                    new Vector3( 7.80f,  7.20f,  8.40f),   // gato 3, colado ao 2: o par
+                },
+                xMundoMin = -15f, xMundoMax = 15f,
+            },
+            new Fase
+            {
+                cena = "Phase4",
+                // O CLAUSTRO. Subida pela nave em degraus finos ate o terceiro
+                // nivel (topo 3,5), com os braseiros cobrindo os corredores e os
+                // carnicais disparando nos trechos retos.
+                //
+                // A primeira versao punha inimigo colado a beira de todo abismo
+                // e era quase impossivel: o empurrao de um golpe - ou a disparada
+                // do carnical terminando na ponta da faixa - jogava o Ren no
+                // vazio. Agora toda faixa fica a 1,6 u ou mais de um abismo, os
+                // vaos sao menores (1,4 / 1,6 / 1,9) e a reta final nao tem
+                // inimigo: so o ultimo cirio.
+                segmentos = new[]
+                {
+                    new Vector2(-15.0f, -4.8f),
+                    new Vector2( -3.4f,  3.0f),   // vao de 1,40 u
+                    new Vector2(  4.6f, 10.0f),   // vao de 1,60 u
+                    new Vector2( 11.9f, 15.0f),   // vao de 1,90 u
+                },
+                plataformas = new[]
+                {
+                    new Vector3( 1.4f,  2.6f, 0.9f),   // degrau, com o primeiro braseiro
+                    new Vector3( 3.0f,  4.6f, 2.2f),
+                    new Vector3( 5.1f,  7.3f, 3.5f),   // o alto: segundo cirio e segundo braseiro
+                },
+                patrulhas = new[]
+                {
+                    new Vector3(-7.00f, -7.60f, -6.40f),   // guardiao, longe da beira
+                    new Vector3(-0.50f, -1.80f,  0.80f),   // carnical 1: dispara contra a rocha do degrau, nao contra o vao
+                    new Vector3( 7.40f,  6.40f,  8.40f),   // carnical 2, sob o braseiro alto
+                },
+                xMundoMin = -15f, xMundoMax = 15f,
+            },
+            new Fase
+            {
                 cena = "FinalPhase",
                 // Arena limpa: qualquer degrau macico travaria a perseguicao do
                 // chefe, e um abismo tornaria a luta uma questao de empurrao.
@@ -150,7 +216,15 @@ namespace EcosDeAldenor.EditorTools
         public static void ReconstruirTudo()
         {
             var sb = new StringBuilder("Reconstrucao das fases:\n");
-            foreach (var f in Fases)
+            foreach (var f in Fases) sb.AppendLine(Reconstruir(f));
+            Debug.Log(sb.ToString());
+        }
+
+        public static Fase FaseDaCena(string cena) => Fases.First(f => f.cena == cena);
+
+        /// <summary>Reconstroi UMA fase a partir da tabela: abre, monta e salva a cena.</summary>
+        public static string Reconstruir(Fase f)
+        {
             {
                 var cena = EditorSceneManager.OpenScene(CaminhoDaCena(f.cena), OpenSceneMode.Single);
 
@@ -175,10 +249,9 @@ namespace EcosDeAldenor.EditorTools
 
                 EditorSceneManager.MarkSceneDirty(cena);
                 EditorSceneManager.SaveScene(cena);
-                sb.AppendLine(string.Format("  {0}: {1} segmentos, {2} plataformas, {3} decoracoes sem lugar, {4} pecas de fundo acrescentadas",
-                    f.cena, f.segmentos.Length, f.plataformas.Length, sobraram, pecasDeFundo));
+                return string.Format("  {0}: {1} segmentos, {2} plataformas, {3} decoracoes sem lugar, {4} pecas de fundo acrescentadas",
+                    f.cena, f.segmentos.Length, f.plataformas.Length, sobraram, pecasDeFundo);
             }
-            Debug.Log(sb.ToString());
         }
 
         // ------------------------------------------------------------------

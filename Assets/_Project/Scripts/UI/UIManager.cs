@@ -54,12 +54,79 @@ namespace EcosDeAldenor.UI
                 GameManager.Instance.OnFragmentsChanged += UpdateFragmentsText;
                 UpdateFragmentsText(GameManager.Instance.TotalFragments);
             }
+
+            MontarPlacaDeObjetivo();
         }
 
         private void OnDestroy()
         {
             if (playerHealth != null) playerHealth.OnHealthChanged -= UpdateHearts;
             if (GameManager.Instance != null) GameManager.Instance.OnFragmentsChanged -= UpdateFragmentsText;
+            ObjetivoDaFase.OnMudou -= AtualizarObjetivo;
+        }
+
+        // ------------------------------------------------------------------
+        // Objetivo da fase (sinos, cirios)
+        // ------------------------------------------------------------------
+
+        private Text textoDoObjetivo;
+        private RectTransform iconeDoObjetivo;
+
+        /// <summary>
+        /// Nas fases com objetivo proprio, uma segunda placa abaixo da das
+        /// almas: o icone do objetivo e "N / 3". Sem ela o jogador nao tinha
+        /// como saber que sinos e cirios eram algo a fazer, e nao cenario.
+        /// </summary>
+        private void MontarPlacaDeObjetivo()
+        {
+            var todos = FindObjectsByType<ObjetivoDaFase>(FindObjectsInactive.Exclude);
+            if (todos.Length == 0 || fragmentsText == null) return;
+
+            var placa = Placa("PlacaObjetivo", fragmentsText.transform.parent.parent, new Vector2(1f, 1f),
+                              new Vector2(-18f, -92f), new Vector2(196f, 66f));
+
+            var icone = new GameObject("Icone", typeof(RectTransform), typeof(Image));
+            iconeDoObjetivo = (RectTransform)icone.transform;
+            iconeDoObjetivo.SetParent(placa, false);
+            iconeDoObjetivo.anchorMin = iconeDoObjetivo.anchorMax = new Vector2(0f, 0.5f);
+            iconeDoObjetivo.sizeDelta = new Vector2(46f, 50f);
+            iconeDoObjetivo.anchoredPosition = new Vector2(44f, 0f);
+            var img = icone.GetComponent<Image>();
+            img.sprite = todos[0].Icone;
+            img.preserveAspect = true;
+            img.raycastTarget = false;
+
+            textoDoObjetivo = Object.Instantiate(fragmentsText, placa);
+            textoDoObjetivo.name = "TextoObjetivo";
+            var tr = textoDoObjetivo.rectTransform;
+            tr.anchorMin = Vector2.zero;
+            tr.anchorMax = Vector2.one;
+            tr.pivot = new Vector2(0.5f, 0.5f);
+            tr.offsetMin = new Vector2(80f, 0f);
+            tr.offsetMax = new Vector2(-12f, 0f);
+
+            ObjetivoDaFase.OnMudou += AtualizarObjetivo;
+            AtualizarObjetivo();
+        }
+
+        private void AtualizarObjetivo()
+        {
+            if (textoDoObjetivo == null) return;
+            var todos = FindObjectsByType<ObjetivoDaFase>(FindObjectsInactive.Exclude);
+            int feitos = 0;
+            foreach (var o in todos) if (o.Cumprido) feitos++;
+            textoDoObjetivo.text = $"{feitos}<size=26><color=#C9A24B> / {todos.Length}</color></size>";
+            if (feitos > 0 && iconeDoObjetivo != null) StartCoroutine(PulsarIcone(iconeDoObjetivo));
+        }
+
+        private System.Collections.IEnumerator PulsarIcone(RectTransform alvo)
+        {
+            for (float t = 0f; t < 0.35f; t += Time.unscaledDeltaTime)
+            {
+                alvo.localScale = Vector3.one * (1f + 0.35f * Mathf.Sin(t / 0.35f * Mathf.PI));
+                yield return null;
+            }
+            alvo.localScale = Vector3.one;
         }
 
         /// <summary>
@@ -269,7 +336,7 @@ namespace EcosDeAldenor.UI
         private System.Collections.IEnumerator AnunciarFaseFinal()
         {
             yield return Aviso("As almas foram reunidas\n" +
-                               "<size=26><color=#B9A7D6>O santuário final se abriu</color></size>",
+                               "<size=26><color=#B9A7D6>O caminho até a igreja se abriu</color></size>",
                                finalPhaseUnlockedSfx, 2.4f);
             unlockBanner = null;
         }
