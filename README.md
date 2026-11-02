@@ -58,13 +58,14 @@ Nenhum golpe mata com a vida cheia, em nenhum nível.
 
 ## 🗺️ Estrutura do jogo
 
-O jogo tem **12 cenas** encadeadas:
+O jogo tem **13 cenas** encadeadas:
 
-`MainMenu → Prologo → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 → FinalPhase → Epilogo → Victory / GameOver / Credits`
+`MainMenu → Prologo → PrologoIgreja → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 → FinalPhase → Epilogo → Victory / GameOver / Credits`
 
-- **Prologo:** a história de Aldenor em cinco quadros ilustrados com a arte dos próprios pacotes —
-  a cidade ao entardecer, o anjo da igreja, a névoa, a Vigília encapuzada e o Ren no cemitério —
-  narrada letra por letra. `Espaço` avança, `ESC` pula.
+- **Prologo / PrologoIgreja:** a história de Aldenor encenada dentro do jogo, como o epílogo — a
+  cidade ao entardecer com os sinos tocando até a névoa descer e levar as almas; na igreja, o anjo
+  que recebe as almas e se cobre com o manto vermelho; e o Ren despertando no próprio Tutorial,
+  quando o controle passa ao jogador. `ESC` pula.
 
 - **Tutorial:** abre com a **tela de tutorial** (controles e objetivo) e depois entrega uma área
   segura, com placas reforçando cada comando no lugar onde ele é usado.
@@ -150,7 +151,7 @@ nenhum**, gerando um jogo sem sprites e sem som. O `montar.ps1` detecta esse
 estado e para antes de construir.
 
 O script chama o Unity em modo batch e faz, nesta ordem: confere a lista de
-cenas (12, com **MainMenu** em primeiro), roda o verificador de geometria das
+cenas (13, com **MainMenu** em primeiro), roda o verificador de geometria das
 fases (alcance de pulo, vãos, atores presos na rocha, patrulha válida), roda os
 testes automatizados quando houver alguma suíte, e só então constrói. Qualquer
 etapa que falhe interrompe a build e aponta o log em `Logs\`.
@@ -196,7 +197,7 @@ verificações.
 **Envie sempre a pasta inteira, compactada — nunca só o `.exe`.**
 
 O `Ecos de Aldenor.exe` tem **0,6 MB** de uma build de **141 MB**: ele é apenas o
-carregador. Sem a pasta `Ecos de Aldenor_Data` (as 12 cenas e os assets), a
+carregador. Sem a pasta `Ecos de Aldenor_Data` (as 13 cenas e os assets), a
 `UnityPlayer.dll` e a `MonoBleedingEdge` ao lado dele, ele **abre e fecha na hora** —
 nem chega a escrever um log. Foi o que aconteceu quando a build foi enviada a colegas.
 
@@ -254,6 +255,6 @@ Assets/
 ├── _Project/            # Código, prefabs e cenas próprias do jogo
 │   ├── Scripts/         # C# (Core, Player, Enemies, Systems, UI)
 │   ├── Prefabs/         # Player, inimigos, itens, UI, ambiente
-│   └── Scenes/          # As 12 cenas do jogo, MainMenu inclusive
+│   └── Scenes/          # As 13 cenas do jogo, MainMenu inclusive
 └── ...                  # Pacotes de assets de terceiros (ver Créditos)
 ```

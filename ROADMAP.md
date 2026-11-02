@@ -23,11 +23,13 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   vermelha no chão) e o dano só vale dentro da área anunciada — esquivar funciona
 - ✅ **Tela inicial de tutorial**: controles, objetivo e avisos antes da primeira fase, com o tempo
   congelado até o jogador escolher *Começar*
-- ✅ **Prólogo** (cena `Prologo`, entre o menu e o tutorial): a história de Aldenor em cinco quadros
-  vivos — cidade ao entardecer com quatro moradores andando (pacote *Town*, até então só a trilha
-  era usada), o anjo na igreja, a névoa com espectros, a Vigília encapuzada, o Ren no cemitério —
-  com narração letra por letra. Planta a transformação do chefe. Ferramenta **Ecos de Aldenor →
-  Montar prologo** refaz a cena
+- ✅ **Prólogo dentro do jogo** (cenas `Prologo` e `PrologoIgreja`, entre o menu e o tutorial),
+  espelhando o epílogo: a cidade ao entardecer com moradores e campanários badalando até a névoa
+  descer e arrancar as almas; na arena, o anjo recebe as almas e se cobre com o manto vermelho
+  (a transformação do chefe ao contrário); e o Ren desperta no próprio Tutorial (`DespertarDoRen`)
+  antes da tela de controles. Substitui os cinco quadros da primeira versão. `Encenacao` reúne as
+  peças comuns (atores, almas, clima, relâmpago, título). Ferramenta **Ecos de Aldenor → Montar
+  prologo** refaz as cenas
 - ✅ **Epílogo dentro do jogo**: a despedida do anjo na própria arena (o Ren caminha até ele, os
   dois conversam, o anjo se desfaz e solta as almas, a luz dele passa ao Ren) e o amanhecer na
   cidade da Fase 3 (almas devolvendo a cor aos moradores, campanários tocando, o Ren diante da
@@ -84,6 +86,9 @@ Legenda: ✅ feito · 🔲 a fazer · 🔎 verificar
   SFX de ataque, dano, morte, pulo, coleta (alma) e checkpoint
 - ✅ **Mixagem**: música em 0,55 e SFX em 0,90 — antes as duas fontes ficavam em 1,0 —
   com ganho por faixa, já que as trilhas vêm de pacotes diferentes
+- ✅ **Trilhas niveladas** (`TrilhasDoJogo`): ganho por faixa medido pelo volume médio, perto de
+  −20 dBFS (a *Music 1* estava ~10 dB abaixo do menu), *crossfade* entre cenas com duas fontes e
+  pontos de loop para as faixas que não fechavam o loop no fim do arquivo
 - ✅ **Trilha de chefe de verdade**: *Epic Boss Battle* (Juhani Junkala, CC0, 172 BPM) no
   lugar de um loop de tensão a 67 BPM, com a música subindo de intensidade a cada fase
   d'A Vigília

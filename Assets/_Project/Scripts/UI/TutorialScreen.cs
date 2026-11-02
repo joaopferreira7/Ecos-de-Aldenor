@@ -33,7 +33,9 @@ namespace EcosDeAldenor.UI
 
         private void Start()
         {
-            if (mostrarAoIniciar) Abrir();
+            // Vindo do prologo, o Ren primeiro desperta (DespertarDoRen), e e
+            // ele quem abre esta tela no fim da cena.
+            if (mostrarAoIniciar && !DespertarDoRen.EmCena) Abrir();
         }
 
         public void Abrir()

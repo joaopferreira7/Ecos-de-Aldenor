@@ -30,15 +30,28 @@ namespace EcosDeAldenor.Systems
         [Tooltip("Material sem luz (Sprite-Unlit-Default): a nevoa e as almas nao devem escurecer com as luzes 2D.")]
         [SerializeField] private Material material;
 
-        private class Faixa { public SpriteRenderer sr; public float velocidade; public float largura; public float parallax; }
+        private class Faixa { public SpriteRenderer sr; public float velocidade; public float largura; public float parallax; public Color cor; }
         private class Alma { public Transform t; public SpriteRenderer sr; public float sobe, fase, balanco, alpha, escala; }
 
         private readonly List<Faixa> faixas = new List<Faixa>();
         private readonly List<Alma> almas = new List<Alma>();
         private Camera cam;
 
+        // 0 a 1: o quanto a nevoa (e as almas soltas) esta presente. As cenas
+        // do prologo e do epilogo a fazem descer e se levantar.
+        private float presenca = 1f;
+        private bool comecarSemNevoa;
+
+        /// <summary>Comeca sem nevoa nem almas, para uma cena faze-las descer (Adensar).</summary>
+        public void ComecarSemNevoa()
+        {
+            comecarSemNevoa = true;
+            presenca = 0f;
+        }
+
         private void Start()
         {
+            if (comecarSemNevoa) presenca = 0f;
             cam = Camera.main;
             if (cam == null) { enabled = false; return; }
 
@@ -89,27 +102,27 @@ namespace EcosDeAldenor.Systems
             sr.sortingOrder = ordem;
             if (material != null) sr.sharedMaterial = material;
             go.transform.position = new Vector3(0f, baseDaNevoa + desceY + alturaDaNevoa * 0.5f, 0f);
-            return new Faixa { sr = sr, velocidade = vel, largura = largura, parallax = parallax };
+            return new Faixa { sr = sr, velocidade = vel, largura = largura, parallax = parallax, cor = cor };
         }
 
         /// <summary>
         /// A nevoa se levanta: as faixas somem aos poucos. O amanhecer do
         /// epilogo usa isto - a nevoa e o que desceu sobre Aldenor no prologo.
         /// </summary>
-        public System.Collections.IEnumerator Dissipar(float duracao)
+        public System.Collections.IEnumerator Dissipar(float duracao) => Presenca(0f, duracao);
+
+        /// <summary>A nevoa desce sobre a cena - a noite do prologo.</summary>
+        public System.Collections.IEnumerator Adensar(float duracao) => Presenca(1f, duracao);
+
+        private System.Collections.IEnumerator Presenca(float para, float duracao)
         {
-            var inicio = new System.Collections.Generic.List<float>();
-            foreach (var f in faixas) inicio.Add(f.sr.color.a);
+            float de = presenca;
             for (float t = 0f; t < duracao; t += Time.deltaTime)
             {
-                for (int i = 0; i < faixas.Count; i++)
-                {
-                    var c = faixas[i].sr.color;
-                    faixas[i].sr.color = new Color(c.r, c.g, c.b, Mathf.Lerp(inicio[i], 0f, t / duracao));
-                }
+                presenca = Mathf.Lerp(de, para, t / duracao);
                 yield return null;
             }
-            foreach (var f in faixas) f.sr.enabled = false;
+            presenca = para;
         }
 
         private void LateUpdate()
@@ -121,6 +134,7 @@ namespace EcosDeAldenor.Systems
             // da divisao pela largura do ladrilho esconde o salto.
             foreach (var f in faixas)
             {
+                f.sr.color = new Color(f.cor.r, f.cor.g, f.cor.b, f.cor.a * presenca);
                 float desloc = t * f.velocidade + cx * (1f - f.parallax);
                 float x = cx - Mathf.Repeat(desloc, f.largura);
                 var p = f.sr.transform.position;
@@ -148,7 +162,7 @@ namespace EcosDeAldenor.Systems
                 // Cintila e some perto do alto, em vez de sumir de uma vez.
                 float topo = Mathf.InverseLerp(c.y + meiaAltura + 0.5f, c.y + meiaAltura - 2f, p.y);
                 float brilho = 0.65f + 0.35f * Mathf.Sin(t * 3f + a.fase * 2f);
-                a.sr.color = new Color(corDasAlmas.r, corDasAlmas.g, corDasAlmas.b, corDasAlmas.a * a.alpha * brilho * topo);
+                a.sr.color = new Color(corDasAlmas.r, corDasAlmas.g, corDasAlmas.b, corDasAlmas.a * a.alpha * brilho * topo * presenca);
             }
         }
 

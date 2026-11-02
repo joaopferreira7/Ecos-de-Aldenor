@@ -57,7 +57,7 @@ namespace EcosDeAldenor.Systems
         private SpriteRenderer marcador;
         private SpriteRenderer brilho;
         private float fase;
-        private static int ultimaCenaAnunciada = -1;
+        private static UnityEngine.SceneManagement.Scene ultimaCenaAnunciada;
 
         protected virtual void Awake()
         {
@@ -77,7 +77,7 @@ namespace EcosDeAldenor.Systems
             marcador = Enfeite("Marcador", ArteGerada.Marcador(), 8);
 
             // Um aviso por fase, dado por quem chegar primeiro.
-            int cena = gameObject.scene.handle;
+            var cena = gameObject.scene;
             if (ultimaCenaAnunciada != cena)
             {
                 ultimaCenaAnunciada = cena;

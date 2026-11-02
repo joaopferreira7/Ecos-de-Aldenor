@@ -52,23 +52,26 @@ cemitério como **ecos**. A Vigília não as protegeu: cobriu-se com um capuz e 
 a guardá-las como prisioneiras. **Ren**, o último cavaleiro de pé, desperta entre
 as lápides para reunir os seis ecos, subir à igreja e encerrar a vigília.
 
-**O prólogo** conta essa história antes do tutorial (cena `Prologo`), em cinco
-capítulos encenados com a arte dos próprios pacotes, enquadrados como cinema (faixas
-pretas, vinheta, câmera deslizando, nome do capítulo em fonte gótica). A frase de cada
-capítulo só começa depois que o momento acontece:
+**O prólogo** conta essa história antes do tutorial **dentro do jogo**, nos cenários de
+verdade, espelhando o epílogo (a primeira versão eram cinco quadros num quadro de cinema; depois
+que o epílogo virou cena, o começo e o fim ficaram desiguais). São três partes:
 
-| Capítulo | O que se vê |
-|---|---|
-| I · Aldenor | a cidade ao entardecer, moradores andando, vaga-lumes, o sol atrás da igreja |
-| II · A Vigília | o anjo diante do altar sob colunas de luz, almas douradas |
-| III · A Névoa | relâmpago e trovão; os moradores se apagam e se desfazem em almas que sobem; espectros surgem na névoa |
-| IV · O Manto | o anjo se dissolve numa fumaça vermelha e no lugar dele surge o mago encapuzado |
-| V · O Último Cavaleiro | o Ren se levanta do chão (a animação de morte dele ao contrário) e os seis ecos acendem um a um |
+1. **A cidade** (cena `Prologo`, `PrologoNaCidade`) — a cidade da Fase 3 sem nada de jogo. Ao
+   entardecer, os moradores andam pela rua e os campanários badalam; a câmera sobe até a igreja
+   na colina. A música do menu se apaga, cai um relâmpago, a névoa desce e os sinos se calam: os
+   moradores param, perdem a cor e as almas deles sobem rumo à igreja.
+2. **A igreja** (cena `PrologoIgreja`, `PrologoNaIgreja`) — a arena do chefe, em silêncio. O anjo
+   dourado diante do altar recebe as almas, que giram em volta dele. Com o trovão a luz fica
+   vermelha, o anjo estremece, some numa fumaça vermelha e no lugar dele surge o mago encapuzado —
+   a transformação da luta final ao contrário. As almas fogem para o cemitério, e o nome do jogo
+   aparece no escuro.
+3. **O despertar** (no próprio `Tutorial`, `DespertarDoRen`) — o Ren está caído entre as lápides e
+   se levanta (a animação de morte dele ao contrário); seis ecos acendem no céu e partem, e o
+   controle passa ao jogador, com a tela de controles logo depois. Só acontece vindo do prólogo:
+   quem pula a história, ou volta ao tutorial, cai direto na tela de controles.
 
-Espaço/Enter/clique avança; ESC pula direto para o tutorial.
-
-O quarto quadro planta a virada da luta final: *"Dizem que o anjo ainda está lá,
-sob aquele manto."* Na metade da vida, a Vigília se transforma e revela o anjo.
+ESC pula direto para o tutorial. A segunda parte planta a virada da luta final: o mago é o anjo
+sob o manto, e na metade da vida a Vigília se transforma e revela o anjo.
 
 **O epílogo** é uma cena **dentro do jogo**, com os personagens de verdade, em duas partes
 (a primeira versão eram quadros no estilo do prólogo; depois de jogar, o grupo pediu a cena):
@@ -298,17 +301,17 @@ por cor e deformação, e a morte usa a baforada comum aos inimigos.
 
 ## 7. Progressão e fluxo de cenas
 
-O jogo tem **12 cenas** encadeadas:
+O jogo tem **13 cenas** encadeadas:
 
 ```
-MainMenu → Prologo → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 → FinalPhase → Epilogo → Victory
+MainMenu → Prologo → PrologoIgreja → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 → FinalPhase → Epilogo → Victory
                                               ↘ GameOver ↘  (→ MainMenu)
                                     Credits (a partir do MainMenu)
 ```
 
 - **MainMenu** — título estilizado e navegação (Jogar, Créditos, Sair).
-- **Prologo** — a história de Aldenor em cinco quadros ilustrados (ver §3). Só aparece ao
-  começar um jogo novo; ESC pula.
+- **Prologo / PrologoIgreja** — a história de Aldenor encenada na cidade e na igreja (ver §3),
+  terminando com o Ren despertando no Tutorial. Só aparece ao começar um jogo novo; ESC pula.
 - **Tutorial** — área segura, sem inimigos, com placas ensinando os controles.
 - **Phase1 / Phase2** — cemitério espectral com plataformas, inimigos, fragmentos e checkpoints.
   As seis almas ficam nessas duas fases.
@@ -359,14 +362,22 @@ MainMenu → Prologo → Tutorial → Phase1 → Phase2 → Phase3 → Phase4 �
   - **Chefe (FinalPhase):** *Epic Boss Battle*, trilha orquestral de combate (172 BPM) —
     as trilhas das fases têm 64–100 BPM e servem à exploração, não ao confronto;
   - **Epílogo e Vitória:** trilha de "paz restaurada" (em loop), contínua entre as duas cenas;
-  - **Derrota:** *sting* que toca uma única vez.
+  - **Derrota:** *sting* que toca uma única vez;
+  - **Prólogo:** o tema do menu continua na cidade até a névoa calá-lo; a igreja fica em silêncio.
+- **Troca sem corte:** o `AudioManager` tem duas fontes e faz *crossfade* (1,2 s) quando a cena
+  muda de faixa; a mesma faixa atravessa a troca sem reiniciar.
+- **Loops sem emenda:** algumas trilhas não fecham o loop no fim do arquivo (silêncio ou queda
+  no final). `TrilhasDoJogo` guarda, por faixa, onde o loop termina e recomeça, e a emenda é
+  feita com um *crossfade* de 1,5 s entre as duas fontes.
 - **Escalada na luta do chefe:** a cada terço de vida perdido, A Vigília muda de fase e a
   trilha sobe de intensidade (×1,12 e ×1,25), com um toque de virada e um tremor de câmera.
   As fases já mudavam o comportamento do chefe, mas em silêncio; agora a virada se ouve.
 - **Encadeamento de ganho:** volume final = escolha do jogador × ganho da faixa × intensidade.
   O ganho por faixa existe porque as trilhas vêm de pacotes diferentes e não foram
-  masterizadas juntas — a do chefe é gravada ~3,5× mais alta que as das fases e entra com
-  ganho 0,36, para ficar presente sem virar um susto de volume.
+  masterizadas juntas. Os ganhos ficam numa tabela só (`TrilhasDoJogo`), medidos pelo volume
+  médio (RMS) de cada arquivo, para todas ficarem perto de −20 dBFS: a *Music 1* era ~10 dB
+  mais baixa que o menu e entra com 1,70; a do chefe é gravada ~3,5× mais alta que as das
+  fases e entra com 0,36, um pouco acima das outras, sem virar um susto de volume.
 - **SFX** (RPG Essentials — Leohpaz): ataque, dano, **morte**, **pulo**, **coleta de alma**
   (absorção), **ativação de checkpoint** (revive) e **virada de fase do chefe** (carga mágica).
 

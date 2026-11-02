@@ -151,6 +151,19 @@ namespace EcosDeAldenor.Systems
             if (luz != null) luz.intensity = Mathf.Lerp(luz.intensity, 0.9f, Time.deltaTime * 2f);
         }
 
+        /// <summary>
+        /// Uma badalada de cena (prologo, epilogo): som, balanco e luz, sem
+        /// contar como objetivo e sem a onda que atordoa.
+        /// </summary>
+        public void Badalar()
+        {
+            balanco = 18f;
+            relogio = 0f;
+            desenho.color = Color.white;
+            AudioManager.Instance?.PlaySfx(RuntimeAudio.Sino());
+            Efeitos.Lampejo(transform.position + new Vector3(0f, -0.45f, 0f), 2f, new Color(1f, 0.9f, 0.6f, 0.5f));
+        }
+
         protected override void AoCumprir()
         {
             balanco = 22f;

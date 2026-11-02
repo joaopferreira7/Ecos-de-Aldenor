@@ -35,7 +35,7 @@ namespace EcosDeAldenor.Systems
         {
             if (referencia == null) return null;
             var tex = referencia.texture;
-            string chave = tex.GetInstanceID() + ":" + x + "," + yTopo + "," + largura + "," + altura + "," + pivo;
+            string chave = tex.GetHashCode() + ":" + x + "," + yTopo + "," + largura + "," + altura + "," + pivo;
             if (recortes.TryGetValue(chave, out var pronto) && pronto != null) return pronto;
 
             var rect = new Rect(x, tex.height - yTopo - altura, largura, altura);

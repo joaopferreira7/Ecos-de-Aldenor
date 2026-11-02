@@ -38,10 +38,42 @@ namespace EcosDeAldenor.EditorTools
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
             CorrigirImportacao();
+            var cena = CidadeSemJogo(Cena);
 
-            AssetDatabase.DeleteAsset(Cena);
-            AssetDatabase.CopyAsset(Origem, Cena);
-            var cena = EditorSceneManager.OpenScene(Cena, OpenSceneMode.Single);
+            var musica = Object.FindAnyObjectByType<SceneMusicPlayer>();
+            if (musica != null)
+            {
+                var so = new SerializedObject(musica);
+                so.FindProperty("sceneMusic").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(Trilha);
+                so.FindProperty("trackGain").floatValue = 1f;
+                so.FindProperty("tocarAoIniciar").boolValue = true;
+                so.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            var diretor = new GameObject("EpilogoNaCidade").AddComponent<EpilogoNaCidade>();
+            var sod = new SerializedObject(diretor);
+            Moradores(sod.FindProperty("moradores"));
+            Lista(sod.FindProperty("renCorrendo"), FramesDoClipe(MontarPrologo.HeroKnight + "Animations/HeroKnight_Run.anim"));
+            Lista(sod.FindProperty("renParado"), FramesDoClipe(MontarPrologo.HeroKnight + "Animations/HeroKnight_Idle.anim"));
+            sod.FindProperty("somDaAlma").objectReferenceValue = Clip(Sfx + "8_Buffs_Heals_SFX/39_Absorb_04.wav");
+            sod.ApplyModifiedPropertiesWithoutUndo();
+
+            EditorSceneManager.MarkSceneDirty(cena);
+            EditorSceneManager.SaveScene(cena);
+            Debug.Log("Epilogo montado em " + Cena + " a partir da cidade da Fase 3.");
+        }
+
+        /// <summary>
+        /// A cidade da Fase 3 sem nada de jogo, salva em <paramref name="destino"/>:
+        /// o palco do epilogo e da primeira parte do prologo. Sai o Ren jogavel,
+        /// o HUD, os inimigos, as portas, os altares e o abismo; o chao vira uma
+        /// rua so e os tres campanarios descem para ela. A cena fica aberta.
+        /// </summary>
+        internal static UnityEngine.SceneManagement.Scene CidadeSemJogo(string destino)
+        {
+            AssetDatabase.DeleteAsset(destino);
+            AssetDatabase.CopyAsset(Origem, destino);
+            var cena = EditorSceneManager.OpenScene(destino, OpenSceneMode.Single);
 
             // Nada de jogo.
             Remover<PlayerController>();
@@ -68,41 +100,20 @@ namespace EcosDeAldenor.EditorTools
             for (int i = 0; i < sinos.Count && i < xs.Length; i++)
                 sinos[i].transform.position = new Vector3(xs[i], LevelTerrainBuilder.TopoChao + 1.23f, 0f);
 
-            var musica = Object.FindAnyObjectByType<SceneMusicPlayer>();
-            if (musica != null)
-            {
-                var so = new SerializedObject(musica);
-                so.FindProperty("sceneMusic").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(Trilha);
-                so.FindProperty("trackGain").floatValue = 1f;
-                so.FindProperty("tocarAoIniciar").boolValue = true;
-                so.ApplyModifiedPropertiesWithoutUndo();
-            }
-
             var camera = Camera.main;
             if (camera != null)
             {
                 var seguidor = camera.GetComponent<SceneScript.CameraFollow2D>();
                 if (seguidor != null) seguidor.target = null;
             }
-
-            var diretor = new GameObject("EpilogoNaCidade").AddComponent<EpilogoNaCidade>();
-            var sod = new SerializedObject(diretor);
-            Moradores(sod.FindProperty("moradores"));
-            Lista(sod.FindProperty("renCorrendo"), FramesDoClipe(MontarPrologo.HeroKnight + "Animations/HeroKnight_Run.anim"));
-            Lista(sod.FindProperty("renParado"), FramesDoClipe(MontarPrologo.HeroKnight + "Animations/HeroKnight_Idle.anim"));
-            sod.FindProperty("somDaAlma").objectReferenceValue = Clip(Sfx + "8_Buffs_Heals_SFX/39_Absorb_04.wav");
-            sod.ApplyModifiedPropertiesWithoutUndo();
-
-            EditorSceneManager.MarkSceneDirty(cena);
-            EditorSceneManager.SaveScene(cena);
-            Debug.Log("Epilogo montado em " + Cena + " a partir da cidade da Fase 3.");
+            return cena;
         }
 
         /// <summary>
         /// Os quatro moradores do prologo e mais dois, espalhados pela rua. Os
         /// tres primeiros ficam na metade esquerda, onde a camera comeca.
         /// </summary>
-        static void Moradores(SerializedProperty lista)
+        internal static void Moradores(SerializedProperty lista)
         {
             var dados = new (string parado, int nParado, string andando, int nAndando, float x, bool espelhar)[]
             {
@@ -127,13 +138,13 @@ namespace EcosDeAldenor.EditorTools
             }
         }
 
-        static void Lista(SerializedProperty p, Sprite[] valores)
+        internal static void Lista(SerializedProperty p, Sprite[] valores)
         {
             p.arraySize = valores.Length;
             for (int i = 0; i < valores.Length; i++) p.GetArrayElementAtIndex(i).objectReferenceValue = valores[i];
         }
 
-        static void Remover<T>() where T : Component
+        internal static void Remover<T>() where T : Component
         {
             foreach (var c in Object.FindObjectsByType<T>(FindObjectsInactive.Include))
                 if (c != null) Object.DestroyImmediate(c.gameObject);
