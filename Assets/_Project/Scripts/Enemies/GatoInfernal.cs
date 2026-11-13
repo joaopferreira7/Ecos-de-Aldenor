@@ -49,6 +49,7 @@ namespace EcosDeAldenor.Enemies
         private float alvoX;
         private Vector3 escalaBase;
         private Color corDoCorpo = Color.white;
+        private Sprite[] quadroDoBote;
 
         protected override void Awake()
         {
@@ -120,6 +121,13 @@ namespace EcosDeAldenor.Enemies
             float g = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
             rb.linearVelocity = new Vector2((destino - x) / tempoDeVoo, g * tempoDeVoo * 0.5f);
 
+            // No ar, o quadro esticado da corrida: o bote.
+            if (spriteAnim != null && framesAndando != null && framesAndando.Length > 0)
+            {
+                if (quadroDoBote == null) quadroDoBote = new[] { framesAndando[framesAndando.Length - 1] };
+                spriteAnim.PlayLoop(quadroDoBote, 1f);
+            }
+
             AudioManager.Instance?.PlaySfx(saltoSfx);
             Efeitos.Poeira(PesNoChao(), 6, 0.8f);
             Mudar(Estado.NoAr);
@@ -134,7 +142,7 @@ namespace EcosDeAldenor.Enemies
             bool pousou = relogio > tempoDeVoo * 0.5f && rb.linearVelocity.y > -0.05f;
             if (!pousou && relogio < tempoDeVoo + 0.8f) return;
 
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            Parar();
             AudioManager.Instance?.PlaySfx(pousoSfx);
             Efeitos.Poeira(PesNoChao(), 10, 1.4f);
             CameraShake.Shake(0.08f, 0.06f);
@@ -159,6 +167,12 @@ namespace EcosDeAldenor.Enemies
             if (corpo != null) corpo.color = corDoCorpo;
             proximoSalto = Time.time + recarga;
             Mudar(Estado.Patrulha);
+        }
+
+        private void Parar()
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            UpdateAnimator(false);
         }
 
         private void Mudar(Estado novo)
@@ -189,7 +203,9 @@ namespace EcosDeAldenor.Enemies
 
         /// <summary>
         /// Deforma o corpo sem desfazer o lado para onde ele olha (o sinal da
-        /// escala X e o espelhamento - ver EnemyBase.OlharPara).
+        /// escala X e o espelhamento - ver EnemyBase.OlharPara). O pivo dos
+        /// quadros fica nos pes e o corpo de colisao comeca nele: achatar so
+        /// baixa o topo, as patas e a base do corpo nao saem do chao.
         /// </summary>
         private void Escalar(float largura, float altura)
         {

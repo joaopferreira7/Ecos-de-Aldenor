@@ -88,7 +88,7 @@ Transform:
   m_GameObject: {fileID: 8761777552226280561}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.28, y: 0.05, z: 0}
+  m_LocalPosition: {x: 0.28, y: 0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -172,7 +172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4269114208525818, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.26
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4805181885227780, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_LocalScale.x
@@ -240,24 +240,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 61252362154681264, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_Offset.y
-      value: -0.06
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 61252362154681264, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 61252362154681264, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 0.6
+      value: 0.96
       objectReference: {fileID: 0}
     - target: {fileID: 61252362154681264, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.36
+      value: 0.53
       objectReference: {fileID: 0}
     - target: {fileID: 212259381048184306, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -8848743475140167525, guid: 2c8045611edbe3e4e98c8570752e88a6, type: 3}
+      objectReference: {fileID: 5826858585908491774, guid: fc69fdc66ab454d40927e7bfa994fe5e, type: 3}
     - target: {fileID: 212259381048184306, guid: 2e2183501755a214591e802f3aff33d2, type: 3}
       propertyPath: m_SortingOrder
       value: 3
@@ -339,7 +339,7 @@ MonoBehaviour:
   deathPoofTint: {r: 0.9, g: 0.3, b: 0.25, a: 1}
   deathPoofScale: 1.1
   framesParado:
-  - {fileID: -8848743475140167525, guid: 2c8045611edbe3e4e98c8570752e88a6, type: 3}
+  - {fileID: 5826858585908491774, guid: fc69fdc66ab454d40927e7bfa994fe5e, type: 3}
   fpsParado: 6
   framesAndando:
   - {fileID: -8848743475140167525, guid: 2c8045611edbe3e4e98c8570752e88a6, type: 3}

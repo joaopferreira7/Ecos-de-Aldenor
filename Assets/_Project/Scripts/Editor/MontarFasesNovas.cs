@@ -70,10 +70,13 @@ namespace EcosDeAldenor.EditorTools
         {
             var quadros = Frames(Cemiterio + "Characters/Enemies/hell-gato/Sprites/hell-gato-{0}.png", 1, 4);
             return NovoInimigo<SombraRastejante, GatoInfernal>("SombraRastejante", "GatoInfernal", quadros[0], 2.6f,
-                new Vector2(0.62f, 0.4f), new Vector2(0f, -0.06f), new Color(1f, 0.3f, 0.2f), new Vector3(0.28f, 0.05f, 0f),
+                // Pivo nos pes (AlinharQuadros): o corpo comeca no pivo e sobe.
+                new Vector2(0.62f, 0.4f), new Vector2(0f, 0.2f), new Color(1f, 0.3f, 0.2f), new Vector3(0.28f, 0.23f, 0f),
                 so =>
                 {
-                    Lista(so, "framesParado", quadros.Take(1).ToArray());
+                    // O pacote nao tem pose parada: o quadro 2 (patas recolhidas
+                    // sob o corpo) e o que mais parece um gato de tocaia.
+                    Lista(so, "framesParado", new[] { quadros[1] });
                     Lista(so, "framesAndando", quadros);
                     Lista(so, "framesPerseguindo", new Sprite[0]);
                     Lista(so, "framesDespertar", new Sprite[0]);
@@ -99,7 +102,7 @@ namespace EcosDeAldenor.EditorTools
             var corrida = Frames(Igreja + "SPRITES/burning-ghoul/run 1/sprites/f-{0:00}.png", 1, 8);
             var disparada = Frames(Igreja + "SPRITES/burning-ghoul/run 2/sprites/f-{0:00}.png", 1, 8);
             return NovoInimigo<GuardiaoDePedra, CarnicalEmChamas>("GuardiaoDePedra", "CarnicalEmChamas", corrida[0], 2.7f,
-                new Vector2(0.3f, 0.5f), new Vector2(0f, -0.02f), new Color(1f, 0.55f, 0.2f), new Vector3(-0.05f, 0.24f, 0f),
+                new Vector2(0.3f, 0.5f), new Vector2(0f, 0.25f), new Color(1f, 0.55f, 0.2f), new Vector3(-0.05f, 0.45f, 0f),
                 so =>
                 {
                     Lista(so, "framesParado", corrida.Take(1).ToArray());
@@ -548,6 +551,63 @@ namespace EcosDeAldenor.EditorTools
                 imp.filterMode = FilterMode.Point;
                 imp.textureCompression = TextureImporterCompression.Uncompressed;
                 imp.SaveAndReimport();
+            }
+
+            AlinharQuadros(Frames(Cemiterio + "Characters/Enemies/hell-gato/Sprites/hell-gato-{0}.png", 1, 4));
+            // As duas corridas do carnical juntas: a disparada troca uma pela outra.
+            AlinharQuadros(Frames(Igreja + "SPRITES/burning-ghoul/run 1/sprites/f-{0:00}.png", 1, 8)
+                .Concat(Frames(Igreja + "SPRITES/burning-ghoul/run 2/sprites/f-{0:00}.png", 1, 8)).ToArray());
+        }
+
+        /// <summary>
+        /// O gato e o carnical vem em quadros soltos, e o Unity recortou cada um
+        /// rente ao desenho, com o pivo no centro do recorte. Como cada quadro
+        /// tem um tamanho, o pivo cai num ponto diferente do desenho a cada
+        /// quadro: o bicho tremia de lado e quicava enquanto corria.
+        ///
+        /// Aqui cada quadro passa a ser a imagem inteira, e todos usam o mesmo
+        /// pivo: nos PES (a base da imagem, onde o desenho pisa), no meio do
+        /// corpo do primeiro quadro. Com o pivo nos pes, o desenho pisa no chao
+        /// do corpo de colisao (antes flutuava ~0,2 u acima dele) e o achatar do
+        /// aviso do gato encolhe o bicho para baixo sem tirar as patas do chao.
+        /// O id do sprite e mantido, entao prefabs e cenas continuam apontando
+        /// para ele. Rodar de novo nao muda nada.
+        /// </summary>
+        public static void AlinharQuadros(Sprite[] quadros)
+        {
+            if (quadros == null || quadros.Length == 0 || quadros[0] == null) return;
+
+            // Pivo em pixels da imagem inteira: o meio do primeiro quadro, na base.
+            var primeiro = quadros[0];
+            Vector2 ancora = new Vector2(primeiro.rect.x + primeiro.pivot.x, 0f);
+
+            foreach (var quadro in quadros)
+            {
+                if (quadro == null) continue;
+                string caminho = AssetDatabase.GetAssetPath(quadro);
+                var fabrica = new UnityEditor.U2D.Sprites.SpriteDataProviderFactories();
+                fabrica.Init();
+                var dados = fabrica.GetSpriteEditorDataProviderFromObject(AssetImporter.GetAtPath(caminho));
+                if (dados == null) continue;
+                dados.InitSpriteEditorDataProvider();
+
+                var tex = quadro.texture;
+                var inteiro = new Rect(0f, 0f, tex.width, tex.height);
+                var pivo = new Vector2(ancora.x / tex.width, ancora.y / tex.height);
+
+                var recortes = dados.GetSpriteRects();
+                var meu = recortes.FirstOrDefault(r => r.name == quadro.name) ?? recortes.FirstOrDefault();
+                if (meu == null) continue;
+                if (recortes.Length == 1 && meu.rect == inteiro && meu.alignment == SpriteAlignment.Custom
+                    && (meu.pivot - pivo).sqrMagnitude < 1e-8f) continue;
+
+                meu.rect = inteiro;
+                meu.alignment = SpriteAlignment.Custom;
+                meu.pivot = pivo;
+                // Recortes extras (lascas de poucos pixels) cairiam por cima do inteiro.
+                dados.SetSpriteRects(new[] { meu });
+                dados.Apply();
+                (dados.targetObject as AssetImporter)?.SaveAndReimport();
             }
         }
 

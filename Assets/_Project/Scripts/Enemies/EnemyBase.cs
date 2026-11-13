@@ -204,7 +204,10 @@ namespace EcosDeAldenor.Enemies
 
             MoveTowards(currentTargetPos, patrolSpeed);
 
-            if (Vector2.Distance(transform.position, currentTargetPos) < 0.2f)
+            // So o X conta: os pontos sao guardados no Awake, antes de o inimigo
+            // cair ate o chao, e a diferenca de altura impedia a distancia 2D de
+            // ficar abaixo do limite - ele chegava na borda e nunca virava.
+            if (Mathf.Abs(transform.position.x - currentTargetPos.x) < 0.2f)
             {
                 movingToB = !movingToB;
                 currentTargetPos = movingToB ? pointBPos : pointAPos;
@@ -320,6 +323,17 @@ namespace EcosDeAldenor.Enemies
 
         protected void MoveTowards(Vector3 target, float speed)
         {
+            // Ja chegou: para. Sem isto, um alvo quase no mesmo x (o jogador
+            // fora do territorio, com o alvo preso na borda) ainda dava direcao
+            // +-1 depois do normalize, e o inimigo corria no lugar, virando de
+            // lado a cada quadro.
+            if (Mathf.Abs(target.x - transform.position.x) < 0.1f)
+            {
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+                UpdateAnimator(false);
+                return;
+            }
+
             Vector2 direction = (target - transform.position).normalized;
             rb.linearVelocity = new Vector2(direction.x * speed, rb.linearVelocity.y);
 
