@@ -15,8 +15,8 @@ namespace EcosDeAldenor.UI
     ///   1. o entardecer: os moradores andam pela rua e os sinos tocam - o
     ///      "reino de sinos e lampioes" da historia, agora ouvido;
     ///   2. a camera sobe um pouco, para a igreja na colina;
-    ///   3. o relampago: a musica some, a luz cai, a nevoa desce e os sinos
-    ///      param de tocar;
+    ///   3. o relampago: a luz cai, a nevoa desce e os sinos param de tocar
+    ///      (a trilha do menu segue ate o fim do prologo);
     ///   4. os moradores param, perdem a cor, e as almas deles sao arrancadas e
     ///      levadas pelo ceu em direcao a igreja.
     ///
@@ -126,8 +126,8 @@ namespace EcosDeAldenor.UI
             StartCoroutine(Panoramica(0f, 3.2f, 4f));
             yield return cinema.Narrar("No alto da colina, a velha igreja velava por todos.", 2.4f);
 
-            // 3. A nevoa desce; os sinos se calam.
-            StartCoroutine(BaixarMusica(2.5f));
+            // 3. A nevoa desce; os sinos se calam. A trilha segue: ela acompanha
+            // o prologo inteiro e so da lugar a do tutorial quando o Ren desperta.
             yield return Encenacao.Relampago(cinema, trovao);
             StartCoroutine(Encenacao.Clima(luzGlobal, fundo, LuzDoEntardecer, 0.85f, LuzDaTempestade, 0.42f,
                                            FundoDoEntardecer, FundoDaTempestade, 3f));
@@ -196,16 +196,6 @@ namespace EcosDeAldenor.UI
                 yield return null;
             }
             foco.position = para;
-        }
-
-        private static IEnumerator BaixarMusica(float duracao)
-        {
-            for (float t = 0f; t < duracao; t += Time.deltaTime)
-            {
-                AudioManager.Instance?.SetMusicIntensity(1f - t / duracao);
-                yield return null;
-            }
-            AudioManager.Instance?.StopMusic();
         }
 
         private IEnumerator Sair(string cena)

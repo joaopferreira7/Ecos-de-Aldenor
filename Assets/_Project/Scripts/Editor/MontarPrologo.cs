@@ -65,7 +65,7 @@ namespace EcosDeAldenor.EditorTools
             var cena = MontarEpilogo.CidadeSemJogo(Cena);
 
             // A trilha do menu continua (o AudioManager nao reinicia a mesma
-            // faixa) ate a nevoa calar tudo.
+            // faixa) pelo prologo inteiro, ate o tutorial trocar a dele.
             var musica = Object.FindAnyObjectByType<SceneMusicPlayer>();
             if (musica != null)
             {
@@ -92,8 +92,20 @@ namespace EcosDeAldenor.EditorTools
             AssetDatabase.CopyAsset(Arena, CenaDaIgreja);
             var cena = EditorSceneManager.OpenScene(CenaDaIgreja, OpenSceneMode.Single);
 
-            // Nada de jogo: so a nave, as luzes e a nevoa. A trilha da arena ja
-            // comeca calada (a luta so a toca quando o chefe se revela).
+            // Nada de jogo: so a nave, as luzes e a nevoa. A trilha da arena
+            // (que comeca calada ate o chefe se revelar) da lugar a do menu, a
+            // mesma da cidade: o AudioManager nao reinicia a faixa que ja toca,
+            // entao a musica atravessa o prologo inteiro sem corte.
+            var musica = Object.FindAnyObjectByType<SceneMusicPlayer>();
+            if (musica != null)
+            {
+                var som = new SerializedObject(musica);
+                som.FindProperty("sceneMusic").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(Menu);
+                som.FindProperty("trackGain").floatValue = 1f;
+                som.FindProperty("tocarAoIniciar").boolValue = true;
+                som.ApplyModifiedPropertiesWithoutUndo();
+            }
+
             MontarEpilogo.Remover<PlayerController>();
             MontarEpilogo.Remover<UIManager>();
             MontarEpilogo.Remover<EnemyBase>();

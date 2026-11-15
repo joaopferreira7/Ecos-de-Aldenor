@@ -43,6 +43,24 @@ namespace EcosDeAldenor.UI
 
         private void OnDestroy() => EmCena = false;
 
+        /// <summary>
+        /// Assenta o Ren no chao antes de a cena comecar. O ponto de nascimento
+        /// fica um pouco acima do piso (o corpo cai ate ele no primeiro
+        /// instante), mas o ator caido e criado ali e nao tem fisica: ficava
+        /// deitado no ar, e o Ren de verdade levantava mais embaixo.
+        /// </summary>
+        private static void PorNoChao(GameObject ren)
+        {
+            var col = ren.GetComponent<Collider2D>();
+            if (col == null) return;
+            var hit = Physics2D.Raycast(ren.transform.position, Vector2.down, 10f, LayerMask.GetMask("Ground"));
+            if (hit.collider == null) return;
+            float pesAbaixoDoPivo = col.bounds.min.y - ren.transform.position.y;
+            ren.transform.position = new Vector3(ren.transform.position.x, hit.point.y - pesAbaixoDoPivo, ren.transform.position.z);
+            var rb = ren.GetComponent<Rigidbody2D>();
+            if (rb != null) { rb.position = ren.transform.position; rb.linearVelocity = Vector2.zero; }
+        }
+
         private IEnumerator Cena()
         {
             var renGO = GameObject.FindGameObjectWithTag("Player");
@@ -58,6 +76,7 @@ namespace EcosDeAldenor.UI
             // O Ren caido: um ator no lugar dele, com o ultimo quadro da morte.
             SpriteRenderer caido = null;
             var levantando = renMorrendo != null ? renMorrendo.Reverse().ToArray() : new Sprite[0];
+            if (renGO != null) PorNoChao(renGO);
             if (corpo != null && levantando.Length > 0)
             {
                 corpo.enabled = false;

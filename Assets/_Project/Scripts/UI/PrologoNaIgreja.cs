@@ -78,7 +78,6 @@ namespace EcosDeAldenor.UI
 
         private IEnumerator Cena()
         {
-            AudioManager.Instance?.StopMusic();
             StartCoroutine(Encenacao.Clima(luzGlobal, fundo, new Color(0.7f, 0.62f, 0.8f), 0.55f, new Color(0.7f, 0.62f, 0.8f), 0.55f,
                                            Color.white, Color.white, 0f));
             yield return cinema.Faixas(true, 0.8f);
