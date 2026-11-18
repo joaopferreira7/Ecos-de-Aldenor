@@ -58,10 +58,10 @@ que o epílogo virou cena, o começo e o fim ficaram desiguais). São três part
 
 1. **A cidade** (cena `Prologo`, `PrologoNaCidade`) — a cidade da Fase 3 sem nada de jogo. Ao
    entardecer, os moradores andam pela rua e os campanários badalam; a câmera sobe até a igreja
-   na colina. A música do menu se apaga, cai um relâmpago, a névoa desce e os sinos se calam: os
+   na colina. Cai um relâmpago, a névoa desce e os sinos se calam (a música do menu segue): os
    moradores param, perdem a cor e as almas deles sobem rumo à igreja.
-2. **A igreja** (cena `PrologoIgreja`, `PrologoNaIgreja`) — a arena do chefe, em silêncio. O anjo
-   dourado diante do altar recebe as almas, que giram em volta dele. Com o trovão a luz fica
+2. **A igreja** (cena `PrologoIgreja`, `PrologoNaIgreja`) — a arena do chefe, ainda com o tema
+   do menu. O anjo dourado diante do altar recebe as almas, que giram em volta dele. Com o trovão a luz fica
    vermelha, o anjo estremece, some numa fumaça vermelha e no lugar dele surge o mago encapuzado —
    a transformação da luta final ao contrário. As almas fogem para o cemitério, e o nome do jogo
    aparece no escuro.
@@ -363,7 +363,8 @@ MainMenu → Prologo → PrologoIgreja → Tutorial → Phase1 → Phase2 → Ph
     as trilhas das fases têm 64–100 BPM e servem à exploração, não ao confronto;
   - **Epílogo e Vitória:** trilha de "paz restaurada" (em loop), contínua entre as duas cenas;
   - **Derrota:** *sting* que toca uma única vez;
-  - **Prólogo:** o tema do menu continua na cidade até a névoa calá-lo; a igreja fica em silêncio.
+  - **Prólogo:** o tema do menu atravessa o prólogo inteiro, da cidade à igreja, sem corte, e só
+    dá lugar à trilha do tutorial quando o Ren desperta.
 - **Troca sem corte:** o `AudioManager` tem duas fontes e faz *crossfade* (1,2 s) quando a cena
   muda de faixa; a mesma faixa atravessa a troca sem reiniciar.
 - **Loops sem emenda:** algumas trilhas não fecham o loop no fim do arquivo (silêncio ou queda
@@ -386,7 +387,8 @@ MainMenu → Prologo → PrologoIgreja → Tutorial → Phase1 → Phase2 → Ph
 ## 11. Arquitetura técnica
 
 - **Código** em `Assets/_Project/Scripts/` (namespaces `EcosDeAldenor.*`), organizado por
-  domínio: `Core`, `Player`, `Enemies`, `Systems`, `UI`, `ScriptableObjects`.
+  domínio: `Core`, `Player`, `Enemies`, `Systems`, `UI` e `Editor` (ferramentas que montam as
+  cenas e a build).
 - **Padrões:** Singletons persistentes (`GameManager`, `AudioManager`, `SceneController`),
   **eventos C#** para desacoplar UI e lógica, princípios SOLID e comentários em PT-BR.
 - **Sistemas de apresentação:** câmera seguidora com limites, `CameraShake`, `ParallaxLayer`,
@@ -397,12 +399,12 @@ MainMenu → Prologo → PrologoIgreja → Tutorial → Phase1 → Phase2 → Ph
 
 ## 12. Requisitos da entrega (checklist)
 
-- [x] Build jogável (a gerar/testar em máquina limpa — ver `ROADMAP.md`)
+- [x] Build jogável para Windows (`.exe` em tela cheia, gerada por *Ecos de Aldenor → Gerar build Windows*)
 - [x] Projeto Unity organizado e versionado
 - [x] GDD (este documento)
 - [x] README com integrantes
 - [x] Tela de créditos com fontes dos assets
-- [ ] Confirmar autoria dos assets nas fontes oficiais (ver `ROADMAP.md`)
+- [x] Autoria dos assets conferida nas fontes oficiais (ver `ROADMAP.md`)
 
 ---
 

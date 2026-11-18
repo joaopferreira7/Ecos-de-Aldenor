@@ -196,14 +196,14 @@ verificações.
 
 **Envie sempre a pasta inteira, compactada — nunca só o `.exe`.**
 
-O `Ecos de Aldenor.exe` tem **0,6 MB** de uma build de **141 MB**: ele é apenas o
+O `Ecos de Aldenor.exe` tem **0,6 MB** de uma build de **~150 MB**: ele é apenas o
 carregador. Sem a pasta `Ecos de Aldenor_Data` (as 13 cenas e os assets), a
 `UnityPlayer.dll` e a `MonoBleedingEdge` ao lado dele, ele **abre e fecha na hora** —
 nem chega a escrever um log. Foi o que aconteceu quando a build foi enviada a colegas.
 
 1. Gere a build (o comando já coloca o `LEIAME.txt` dentro dela e remove a pasta de
    símbolos do Burst, que o próprio Unity marca como *DoNotShip*).
-2. Compacte a pasta `Build/` inteira em um `.zip` (~60 MB).
+2. Compacte a pasta `Build/` inteira em um `.zip` (~67 MB).
 3. Quem receber deve **extrair tudo** e abrir o `.exe` de dentro da pasta extraída.
 
 O `LEIAME-jogador.txt` na raiz do repositório é a fonte desse arquivo: ele explica
